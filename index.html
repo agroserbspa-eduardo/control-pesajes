@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="theme-color"
+    content="#333333">
+
+  <link
+    rel="manifest"
+    href="manifest.json">
+
+  <title>Control de Pesajes</title>
+
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f2f2f2;
+    }
+
+    .contenedor {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .tarjeta {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input,
+    button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 15px;
+      margin-top: 8px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    #trabajador {
+      margin-top: 10px;
+      padding: 15px;
+      background: #eee;
+      border-radius: 8px;
+    }
+
+    #estado {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    #pendientes {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+<div class="contenedor">
+
+  <h1>CONTROL DE PESAJES</h1>
+
+
+  <div class="tarjeta">
+
+    <label>
+      Código del trabajador
+    </label>
+
+    <input
+      id="codigo"
+      type="text"
+      placeholder="Ej: Trab001">
+
+
+    <div id="trabajador">
+      Trabajador no seleccionado
+    </div>
+
+
+    <label>
+      Kilos
+    </label>
+
+    <input
+      id="kilos"
+      type="number"
+      step="0.1"
+      placeholder="Ej: 84.5">
+
+
+    <button
+      onclick="guardarPesaje()">
+
+      GUARDAR PESAJE
+
+    </button>
+
+
+    <div id="estado"></div>
+
+
+    <div id="pendientes">
+      Pendientes: 0
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const trabajadores = {
+
+  "Trab001": "Juan",
+
+  "Trab002": "Pedro",
+
+  "Trab003": "Luis"
+
+};
+
+
+const codigoInput =
+  document.getElementById("codigo");
+
+
+codigoInput.addEventListener(
+  "change",
+  function() {
+
+    buscarTrabajador(
+      this.value
+    );
+
+  }
+);
+
+
+function buscarTrabajador(codigo) {
+
+  codigo =
+    codigo.trim();
+
+
+  const nombre =
+    trabajadores[codigo];
+
+
+  const pantalla =
+    document.getElementById(
+      "trabajador"
+    );
+
+
+  if (nombre) {
+
+    pantalla.textContent =
+      nombre +
+      " (" +
+      codigo +
+      ")";
+
+  } else {
+
+    pantalla.textContent =
+      "Trabajador no encontrado";
+
+  }
+
+}
+
+
+async function guardarPesaje() {
+
+  const codigo =
+    document.getElementById(
+      "codigo"
+    ).value.trim();
+
+
+  const kilos =
+    document.getElementById(
+      "kilos"
+    ).value;
+
+
+  const estado =
+    document.getElementById(
+      "estado"
+    );
+
+
+  if (!codigo) {
+
+    estado.textContent =
+      "Ingrese el código";
+
+    return;
+
+  }
+
+
+  if (!kilos || kilos <= 0) {
+
+    estado.textContent =
+      "Ingrese los kilos";
+
+    return;
+
+  }
+
+
+  const registro = {
+
+    id:
+      Date.now(),
+
+    fechaHora:
+      new Date().toISOString(),
+
+    codigo:
+      codigo,
+
+    kilos:
+      Number(kilos)
+
+  };
+
+
+  /*
+    Guardamos localmente.
+    Esto funciona sin Internet.
+  */
+
+  const registros =
+    JSON.parse(
+      localStorage.getItem(
+        "pesajes"
+      ) || "[]"
+    );
+
+
+  registros.push(
+    registro
+  );
+
+
+  localStorage.setItem(
+    "pesajes",
+    JSON.stringify(
+      registros
+    )
+  );
+
+
+  estado.textContent =
+    "✓ Pesaje guardado en la tablet";
+
+
+  document.getElementById(
+    "kilos"
+  ).value = "";
+
+
+  actualizarPendientes();
+
+}
+
+
+function actualizarPendientes() {
+
+  const registros =
+    JSON.parse(
+      localStorage.getItem(
+        "pesajes"
+      ) || "[]"
+    );
+
+
+  document.getElementById(
+    "pendientes"
+  ).textContent =
+    "Pendientes: " +
+    registros.length;
+
+}
+
+
+actualizarPendientes();
+
+
+/*
+  Registrar la aplicación
+  como PWA.
+*/
+
+if (
+  "serviceWorker"
+  in navigator
+) {
+
+  window.addEventListener(
+    "load",
+    function() {
+
+      navigator.serviceWorker
+        .register(
+          "sw.js"
+        );
+
+    }
+  );
+
+}
+
+</script>
+
+</body>
+
+</html>
