@@ -1,0 +1,9 @@
+{
+  "name": "Control de Pesajes",
+  "short_name": "Pesajes",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f2f2f2",
+  "theme_color": "#333333",
+  "description": "Sistema de control de pesajes"
+}
