@@ -62,7 +62,7 @@ button {
 button {
   cursor: pointer;
   font-weight: bold;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 #trabajador {
@@ -71,6 +71,21 @@ button {
   background: #eee;
   border-radius: 8px;
   font-size: 18px;
+}
+
+#lectorQR {
+  margin-top: 15px;
+  text-align: center;
+}
+
+#lectorQR video {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+}
+
+#cerrarQR {
+  display: none;
 }
 
 #estado {
@@ -95,11 +110,14 @@ button {
 
 <h1>CONTROL DE PESAJES</h1>
 
+
 <div class="tarjeta">
+
 
 <label>
 Código del trabajador
 </label>
+
 
 <input
   id="codigo"
@@ -107,14 +125,40 @@ Código del trabajador
   placeholder="Ej: Trab001"
   autocomplete="off">
 
+
+<button
+  type="button"
+  onclick="abrirEscaner()">
+
+📷 ESCANEAR QR
+
+</button>
+
+
+<div id="lectorQR"></div>
+
+
+<button
+  id="cerrarQR"
+  type="button"
+  onclick="cerrarEscaner()">
+
+✖ CERRAR CÁMARA
+
+</button>
+
+
 <div id="trabajador">
+
 Trabajador no seleccionado
+
 </div>
 
 
 <label>
 Kilos
 </label>
+
 
 <input
   id="kilos"
@@ -123,16 +167,23 @@ Kilos
   placeholder="Ej: 84.5">
 
 
-<button onclick="guardarPesaje()">
+<button
+  onclick="guardarPesaje()">
+
 GUARDAR PESAJE
+
 </button>
 
 
 <div id="estado"></div>
 
+
 <div id="pendientes">
+
 Pendientes: 0
+
 </div>
+
 
 </div>
 
@@ -155,6 +206,15 @@ const URL_APPS_SCRIPT =
 // ==========================================
 
 let trabajadores = [];
+
+
+// ==========================================
+// LECTOR QR
+// ==========================================
+
+let streamQR = null;
+
+let intervaloQR = null;
 
 
 // ==========================================
@@ -274,10 +334,6 @@ async function cargarTrabajadores() {
     );
 
 
-  // ========================================
-  // SI HAY INTERNET
-  // ========================================
-
   if (navigator.onLine) {
 
     try {
@@ -301,8 +357,6 @@ async function cargarTrabajadores() {
       trabajadores =
         lista;
 
-
-      // Guardar copia en dispositivo
 
       localStorage.setItem(
         "trabajadores",
@@ -336,10 +390,6 @@ async function cargarTrabajadores() {
 
   }
 
-
-  // ========================================
-  // COPIA LOCAL
-  // ========================================
 
   const guardados =
     localStorage.getItem(
@@ -437,6 +487,312 @@ function buscarTrabajador(
       "Trabajador no seleccionado";
 
   }
+
+}
+
+
+// ==========================================
+// ESCANEAR QR
+// ==========================================
+
+async function abrirEscaner() {
+
+  const lector =
+    document.getElementById(
+      "lectorQR"
+    );
+
+  const botonCerrar =
+    document.getElementById(
+      "cerrarQR"
+    );
+
+  const estado =
+    document.getElementById(
+      "estado"
+    );
+
+
+  // Comprobar cámara
+
+  if (
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ) {
+
+    estado.textContent =
+      "La cámara no está disponible.";
+
+    return;
+
+  }
+
+
+  try {
+
+
+    streamQR =
+      await navigator.mediaDevices
+        .getUserMedia({
+
+          video: {
+            facingMode: {
+              ideal: "environment"
+            }
+          },
+
+          audio: false
+
+        });
+
+
+    const video =
+      document.createElement(
+        "video"
+      );
+
+
+    video.setAttribute(
+      "playsinline",
+      true
+    );
+
+
+    video.autoplay =
+      true;
+
+
+    video.srcObject =
+      streamQR;
+
+
+    lector.innerHTML =
+      "";
+
+
+    lector.appendChild(
+      video
+    );
+
+
+    botonCerrar.style.display =
+      "block";
+
+
+    estado.textContent =
+      "Apunta la cámara al QR del trabajador";
+
+
+    await video.play();
+
+
+    // Comprobar si el navegador
+    // tiene BarcodeDetector
+
+    if (
+      "BarcodeDetector"
+      in window
+    ) {
+
+
+      const detector =
+        new BarcodeDetector({
+
+          formats: [
+            "qr_code"
+          ]
+
+        });
+
+
+      intervaloQR =
+        setInterval(
+          async function() {
+
+            try {
+
+              const codigos =
+                await detector.detect(
+                  video
+                );
+
+
+              if (
+                codigos.length > 0
+              ) {
+
+                const codigoQR =
+                  codigos[0].rawValue;
+
+
+                procesarQR(
+                  codigoQR
+                );
+
+              }
+
+            } catch(error) {
+
+              console.log(
+                "Error lector QR:",
+                error
+              );
+
+            }
+
+          },
+          300
+        );
+
+
+    } else {
+
+      estado.textContent =
+        "Este navegador no admite lectura QR directa.";
+
+    }
+
+
+  } catch(error) {
+
+    console.log(
+      error
+    );
+
+
+    estado.textContent =
+      "No se pudo abrir la cámara. Revisa los permisos.";
+
+  }
+
+}
+
+
+// ==========================================
+// PROCESAR QR
+// ==========================================
+
+function procesarQR(
+  valor
+) {
+
+  valor =
+    String(valor).trim();
+
+
+  console.log(
+    "QR leído:",
+    valor
+  );
+
+
+  // Colocar código en el campo
+
+  document.getElementById(
+    "codigo"
+  ).value =
+    valor;
+
+
+  // Buscar trabajador
+
+  buscarTrabajador(
+    valor
+  );
+
+
+  // Cerrar cámara
+
+  cerrarEscaner();
+
+
+  const trabajador =
+    trabajadores.find(
+      function(t) {
+
+        return String(
+          t.codigo
+        )
+        .toLowerCase()
+        ===
+        valor.toLowerCase();
+
+      }
+    );
+
+
+  if (trabajador) {
+
+    document.getElementById(
+      "estado"
+    ).textContent =
+      "✓ QR reconocido: " +
+      trabajador.nombre;
+
+
+  } else {
+
+    document.getElementById(
+      "estado"
+    ).textContent =
+      "QR leído, pero el trabajador no existe";
+
+  }
+
+}
+
+
+// ==========================================
+// CERRAR ESCÁNER
+// ==========================================
+
+function cerrarEscaner() {
+
+  if (intervaloQR) {
+
+    clearInterval(
+      intervaloQR
+    );
+
+    intervaloQR =
+      null;
+
+  }
+
+
+  if (streamQR) {
+
+    streamQR
+      .getTracks()
+      .forEach(
+        function(track) {
+
+          track.stop();
+
+        }
+      );
+
+
+    streamQR =
+      null;
+
+  }
+
+
+  const lector =
+    document.getElementById(
+      "lectorQR"
+    );
+
+
+  lector.innerHTML =
+    "";
+
+
+  document.getElementById(
+    "cerrarQR"
+  ).style.display =
+    "none";
 
 }
 
@@ -657,7 +1013,9 @@ async function eliminarLocal(
         );
 
 
-      almacen.delete(id);
+      almacen.delete(
+        id
+      );
 
 
       transaccion.oncomplete =
@@ -744,7 +1102,10 @@ async function guardarPesaje() {
   }
 
 
-  if (!kilos || Number(kilos) <= 0) {
+  if (
+    !kilos ||
+    Number(kilos) <= 0
+  ) {
 
     estado.textContent =
       "Ingrese los kilos";
@@ -786,7 +1147,10 @@ async function guardarPesaje() {
       "-" +
       Math.random()
         .toString(36)
-        .substring(2, 8),
+        .substring(
+          2,
+          8
+        ),
 
     fechaHora:
       new Date().toISOString(),
@@ -816,10 +1180,13 @@ async function guardarPesaje() {
 
     document.getElementById(
       "kilos"
-    ).value = "";
+    ).value =
+      "";
 
 
-    if (navigator.onLine) {
+    if (
+      navigator.onLine
+    ) {
 
       sincronizar();
 
@@ -832,7 +1199,9 @@ async function guardarPesaje() {
       "Error al guardar";
 
 
-    console.error(error);
+    console.error(
+      error
+    );
 
   }
 
@@ -869,7 +1238,9 @@ async function sincronizarRegistro(
 
 
   const resultado =
-    await jsonp(url);
+    await jsonp(
+      url
+    );
 
 
   if (!resultado.ok) {
@@ -893,7 +1264,9 @@ async function sincronizarRegistro(
 
 async function sincronizar() {
 
-  if (!navigator.onLine) {
+  if (
+    !navigator.onLine
+  ) {
 
     return;
 
@@ -981,7 +1354,7 @@ window.addEventListener(
 
 
 // ==========================================
-// INICIAR
+// INICIO
 // ==========================================
 
 cargarTrabajadores();
