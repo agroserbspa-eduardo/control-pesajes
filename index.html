@@ -147,6 +147,14 @@
 
 <script>
 
+const URL_APPS_SCRIPT =
+  "https://script.google.com/macros/s/AKfycbzs9dBMJotH8zBQNYeeOIdejzlTbPBRkw0IErt0Td9eiHmvy497j7Mu2XZJRzc2J_YWkQ/exec";
+
+
+/* ==================================================
+   TRABAJADORES
+================================================== */
+
 const trabajadores = {
 
   "Trab001": "Juan",
@@ -157,6 +165,10 @@ const trabajadores = {
 
 };
 
+
+/* ==================================================
+   BUSCAR TRABAJADOR
+================================================== */
 
 const codigoInput =
   document.getElementById("codigo");
@@ -208,6 +220,10 @@ function buscarTrabajador(codigo) {
 }
 
 
+/* ==================================================
+   GUARDAR PESALE LOCAL
+================================================== */
+
 async function guardarPesaje() {
 
   const codigo =
@@ -251,7 +267,11 @@ async function guardarPesaje() {
   const registro = {
 
     id:
-      Date.now(),
+      Date.now() +
+      "-" +
+      Math.random()
+        .toString(36)
+        .substring(2, 8),
 
     fechaHora:
       new Date().toISOString(),
@@ -266,8 +286,10 @@ async function guardarPesaje() {
 
 
   /*
-    Guardamos localmente.
-    Esto funciona sin Internet.
+
+    PRIMERO guardamos
+    siempre en la tablet/computador.
+
   */
 
   const registros =
@@ -292,7 +314,7 @@ async function guardarPesaje() {
 
 
   estado.textContent =
-    "✓ Pesaje guardado en la tablet";
+    "✓ Pesaje guardado localmente";
 
 
   document.getElementById(
@@ -302,8 +324,24 @@ async function guardarPesaje() {
 
   actualizarPendientes();
 
+
+  /*
+    Si hay Internet,
+    intentamos sincronizar.
+  */
+
+  if (navigator.onLine) {
+
+    sincronizar();
+
+  }
+
 }
 
+
+/* ==================================================
+   MOSTRAR PENDIENTES
+================================================== */
 
 function actualizarPendientes() {
 
@@ -324,13 +362,173 @@ function actualizarPendientes() {
 }
 
 
+/* ==================================================
+   SINCRONIZAR CON APPS SCRIPT
+================================================== */
+
+async function sincronizar() {
+
+  const registros =
+    JSON.parse(
+      localStorage.getItem(
+        "pesajes"
+      ) || "[]"
+    );
+
+
+  if (
+    registros.length === 0
+  ) {
+
+    return;
+
+  }
+
+
+  if (!navigator.onLine) {
+
+    return;
+
+  }
+
+
+  const pendientes =
+    [...registros];
+
+
+  for (
+    const registro
+    of pendientes
+  ) {
+
+    try {
+
+      const respuesta =
+        await fetch(
+          URL_APPS_SCRIPT,
+          {
+
+            method: "POST",
+
+            headers: {
+
+              "Content-Type":
+                "text/plain;charset=utf-8"
+
+            },
+
+            body:
+              JSON.stringify(
+                registro
+              )
+
+          }
+        );
+
+
+      const resultado =
+        await respuesta.json();
+
+
+      if (
+        resultado.ok
+      ) {
+
+        const actuales =
+          JSON.parse(
+            localStorage.getItem(
+              "pesajes"
+            ) || "[]"
+          );
+
+
+        const restantes =
+          actuales.filter(
+            function(item) {
+
+              return item.id
+                !== registro.id;
+
+            }
+          );
+
+
+        localStorage.setItem(
+          "pesajes",
+          JSON.stringify(
+            restantes
+          )
+        );
+
+
+      }
+
+    } catch(error) {
+
+      console.log(
+        "Sincronización pendiente:",
+        error
+      );
+
+      break;
+
+    }
+
+  }
+
+
+  actualizarPendientes();
+
+}
+
+
+/* ==================================================
+   CUANDO VUELVE INTERNET
+================================================== */
+
+window.addEventListener(
+  "online",
+  function() {
+
+    document.getElementById(
+      "estado"
+    ).textContent =
+      "Internet disponible. Sincronizando...";
+
+
+    sincronizar();
+
+  }
+);
+
+
+/* ==================================================
+   CUANDO SE PIERDE INTERNET
+================================================== */
+
+window.addEventListener(
+  "offline",
+  function() {
+
+    document.getElementById(
+      "estado"
+    ).textContent =
+      "Sin Internet. Guardando localmente.";
+
+  }
+);
+
+
+/* ==================================================
+   INICIAR
+================================================== */
+
 actualizarPendientes();
 
 
-/*
-  Registrar la aplicación
-  como PWA.
-*/
+/* ==================================================
+   SERVICE WORKER
+================================================== */
 
 if (
   "serviceWorker"
