@@ -1,110 +1,97 @@
-const CACHE_NAME =
-"control-pesajes-v3";
-
+const CACHE_NAME = "control-pesajes-v4";
 
 const ARCHIVOS = [
-
   "./",
-
   "./index.html",
-
   "./manifest.json",
-
   "./sw.js"
-
 ];
 
 
 self.addEventListener(
-"install",
-function(event) {
+  "install",
+  function(event) {
 
-event.waitUntil(
+    event.waitUntil(
 
-caches
-.open(CACHE_NAME)
-.then(
-function(cache) {
+      caches
+        .open(CACHE_NAME)
+        .then(function(cache) {
 
-return cache.addAll(
-ARCHIVOS
+          return cache.addAll(
+            ARCHIVOS
+          );
+
+        })
+
+    );
+
+  }
 );
-
-}
-)
-
-);
-
-});
 
 
 self.addEventListener(
-"activate",
-function(event) {
+  "activate",
+  function(event) {
 
-event.waitUntil(
+    event.waitUntil(
 
-caches.keys()
-.then(
-function(nombres) {
+      caches.keys()
+        .then(function(nombres) {
 
-return Promise.all(
+          return Promise.all(
 
-nombres
-.filter(
-function(nombre) {
+            nombres
+              .filter(function(nombre) {
 
-return nombre !==
-CACHE_NAME;
+                return nombre !==
+                  CACHE_NAME;
 
-}
-)
-.map(
-function(nombre) {
+              })
+              .map(function(nombre) {
 
-return caches.delete(
-nombre
+                return caches.delete(
+                  nombre
+                );
+
+              })
+
+          );
+
+        })
+
+    );
+
+  }
 );
-
-}
-)
-
-);
-
-}
-)
-
-);
-
-});
 
 
 self.addEventListener(
-"fetch",
-function(event) {
+  "fetch",
+  function(event) {
 
-event.respondWith(
+    // Para archivos de la aplicación:
+    // intentar red y si falla usar caché.
 
-fetch(
-event.request
-)
-.then(
-function(respuesta) {
+    event.respondWith(
 
-return respuesta;
+      fetch(event.request)
 
-}
-)
-.catch(
-function() {
+        .then(function(respuesta) {
 
-return caches.match(
-event.request
+          return respuesta;
+
+        })
+
+        .catch(function() {
+
+          return caches.match(
+            event.request
+          );
+
+        })
+
+    );
+
+  }
 );
-
-}
-)
-
-);
-
-});
