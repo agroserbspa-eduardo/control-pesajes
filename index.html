@@ -147,23 +147,73 @@
 
 <script>
 
+
+/* ==================================================
+   URL DE APPS SCRIPT
+================================================== */
+
 const URL_APPS_SCRIPT =
   "https://script.google.com/macros/s/AKfycbzs9dBMJotH8zBQNYeeOIdejzlTbPBRkw0IErt0Td9eiHmvy497j7Mu2XZJRzc2J_YWkQ/exec";
 
 
 /* ==================================================
    TRABAJADORES
+   Se cargarán automáticamente desde Google Sheets
 ================================================== */
 
-const trabajadores = {
+let trabajadores = {};
 
-  "Trab001": "Juan",
 
-  "Trab002": "Pedro",
+/* ==================================================
+   CARGAR TRABAJADORES DESDE APPS SCRIPT
+================================================== */
 
-  "Trab003": "Luis"
+async function cargarTrabajadores() {
 
-};
+  try {
+
+    const respuesta =
+      await fetch(
+        URL_APPS_SCRIPT +
+        "?action=trabajadores"
+      );
+
+
+    const lista =
+      await respuesta.json();
+
+
+    trabajadores = {};
+
+
+    lista.forEach(
+      function(trabajador) {
+
+        trabajadores[
+          trabajador.codigo
+        ] =
+          trabajador.nombre;
+
+      }
+    );
+
+
+    console.log(
+      "Trabajadores cargados:",
+      trabajadores
+    );
+
+
+  } catch (error) {
+
+    console.log(
+      "No se pudieron cargar los trabajadores:",
+      error
+    );
+
+  }
+
+}
 
 
 /* ==================================================
@@ -171,7 +221,9 @@ const trabajadores = {
 ================================================== */
 
 const codigoInput =
-  document.getElementById("codigo");
+  document.getElementById(
+    "codigo"
+  );
 
 
 codigoInput.addEventListener(
@@ -221,7 +273,7 @@ function buscarTrabajador(codigo) {
 
 
 /* ==================================================
-   GUARDAR PESALE LOCAL
+   GUARDAR PESaje
 ================================================== */
 
 async function guardarPesaje() {
@@ -285,12 +337,9 @@ async function guardarPesaje() {
   };
 
 
-  /*
-
-    PRIMERO guardamos
-    siempre en la tablet/computador.
-
-  */
+  /* ================================================
+     GUARDAR PRIMERO EN EL DISPOSITIVO
+  ================================================= */
 
   const registros =
     JSON.parse(
@@ -325,10 +374,9 @@ async function guardarPesaje() {
   actualizarPendientes();
 
 
-  /*
-    Si hay Internet,
-    intentamos sincronizar.
-  */
+  /* ================================================
+     SI HAY INTERNET, SINCRONIZAR
+  ================================================= */
 
   if (navigator.onLine) {
 
@@ -363,7 +411,7 @@ function actualizarPendientes() {
 
 
 /* ==================================================
-   SINCRONIZAR CON APPS SCRIPT
+   SINCRONIZAR CON GOOGLE SHEETS
 ================================================== */
 
 async function sincronizar() {
@@ -460,7 +508,6 @@ async function sincronizar() {
           )
         );
 
-
       }
 
     } catch(error) {
@@ -524,6 +571,8 @@ window.addEventListener(
 ================================================== */
 
 actualizarPendientes();
+
+cargarTrabajadores();
 
 
 /* ==================================================
