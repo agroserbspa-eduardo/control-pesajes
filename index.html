@@ -5,17 +5,14 @@
 
 <meta charset="UTF-8">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-<meta
-  name="theme-color"
-  content="#333333">
+<meta name="theme-color"
+      content="#333333">
 
-<link
-  rel="manifest"
-  href="manifest.json">
+<link rel="manifest"
+      href="manifest.json">
 
 <title>Control de Pesajes</title>
 
@@ -23,119 +20,68 @@
 <style>
 
 body {
-
   font-family: Arial, sans-serif;
-
   margin: 0;
-
   padding: 20px;
-
   background: #f2f2f2;
-
 }
-
 
 .contenedor {
-
   max-width: 600px;
-
   margin: auto;
-
 }
-
 
 h1 {
-
   text-align: center;
-
 }
-
 
 .tarjeta {
-
   background: white;
-
   padding: 20px;
-
   border-radius: 12px;
-
   margin-top: 20px;
-
 }
-
 
 label {
-
   display: block;
-
   margin-top: 15px;
-
   font-weight: bold;
-
 }
-
 
 input,
 button {
-
   width: 100%;
-
   box-sizing: border-box;
-
   padding: 15px;
-
   margin-top: 8px;
-
   font-size: 18px;
-
   border-radius: 8px;
-
   border: 1px solid #ccc;
-
 }
-
 
 button {
-
   cursor: pointer;
-
   font-weight: bold;
-
   margin-top: 20px;
-
 }
-
 
 #trabajador {
-
   margin-top: 10px;
-
   padding: 15px;
-
   background: #eee;
-
   border-radius: 8px;
-
+  font-size: 18px;
 }
-
 
 #estado {
-
   text-align: center;
-
   margin-top: 20px;
-
   font-weight: bold;
-
 }
 
-
 #pendientes {
-
   text-align: center;
-
   margin-top: 10px;
-
 }
 
 </style>
@@ -145,42 +91,30 @@ button {
 
 <body>
 
-
 <div class="contenedor">
-
 
 <h1>CONTROL DE PESAJES</h1>
 
-
 <div class="tarjeta">
 
-
 <label>
-
 Código del trabajador
-
 </label>
-
 
 <input
   id="codigo"
   type="text"
-  placeholder="Ej: Trab001">
-
+  placeholder="Ej: Trab001"
+  autocomplete="off">
 
 <div id="trabajador">
-
 Trabajador no seleccionado
-
 </div>
 
 
 <label>
-
 Kilos
-
 </label>
-
 
 <input
   id="kilos"
@@ -189,23 +123,16 @@ Kilos
   placeholder="Ej: 84.5">
 
 
-<button
-  onclick="guardarPesaje()">
-
+<button onclick="guardarPesaje()">
 GUARDAR PESAJE
-
 </button>
 
 
 <div id="estado"></div>
 
-
 <div id="pendientes">
-
 Pendientes: 0
-
 </div>
-
 
 </div>
 
@@ -215,24 +142,308 @@ Pendientes: 0
 <script>
 
 
-/* ==========================================
-   URL APPS SCRIPT
-========================================== */
+// ==========================================
+// URL APPS SCRIPT
+// ==========================================
 
 const URL_APPS_SCRIPT =
 "https://script.google.com/macros/s/AKfycbzs9dBMJotH8zBQNYeeOIdejzlTbPBRkw0IErt0Td9eiHmvy497j7Mu2XZJRzc2J_YWkQ/exec";
 
 
-/* ==========================================
-   TRABAJADORES
-========================================== */
+// ==========================================
+// TRABAJADORES
+// ==========================================
 
 let trabajadores = [];
 
 
-/* ==========================================
-   BASE LOCAL
-========================================== */
+// ==========================================
+// JSONP
+// ==========================================
+
+function jsonp(url) {
+
+  return new Promise(function(resolve, reject) {
+
+    const callbackName =
+      "callback_" +
+      Date.now() +
+      "_" +
+      Math.random()
+        .toString(36)
+        .substring(2);
+
+
+    const script =
+      document.createElement("script");
+
+
+    const tiempo =
+      setTimeout(function() {
+
+        limpiar();
+
+        reject(
+          new Error(
+            "Tiempo de espera agotado"
+          )
+        );
+
+      }, 10000);
+
+
+    function limpiar() {
+
+      clearTimeout(tiempo);
+
+      if (script.parentNode) {
+
+        script.parentNode.removeChild(
+          script
+        );
+
+      }
+
+      try {
+
+        delete window[
+          callbackName
+        ];
+
+      } catch(error) {
+
+        window[
+          callbackName
+        ] = undefined;
+
+      }
+
+    }
+
+
+    window[callbackName] =
+      function(datos) {
+
+        limpiar();
+
+        resolve(datos);
+
+      };
+
+
+    script.onerror =
+      function() {
+
+        limpiar();
+
+        reject(
+          new Error(
+            "No se pudo conectar con Apps Script"
+          )
+        );
+
+      };
+
+
+    script.src =
+      url +
+      "&callback=" +
+      encodeURIComponent(
+        callbackName
+      );
+
+
+    document.body.appendChild(
+      script
+    );
+
+  });
+
+}
+
+
+// ==========================================
+// CARGAR TRABAJADORES
+// ==========================================
+
+async function cargarTrabajadores() {
+
+  const estado =
+    document.getElementById(
+      "estado"
+    );
+
+
+  // ========================================
+  // SI HAY INTERNET
+  // ========================================
+
+  if (navigator.onLine) {
+
+    try {
+
+      const lista =
+        await jsonp(
+          URL_APPS_SCRIPT +
+          "?action=trabajadores"
+        );
+
+
+      if (!Array.isArray(lista)) {
+
+        throw new Error(
+          "Respuesta incorrecta"
+        );
+
+      }
+
+
+      trabajadores =
+        lista;
+
+
+      // Guardar copia en dispositivo
+
+      localStorage.setItem(
+        "trabajadores",
+        JSON.stringify(
+          trabajadores
+        )
+      );
+
+
+      estado.textContent =
+        "✓ Trabajadores actualizados";
+
+
+      console.log(
+        "Trabajadores:",
+        trabajadores
+      );
+
+
+      return;
+
+
+    } catch(error) {
+
+      console.log(
+        "Error Internet:",
+        error
+      );
+
+    }
+
+  }
+
+
+  // ========================================
+  // COPIA LOCAL
+  // ========================================
+
+  const guardados =
+    localStorage.getItem(
+      "trabajadores"
+    );
+
+
+  if (guardados) {
+
+    trabajadores =
+      JSON.parse(
+        guardados
+      );
+
+
+    estado.textContent =
+      "✓ Trabajadores disponibles sin Internet";
+
+
+  } else {
+
+    estado.textContent =
+      "No hay trabajadores guardados";
+
+  }
+
+}
+
+
+// ==========================================
+// BUSCAR TRABAJADOR
+// ==========================================
+
+document
+  .getElementById("codigo")
+  .addEventListener(
+    "input",
+    function() {
+
+      buscarTrabajador(
+        this.value
+      );
+
+    }
+  );
+
+
+function buscarTrabajador(
+  codigo
+) {
+
+  codigo =
+    codigo.trim();
+
+
+  const trabajador =
+    trabajadores.find(
+      function(t) {
+
+        return String(
+          t.codigo
+        )
+        .toLowerCase()
+        ===
+        codigo.toLowerCase();
+
+      }
+    );
+
+
+  const pantalla =
+    document.getElementById(
+      "trabajador"
+    );
+
+
+  if (trabajador) {
+
+    pantalla.textContent =
+      trabajador.nombre +
+      " (" +
+      trabajador.codigo +
+      ")";
+
+
+  } else if (codigo) {
+
+    pantalla.textContent =
+      "Trabajador no encontrado";
+
+
+  } else {
+
+    pantalla.textContent =
+      "Trabajador no seleccionado";
+
+  }
+
+}
+
+
+// ==========================================
+// BASE DE DATOS LOCAL
+// ==========================================
 
 const DB_NAME =
 "ControlPesajesDB";
@@ -244,806 +455,563 @@ const STORE_NAME =
 "pesajes";
 
 
-/* ==========================================
-   ABRIR BASE
-========================================== */
-
 function abrirBaseDatos() {
 
-return new Promise(
-function(resolve,reject) {
+  return new Promise(
+    function(resolve, reject) {
 
-const solicitud =
-indexedDB.open(
-DB_NAME,
-DB_VERSION
-);
-
-
-solicitud.onupgradeneeded =
-function(event) {
-
-const db =
-event.target.result;
+      const solicitud =
+        indexedDB.open(
+          DB_NAME,
+          DB_VERSION
+        );
 
 
-if (
-!db.objectStoreNames.contains(
-STORE_NAME
-)
-) {
+      solicitud.onupgradeneeded =
+        function(event) {
 
-db.createObjectStore(
-STORE_NAME,
-{
-keyPath: "id"
+          const db =
+            event.target.result;
+
+
+          if (
+            !db.objectStoreNames
+              .contains(
+                STORE_NAME
+              )
+          ) {
+
+            db.createObjectStore(
+              STORE_NAME,
+              {
+                keyPath: "id"
+              }
+            );
+
+          }
+
+        };
+
+
+      solicitud.onsuccess =
+        function(event) {
+
+          resolve(
+            event.target.result
+          );
+
+        };
+
+
+      solicitud.onerror =
+        function() {
+
+          reject(
+            solicitud.error
+          );
+
+        };
+
+    }
+  );
+
 }
-);
-
-}
-
-};
 
 
-solicitud.onsuccess =
-function(event) {
-
-resolve(
-event.target.result
-);
-
-};
-
-
-solicitud.onerror =
-function() {
-
-reject(
-solicitud.error
-);
-
-};
-
-});
-
-}
-
-
-/* ==========================================
-   GUARDAR LOCAL
-========================================== */
+// ==========================================
+// GUARDAR LOCAL
+// ==========================================
 
 async function guardarLocal(
-registro
+  registro
 ) {
 
-const db =
-await abrirBaseDatos();
+  const db =
+    await abrirBaseDatos();
 
 
-return new Promise(
-function(resolve,reject) {
+  return new Promise(
+    function(resolve, reject) {
 
-const transaccion =
-db.transaction(
-STORE_NAME,
-"readwrite"
-);
-
-
-const almacen =
-transaccion.objectStore(
-STORE_NAME
-);
+      const transaccion =
+        db.transaction(
+          STORE_NAME,
+          "readwrite"
+        );
 
 
-almacen.put(
-registro
-);
+      const almacen =
+        transaccion.objectStore(
+          STORE_NAME
+        );
 
 
-transaccion.oncomplete =
-function() {
-
-resolve();
-
-};
+      almacen.put(
+        registro
+      );
 
 
-transaccion.onerror =
-function() {
+      transaccion.oncomplete =
+        function() {
 
-reject(
-transaccion.error
-);
+          resolve();
 
-};
+        };
 
-});
+
+      transaccion.onerror =
+        function() {
+
+          reject(
+            transaccion.error
+          );
+
+        };
+
+    }
+  );
 
 }
 
 
-/* ==========================================
-   OBTENER PENDIENTES
-========================================== */
+// ==========================================
+// OBTENER PENDIENTES
+// ==========================================
 
 async function obtenerPendientes() {
 
-const db =
-await abrirBaseDatos();
+  const db =
+    await abrirBaseDatos();
 
 
-return new Promise(
-function(resolve,reject) {
+  return new Promise(
+    function(resolve, reject) {
 
-const transaccion =
-db.transaction(
-STORE_NAME,
-"readonly"
-);
-
-
-const almacen =
-transaccion.objectStore(
-STORE_NAME
-);
+      const transaccion =
+        db.transaction(
+          STORE_NAME,
+          "readonly"
+        );
 
 
-const solicitud =
-almacen.getAll();
+      const almacen =
+        transaccion.objectStore(
+          STORE_NAME
+        );
 
 
-solicitud.onsuccess =
-function() {
-
-resolve(
-solicitud.result
-);
-
-};
+      const solicitud =
+        almacen.getAll();
 
 
-solicitud.onerror =
-function() {
+      solicitud.onsuccess =
+        function() {
 
-reject(
-solicitud.error
-);
+          resolve(
+            solicitud.result
+          );
 
-};
+        };
 
-});
+
+      solicitud.onerror =
+        function() {
+
+          reject(
+            solicitud.error
+          );
+
+        };
+
+    }
+  );
 
 }
 
 
-/* ==========================================
-   ELIMINAR LOCAL
-========================================== */
+// ==========================================
+// ELIMINAR LOCAL
+// ==========================================
 
 async function eliminarLocal(
-id
+  id
 ) {
 
-const db =
-await abrirBaseDatos();
+  const db =
+    await abrirBaseDatos();
 
 
-return new Promise(
-function(resolve,reject) {
+  return new Promise(
+    function(resolve, reject) {
 
-const transaccion =
-db.transaction(
-STORE_NAME,
-"readwrite"
-);
-
-
-const almacen =
-transaccion.objectStore(
-STORE_NAME
-);
+      const transaccion =
+        db.transaction(
+          STORE_NAME,
+          "readwrite"
+        );
 
 
-almacen.delete(
-id
-);
+      const almacen =
+        transaccion.objectStore(
+          STORE_NAME
+        );
 
 
-transaccion.oncomplete =
-function() {
-
-resolve();
-
-};
+      almacen.delete(id);
 
 
-transaccion.onerror =
-function() {
+      transaccion.oncomplete =
+        function() {
 
-reject(
-transaccion.error
-);
+          resolve();
 
-};
-
-});
-
-}
+        };
 
 
-/* ==========================================
-   CARGAR TRABAJADORES
-========================================== */
+      transaccion.onerror =
+        function() {
 
-async function cargarTrabajadores() {
+          reject(
+            transaccion.error
+          );
 
-const estado =
-document.getElementById(
-"estado"
-);
+        };
 
-
-try {
-
-
-/*
-Intentar cargar desde Internet
-*/
-
-if (navigator.onLine) {
-
-const respuesta =
-await fetch(
-URL_APPS_SCRIPT +
-"?action=trabajadores"
-);
-
-
-if (!respuesta.ok) {
-
-throw new Error(
-"Error de conexión"
-);
+    }
+  );
 
 }
 
 
-const lista =
-await respuesta.json();
-
-
-trabajadores =
-lista;
-
-
-/*
-Guardar trabajadores
-localmente
-*/
-
-localStorage.setItem(
-"trabajadores",
-JSON.stringify(
-trabajadores
-)
-);
-
-
-estado.textContent =
-"Trabajadores actualizados";
-
-
-} else {
-
-
-/*
-Sin Internet
-*/
-
-const guardados =
-localStorage.getItem(
-"trabajadores"
-);
-
-
-if (guardados) {
-
-trabajadores =
-JSON.parse(
-guardados
-);
-
-estado.textContent =
-"Trabajadores cargados sin Internet";
-
-} else {
-
-estado.textContent =
-"No hay trabajadores guardados";
-
-}
-
-}
-
-
-} catch(error) {
-
-
-console.log(
-"Error cargando trabajadores:",
-error
-);
-
-
-/*
-Si falla Internet,
-usar copia local
-*/
-
-const guardados =
-localStorage.getItem(
-"trabajadores"
-);
-
-
-if (guardados) {
-
-trabajadores =
-JSON.parse(
-guardados
-);
-
-estado.textContent =
-"Sin Internet. Trabajadores locales.";
-
-} else {
-
-estado.textContent =
-"No se pudieron cargar trabajadores";
-
-}
-
-}
-
-}
-
-
-/* ==========================================
-   BUSCAR TRABAJADOR
-========================================== */
-
-document
-.getElementById("codigo")
-.addEventListener(
-"input",
-function() {
-
-buscarTrabajador(
-this.value
-);
-
-}
-);
-
-
-function buscarTrabajador(
-codigo
-) {
-
-
-codigo =
-codigo.trim();
-
-
-const trabajador =
-trabajadores.find(
-function(t) {
-
-return String(
-t.codigo
-).toLowerCase()
-===
-codigo.toLowerCase();
-
-}
-);
-
-
-const pantalla =
-document.getElementById(
-"trabajador"
-);
-
-
-if (trabajador) {
-
-
-pantalla.textContent =
-trabajador.nombre +
-" (" +
-trabajador.codigo +
-")";
-
-
-} else {
-
-
-if (codigo.length > 0) {
-
-pantalla.textContent =
-"Trabajador no encontrado";
-
-} else {
-
-pantalla.textContent =
-"Trabajador no seleccionado";
-
-}
-
-}
-
-}
-
-
-/* ==========================================
-   GUARDAR PESAJE
-========================================== */
-
-async function guardarPesaje() {
-
-
-const codigo =
-document.getElementById(
-"codigo"
-).value.trim();
-
-
-const kilos =
-document.getElementById(
-"kilos"
-).value;
-
-
-const estado =
-document.getElementById(
-"estado"
-);
-
-
-if (!codigo) {
-
-estado.textContent =
-"Ingrese el código";
-
-return;
-
-}
-
-
-if (!kilos || kilos <= 0) {
-
-estado.textContent =
-"Ingrese los kilos";
-
-return;
-
-}
-
-
-const trabajador =
-trabajadores.find(
-function(t) {
-
-return String(
-t.codigo
-).toLowerCase()
-===
-codigo.toLowerCase();
-
-}
-);
-
-
-if (!trabajador) {
-
-estado.textContent =
-"Trabajador no encontrado";
-
-return;
-
-}
-
-
-const registro = {
-
-id:
-Date.now() +
-"-" +
-Math.random()
-.toString(36)
-.substring(2,8),
-
-fechaHora:
-new Date().toISOString(),
-
-codigo:
-trabajador.codigo,
-
-kilos:
-Number(kilos)
-
-};
-
-
-try {
-
-
-await guardarLocal(
-registro
-);
-
-
-await actualizarPendientes();
-
-
-estado.textContent =
-"✓ Pesaje guardado";
-
-
-document.getElementById(
-"kilos"
-).value = "";
-
-
-if (navigator.onLine) {
-
-sincronizar();
-
-}
-
-
-} catch(error) {
-
-
-estado.textContent =
-"Error al guardar";
-
-
-console.log(error);
-
-}
-
-}
-
-
-/* ==========================================
-   CONTADOR
-========================================== */
+// ==========================================
+// CONTADOR
+// ==========================================
 
 async function actualizarPendientes() {
 
-try {
+  try {
 
-const pendientes =
-await obtenerPendientes();
+    const pendientes =
+      await obtenerPendientes();
 
 
-document.getElementById(
-"pendientes"
-).textContent =
-"Pendientes: " +
-pendientes.length;
+    document.getElementById(
+      "pendientes"
+    ).textContent =
+      "Pendientes: " +
+      pendientes.length;
 
-} catch(error) {
+  } catch(error) {
 
-console.log(error);
+    console.log(error);
+
+  }
 
 }
 
+
+// ==========================================
+// GUARDAR PESAJE
+// ==========================================
+
+async function guardarPesaje() {
+
+  const codigo =
+    document.getElementById(
+      "codigo"
+    ).value.trim();
+
+
+  const kilos =
+    document.getElementById(
+      "kilos"
+    ).value;
+
+
+  const estado =
+    document.getElementById(
+      "estado"
+    );
+
+
+  if (!codigo) {
+
+    estado.textContent =
+      "Ingrese el código";
+
+    return;
+
+  }
+
+
+  if (!kilos || Number(kilos) <= 0) {
+
+    estado.textContent =
+      "Ingrese los kilos";
+
+    return;
+
+  }
+
+
+  const trabajador =
+    trabajadores.find(
+      function(t) {
+
+        return String(
+          t.codigo
+        )
+        .toLowerCase()
+        ===
+        codigo.toLowerCase();
+
+      }
+    );
+
+
+  if (!trabajador) {
+
+    estado.textContent =
+      "Trabajador no encontrado";
+
+    return;
+
+  }
+
+
+  const registro = {
+
+    id:
+      Date.now() +
+      "-" +
+      Math.random()
+        .toString(36)
+        .substring(2, 8),
+
+    fechaHora:
+      new Date().toISOString(),
+
+    codigo:
+      trabajador.codigo,
+
+    kilos:
+      Number(kilos)
+
+  };
+
+
+  try {
+
+    await guardarLocal(
+      registro
+    );
+
+
+    await actualizarPendientes();
+
+
+    estado.textContent =
+      "✓ Pesaje guardado";
+
+
+    document.getElementById(
+      "kilos"
+    ).value = "";
+
+
+    if (navigator.onLine) {
+
+      sincronizar();
+
+    }
+
+
+  } catch(error) {
+
+    estado.textContent =
+      "Error al guardar";
+
+
+    console.error(error);
+
+  }
+
 }
 
 
-/* ==========================================
-   ENVIAR A GOOGLE
-========================================== */
+// ==========================================
+// SINCRONIZAR UN PESAJE
+// ==========================================
 
-function enviarAGoogle(
-registro
+async function sincronizarRegistro(
+  registro
 ) {
 
+  const url =
+    URL_APPS_SCRIPT +
+    "?action=guardar" +
+    "&id=" +
+    encodeURIComponent(
+      registro.id
+    ) +
+    "&fechaHora=" +
+    encodeURIComponent(
+      registro.fechaHora
+    ) +
+    "&codigo=" +
+    encodeURIComponent(
+      registro.codigo
+    ) +
+    "&kilos=" +
+    encodeURIComponent(
+      registro.kilos
+    );
 
-return fetch(
-URL_APPS_SCRIPT,
-{
 
-method: "POST",
+  const resultado =
+    await jsonp(url);
 
-headers: {
 
-"Content-Type":
-"text/plain;charset=utf-8"
+  if (!resultado.ok) {
 
-},
+    throw new Error(
+      resultado.error ||
+      "No se pudo guardar"
+    );
 
-body:
-JSON.stringify(
-registro
-)
+  }
 
-}
-)
 
-.then(
-function(respuesta) {
-
-return respuesta.json();
-
-}
-)
-
-.then(
-function(resultado) {
-
-if (!resultado.ok) {
-
-throw new Error(
-resultado.error
-);
-
-}
-
-return resultado;
-
-}
-);
+  return true;
 
 }
 
 
-/* ==========================================
-   SINCRONIZAR
-========================================== */
+// ==========================================
+// SINCRONIZAR
+// ==========================================
 
 async function sincronizar() {
 
+  if (!navigator.onLine) {
 
-if (!navigator.onLine) {
+    return;
 
-return;
-
-}
-
-
-const pendientes =
-await obtenerPendientes();
+  }
 
 
-if (
-pendientes.length === 0
-) {
-
-return;
-
-}
+  const pendientes =
+    await obtenerPendientes();
 
 
-for (
-const registro
-of pendientes
-) {
+  for (
+    const registro
+    of pendientes
+  ) {
+
+    try {
+
+      await sincronizarRegistro(
+        registro
+      );
 
 
-try {
+      await eliminarLocal(
+        registro.id
+      );
 
 
-await enviarAGoogle(
-registro
-);
+    } catch(error) {
+
+      console.log(
+        "Pendiente:",
+        error
+      );
 
 
-await eliminarLocal(
-registro.id
-);
+      break;
+
+    }
+
+  }
 
 
-} catch(error) {
-
-
-console.log(
-"No se pudo sincronizar:",
-error
-);
-
-
-break;
-
-}
+  await actualizarPendientes();
 
 }
 
 
-await actualizarPendientes();
-
-}
-
-
-/* ==========================================
-   INTERNET
-========================================== */
+// ==========================================
+// INTERNET
+// ==========================================
 
 window.addEventListener(
-"online",
-function() {
+  "online",
+  function() {
+
+    document.getElementById(
+      "estado"
+    ).textContent =
+      "Internet disponible. Sincronizando...";
 
 
-document.getElementById(
-"estado"
-).textContent =
-"Internet disponible";
+    cargarTrabajadores();
 
+    sincronizar();
 
-cargarTrabajadores();
-
-
-sincronizar();
-
-}
+  }
 );
 
 
-/* ==========================================
-   SIN INTERNET
-========================================== */
+// ==========================================
+// SIN INTERNET
+// ==========================================
 
 window.addEventListener(
-"offline",
-function() {
+  "offline",
+  function() {
 
+    document.getElementById(
+      "estado"
+    ).textContent =
+      "Sin Internet. Trabajando localmente.";
 
-document.getElementById(
-"estado"
-).textContent =
-"Sin Internet. Funcionando localmente.";
-
-}
+  }
 );
 
 
-/* ==========================================
-   INICIO
-========================================== */
+// ==========================================
+// INICIAR
+// ==========================================
 
 cargarTrabajadores();
 
 actualizarPendientes();
 
 
-/* ==========================================
-   SERVICE WORKER
-========================================== */
+// ==========================================
+// SERVICE WORKER
+// ==========================================
 
 if (
-"serviceWorker"
-in navigator
+  "serviceWorker" in navigator
 ) {
 
-window.addEventListener(
-"load",
-function() {
+  window.addEventListener(
+    "load",
+    function() {
 
-navigator.serviceWorker.register(
-"sw.js"
-);
+      navigator.serviceWorker
+        .register(
+          "sw.js"
+        );
 
-});
+    }
+  );
 
 }
 
-
 </script>
-
 
 </body>
 
