@@ -1,4 +1,4 @@
-const CACHE_NAME = "control-pesajes-v1";
+const CACHE_NAME = "control-pesajes-v2";
 
 const ARCHIVOS = [
   "./",
@@ -6,30 +6,87 @@ const ARCHIVOS = [
   "./manifest.json"
 ];
 
-self.addEventListener("install", function(event) {
 
-  event.waitUntil(
+self.addEventListener(
+  "install",
+  function(event) {
 
-    caches.open(CACHE_NAME).then(function(cache) {
+    event.waitUntil(
 
-      return cache.addAll(ARCHIVOS);
+      caches
+        .open(CACHE_NAME)
+        .then(function(cache) {
 
-    })
+          return cache.addAll(
+            ARCHIVOS
+          );
 
-  );
+        })
 
-});
+    );
 
-self.addEventListener("fetch", function(event) {
+  }
+);
 
-  event.respondWith(
 
-    caches.match(event.request).then(function(respuesta) {
+self.addEventListener(
+  "activate",
+  function(event) {
 
-      return respuesta || fetch(event.request);
+    event.waitUntil(
 
-    })
+      caches.keys()
+        .then(function(nombres) {
 
-  );
+          return Promise.all(
 
-});
+            nombres
+              .filter(function(nombre) {
+
+                return nombre !==
+                  CACHE_NAME;
+
+              })
+
+              .map(function(nombre) {
+
+                return caches.delete(
+                  nombre
+                );
+
+              })
+
+          );
+
+        })
+
+    );
+
+  }
+);
+
+
+self.addEventListener(
+  "fetch",
+  function(event) {
+
+    event.respondWith(
+
+      fetch(event.request)
+        .then(function(respuesta) {
+
+          return respuesta;
+
+        })
+        .catch(function() {
+
+          return caches.match(
+            event.request
+          );
+
+        })
+
+    );
+
+  }
+);
