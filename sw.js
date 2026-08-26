@@ -1,92 +1,110 @@
-const CACHE_NAME = "control-pesajes-v2";
+const CACHE_NAME =
+"control-pesajes-v3";
+
 
 const ARCHIVOS = [
+
   "./",
+
   "./index.html",
-  "./manifest.json"
+
+  "./manifest.json",
+
+  "./sw.js"
+
 ];
 
 
 self.addEventListener(
-  "install",
-  function(event) {
+"install",
+function(event) {
 
-    event.waitUntil(
+event.waitUntil(
 
-      caches
-        .open(CACHE_NAME)
-        .then(function(cache) {
+caches
+.open(CACHE_NAME)
+.then(
+function(cache) {
 
-          return cache.addAll(
-            ARCHIVOS
-          );
-
-        })
-
-    );
-
-  }
+return cache.addAll(
+ARCHIVOS
 );
+
+}
+)
+
+);
+
+});
 
 
 self.addEventListener(
-  "activate",
-  function(event) {
+"activate",
+function(event) {
 
-    event.waitUntil(
+event.waitUntil(
 
-      caches.keys()
-        .then(function(nombres) {
+caches.keys()
+.then(
+function(nombres) {
 
-          return Promise.all(
+return Promise.all(
 
-            nombres
-              .filter(function(nombre) {
+nombres
+.filter(
+function(nombre) {
 
-                return nombre !==
-                  CACHE_NAME;
+return nombre !==
+CACHE_NAME;
 
-              })
+}
+)
+.map(
+function(nombre) {
 
-              .map(function(nombre) {
-
-                return caches.delete(
-                  nombre
-                );
-
-              })
-
-          );
-
-        })
-
-    );
-
-  }
+return caches.delete(
+nombre
 );
+
+}
+)
+
+);
+
+}
+)
+
+);
+
+});
 
 
 self.addEventListener(
-  "fetch",
-  function(event) {
+"fetch",
+function(event) {
 
-    event.respondWith(
+event.respondWith(
 
-      fetch(event.request)
-        .then(function(respuesta) {
+fetch(
+event.request
+)
+.then(
+function(respuesta) {
 
-          return respuesta;
+return respuesta;
 
-        })
-        .catch(function() {
+}
+)
+.catch(
+function() {
 
-          return caches.match(
-            event.request
-          );
-
-        })
-
-    );
-
-  }
+return caches.match(
+event.request
 );
+
+}
+)
+
+);
+
+});
