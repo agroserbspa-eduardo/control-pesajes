@@ -5,14 +5,17 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0">
 
-<meta name="theme-color"
-      content="#333333">
+<meta
+  name="theme-color"
+  content="#333333">
 
-<link rel="manifest"
-      href="manifest.json">
+<link
+  rel="manifest"
+  href="manifest.json">
 
 <title>Control de Pesajes</title>
 
@@ -193,138 +196,149 @@ Pendientes: 0
 <script>
 
 
-// ==========================================
-// URL APPS SCRIPT
-// ==========================================
+/* ==================================================
+   URL APPS SCRIPT
+================================================== */
 
 const URL_APPS_SCRIPT =
-  "https://script.google.com/macros/s/AKfycbzs9dBMJotH8zBQNYeeOIdejzlTbPBRkw0IErt0Td9eiHmvy497j7Mu2XZJRzc2J_YWkQ/exec";
+"https://script.google.com/macros/s/AKfycbzs9dBMJotH8zBQNYeeOIdejzlTbPBRkw0IErt0Td9eiHmvy497j7Mu2XZJRzc2J_YWkQ/exec";
 
 
-// ==========================================
-// TRABAJADORES
-// ==========================================
+/* ==================================================
+   TRABAJADORES
+================================================== */
 
 let trabajadores = [];
 
 
-// ==========================================
-// LECTOR QR
-// ==========================================
+/* ==================================================
+   LECTOR QR
+================================================== */
 
 let streamQR = null;
 
 let intervaloQR = null;
 
 
-// ==========================================
-// JSONP
-// ==========================================
+/* ==================================================
+   JSONP
+================================================== */
 
 function jsonp(url) {
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(
+    function(resolve, reject) {
 
-    const callbackName =
-      "callback_" +
-      Date.now() +
-      "_" +
-      Math.random()
-        .toString(36)
-        .substring(2);
-
-
-    const script =
-      document.createElement("script");
+      const callbackName =
+        "callback_" +
+        Date.now() +
+        "_" +
+        Math.random()
+          .toString(36)
+          .substring(2);
 
 
-    const tiempo =
-      setTimeout(function() {
-
-        limpiar();
-
-        reject(
-          new Error(
-            "Tiempo de espera agotado"
-          )
+      const script =
+        document.createElement(
+          "script"
         );
 
-      }, 10000);
 
+      const tiempo =
+        setTimeout(
+          function() {
 
-    function limpiar() {
+            limpiar();
 
-      clearTimeout(tiempo);
+            reject(
+              new Error(
+                "Tiempo de espera agotado"
+              )
+            );
 
-      if (script.parentNode) {
-
-        script.parentNode.removeChild(
-          script
+          },
+          10000
         );
+
+
+      function limpiar() {
+
+        clearTimeout(
+          tiempo
+        );
+
+        if (script.parentNode) {
+
+          script.parentNode.removeChild(
+            script
+          );
+
+        }
+
+        try {
+
+          delete window[
+            callbackName
+          ];
+
+        } catch(error) {
+
+          window[
+            callbackName
+          ] = undefined;
+
+        }
 
       }
 
-      try {
 
-        delete window[
+      window[callbackName] =
+        function(datos) {
+
+          limpiar();
+
+          resolve(
+            datos
+          );
+
+        };
+
+
+      script.onerror =
+        function() {
+
+          limpiar();
+
+          reject(
+            new Error(
+              "No se pudo conectar con Apps Script"
+            )
+          );
+
+        };
+
+
+      script.src =
+        url +
+        "&callback=" +
+        encodeURIComponent(
           callbackName
-        ];
-
-      } catch(error) {
-
-        window[
-          callbackName
-        ] = undefined;
-
-      }
-
-    }
-
-
-    window[callbackName] =
-      function(datos) {
-
-        limpiar();
-
-        resolve(datos);
-
-      };
-
-
-    script.onerror =
-      function() {
-
-        limpiar();
-
-        reject(
-          new Error(
-            "No se pudo conectar con Apps Script"
-          )
         );
 
-      };
 
-
-    script.src =
-      url +
-      "&callback=" +
-      encodeURIComponent(
-        callbackName
+      document.body.appendChild(
+        script
       );
 
-
-    document.body.appendChild(
-      script
-    );
-
-  });
+    }
+  );
 
 }
 
 
-// ==========================================
-// CARGAR TRABAJADORES
-// ==========================================
+/* ==================================================
+   CARGAR TRABAJADORES
+================================================== */
 
 async function cargarTrabajadores() {
 
@@ -345,7 +359,9 @@ async function cargarTrabajadores() {
         );
 
 
-      if (!Array.isArray(lista)) {
+      if (
+        !Array.isArray(lista)
+      ) {
 
         throw new Error(
           "Respuesta incorrecta"
@@ -370,14 +386,7 @@ async function cargarTrabajadores() {
         "✓ Trabajadores actualizados";
 
 
-      console.log(
-        "Trabajadores:",
-        trabajadores
-      );
-
-
       return;
-
 
     } catch(error) {
 
@@ -408,7 +417,6 @@ async function cargarTrabajadores() {
     estado.textContent =
       "✓ Trabajadores disponibles sin Internet";
 
-
   } else {
 
     estado.textContent =
@@ -419,12 +427,14 @@ async function cargarTrabajadores() {
 }
 
 
-// ==========================================
-// BUSCAR TRABAJADOR
-// ==========================================
+/* ==================================================
+   BUSCAR TRABAJADOR
+================================================== */
 
 document
-  .getElementById("codigo")
+  .getElementById(
+    "codigo"
+  )
   .addEventListener(
     "input",
     function() {
@@ -474,12 +484,10 @@ function buscarTrabajador(
       trabajador.codigo +
       ")";
 
-
   } else if (codigo) {
 
     pantalla.textContent =
       "Trabajador no encontrado";
-
 
   } else {
 
@@ -491,9 +499,9 @@ function buscarTrabajador(
 }
 
 
-// ==========================================
-// ESCANEAR QR
-// ==========================================
+/* ==================================================
+   ESCANEAR QR
+================================================== */
 
 async function abrirEscaner() {
 
@@ -590,7 +598,6 @@ async function abrirEscaner() {
       in window
     ) {
 
-
       const detector =
         new BarcodeDetector({
 
@@ -640,7 +647,6 @@ async function abrirEscaner() {
           300
         );
 
-
     } else {
 
       estado.textContent =
@@ -664,9 +670,9 @@ async function abrirEscaner() {
 }
 
 
-// ==========================================
-// PROCESAR QR
-// ==========================================
+/* ==================================================
+   PROCESAR QR
+================================================== */
 
 function procesarQR(
   valor
@@ -674,12 +680,6 @@ function procesarQR(
 
   valor =
     String(valor).trim();
-
-
-  console.log(
-    "QR leído:",
-    valor
-  );
 
 
   document.getElementById(
@@ -719,7 +719,6 @@ function procesarQR(
       "✓ QR reconocido: " +
       trabajador.nombre;
 
-
   } else {
 
     document.getElementById(
@@ -732,9 +731,9 @@ function procesarQR(
 }
 
 
-// ==========================================
-// CERRAR ESCÁNER
-// ==========================================
+/* ==================================================
+   CERRAR ESCÁNER
+================================================== */
 
 function cerrarEscaner() {
 
@@ -769,13 +768,9 @@ function cerrarEscaner() {
   }
 
 
-  const lector =
-    document.getElementById(
-      "lectorQR"
-    );
-
-
-  lector.innerHTML =
+  document.getElementById(
+    "lectorQR"
+  ).innerHTML =
     "";
 
 
@@ -787,9 +782,9 @@ function cerrarEscaner() {
 }
 
 
-// ==========================================
-// BASE DE DATOS LOCAL
-// ==========================================
+/* ==================================================
+   BASE DE DATOS LOCAL
+================================================== */
 
 const DB_NAME =
   "ControlPesajesDB";
@@ -864,9 +859,9 @@ function abrirBaseDatos() {
 }
 
 
-// ==========================================
-// GUARDAR LOCAL
-// ==========================================
+/* ==================================================
+   GUARDAR LOCAL
+================================================== */
 
 async function guardarLocal(
   registro
@@ -920,9 +915,9 @@ async function guardarLocal(
 }
 
 
-// ==========================================
-// OBTENER PENDIENTES
-// ==========================================
+/* ==================================================
+   OBTENER PENDIENTES
+================================================== */
 
 async function obtenerPendientes() {
 
@@ -975,9 +970,9 @@ async function obtenerPendientes() {
 }
 
 
-// ==========================================
-// ELIMINAR LOCAL
-// ==========================================
+/* ==================================================
+   ELIMINAR LOCAL
+================================================== */
 
 async function eliminarLocal(
   id
@@ -1031,9 +1026,9 @@ async function eliminarLocal(
 }
 
 
-// ==========================================
-// CONTADOR
-// ==========================================
+/* ==================================================
+   CONTADOR
+================================================== */
 
 async function actualizarPendientes() {
 
@@ -1049,7 +1044,6 @@ async function actualizarPendientes() {
       "Pendientes: " +
       pendientes.length;
 
-
   } catch(error) {
 
     console.log(
@@ -1061,9 +1055,92 @@ async function actualizarPendientes() {
 }
 
 
-// ==========================================
-// GUARDAR PESAJE
-// ==========================================
+/* ==================================================
+   FECHA Y HORA LOCAL DE CHILE
+================================================== */
+
+function obtenerFechaHoraChile() {
+
+  const ahora =
+    new Date();
+
+
+  const partes =
+    new Intl.DateTimeFormat(
+      "en-CA",
+      {
+        timeZone:
+          "America/Santiago",
+
+        year:
+          "numeric",
+
+        month:
+          "2-digit",
+
+        day:
+          "2-digit",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        second:
+          "2-digit",
+
+        hour12:
+          false
+
+      }
+    ).formatToParts(
+      ahora
+    );
+
+
+  const valores = {};
+
+
+  partes.forEach(
+    function(parte) {
+
+      if (
+        parte.type !==
+        "literal"
+      ) {
+
+        valores[
+          parte.type
+        ] =
+          parte.value;
+
+      }
+
+    }
+  );
+
+
+  return (
+    valores.year +
+    "-" +
+    valores.month +
+    "-" +
+    valores.day +
+    "T" +
+    valores.hour +
+    ":" +
+    valores.minute +
+    ":" +
+    valores.second
+  );
+
+}
+
+
+/* ==================================================
+   GUARDAR PESAJE
+================================================== */
 
 async function guardarPesaje() {
 
@@ -1133,26 +1210,6 @@ async function guardarPesaje() {
   }
 
 
-  // ==========================================
-  // FECHA Y HORA DE CHILE
-  // ==========================================
-
-  const fechaHoraChile =
-    new Date().toLocaleString(
-      "es-CL",
-      {
-        timeZone: "America/Santiago",
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false
-      }
-    );
-
-
   const registro = {
 
     id:
@@ -1165,8 +1222,14 @@ async function guardarPesaje() {
           8
         ),
 
+    /*
+       AHORA SE GUARDA
+       DIRECTAMENTE CON
+       HORA DE CHILE.
+    */
+
     fechaHora:
-      fechaHoraChile,
+      obtenerFechaHoraChile(),
 
     codigo:
       trabajador.codigo,
@@ -1178,8 +1241,6 @@ async function guardarPesaje() {
 
 
   try {
-
-    // Primero guarda en la tablet
 
     await guardarLocal(
       registro
@@ -1198,8 +1259,6 @@ async function guardarPesaje() {
     ).value =
       "";
 
-
-    // Si hay internet sincroniza
 
     if (
       navigator.onLine
@@ -1225,9 +1284,9 @@ async function guardarPesaje() {
 }
 
 
-// ==========================================
-// SINCRONIZAR UN PESAJE
-// ==========================================
+/* ==================================================
+   SINCRONIZAR UN PESAJE
+================================================== */
 
 async function sincronizarRegistro(
   registro
@@ -1260,7 +1319,9 @@ async function sincronizarRegistro(
     );
 
 
-  if (!resultado.ok) {
+  if (
+    !resultado.ok
+  ) {
 
     throw new Error(
       resultado.error ||
@@ -1275,9 +1336,9 @@ async function sincronizarRegistro(
 }
 
 
-// ==========================================
-// SINCRONIZAR
-// ==========================================
+/* ==================================================
+   SINCRONIZAR
+================================================== */
 
 async function sincronizar() {
 
@@ -1331,9 +1392,9 @@ async function sincronizar() {
 }
 
 
-// ==========================================
-// INTERNET
-// ==========================================
+/* ==================================================
+   INTERNET
+================================================== */
 
 window.addEventListener(
   "online",
@@ -1353,9 +1414,9 @@ window.addEventListener(
 );
 
 
-// ==========================================
-// SIN INTERNET
-// ==========================================
+/* ==================================================
+   SIN INTERNET
+================================================== */
 
 window.addEventListener(
   "offline",
@@ -1370,18 +1431,18 @@ window.addEventListener(
 );
 
 
-// ==========================================
-// INICIO
-// ==========================================
+/* ==================================================
+   INICIO
+================================================== */
 
 cargarTrabajadores();
 
 actualizarPendientes();
 
 
-// ==========================================
-// SERVICE WORKER
-// ==========================================
+/* ==================================================
+   SERVICE WORKER
+================================================== */
 
 if (
   "serviceWorker" in navigator
