@@ -1,12 +1,21 @@
-const CACHE_NAME = "control-pesajes-v4";
+const CACHE_NAME =
+  "control-pesajes-v4";
+
 
 const ARCHIVOS = [
+
   "./",
+
   "./index.html",
-  "./manifest.json",
-  "./sw.js"
+
+  "./manifest.json"
+
 ];
 
+
+/* ==================================================
+   INSTALAR
+================================================== */
 
 self.addEventListener(
   "install",
@@ -15,20 +24,31 @@ self.addEventListener(
     event.waitUntil(
 
       caches
-        .open(CACHE_NAME)
-        .then(function(cache) {
+        .open(
+          CACHE_NAME
+        )
+        .then(
+          function(cache) {
 
-          return cache.addAll(
-            ARCHIVOS
-          );
+            return cache.addAll(
+              ARCHIVOS
+            );
 
-        })
+          }
+        )
 
     );
+
+
+    self.skipWaiting();
 
   }
 );
 
+
+/* ==================================================
+   ACTIVAR
+================================================== */
 
 self.addEventListener(
   "activate",
@@ -37,59 +57,120 @@ self.addEventListener(
     event.waitUntil(
 
       caches.keys()
-        .then(function(nombres) {
+        .then(
+          function(nombres) {
 
-          return Promise.all(
+            return Promise.all(
 
-            nombres
-              .filter(function(nombre) {
+              nombres
+                .filter(
+                  function(nombre) {
 
-                return nombre !==
-                  CACHE_NAME;
+                    return nombre
+                      !== CACHE_NAME;
 
-              })
-              .map(function(nombre) {
+                  }
+                )
 
-                return caches.delete(
-                  nombre
-                );
+                .map(
+                  function(nombre) {
 
-              })
+                    return caches.delete(
+                      nombre
+                    );
 
-          );
+                  }
+                )
 
-        })
+            );
+
+          }
+        )
 
     );
+
+
+    self.clients.claim();
 
   }
 );
 
 
+/* ==================================================
+   INTERNET / SIN INTERNET
+================================================== */
+
 self.addEventListener(
   "fetch",
   function(event) {
 
-    // Para archivos de la aplicación:
-    // intentar red y si falla usar caché.
+    /*
+       Para la aplicación:
+
+       INTERNET:
+       intenta obtener la versión nueva.
+
+       SIN INTERNET:
+       utiliza la versión guardada.
+    */
+
+    if (
+      event.request.method !==
+      "GET"
+    ) {
+
+      return;
+
+    }
+
 
     event.respondWith(
 
-      fetch(event.request)
+      fetch(
+        event.request
+      )
 
-        .then(function(respuesta) {
+      .then(
+        function(respuesta) {
+
+          /*
+             Guardar copia actualizada
+          */
+
+          const copia =
+            respuesta.clone();
+
+
+          caches
+            .open(
+              CACHE_NAME
+            )
+            .then(
+              function(cache) {
+
+                cache.put(
+                  event.request,
+                  copia
+                );
+
+              }
+            );
+
 
           return respuesta;
 
-        })
+        }
+      )
 
-        .catch(function() {
+      .catch(
+        function() {
 
           return caches.match(
             event.request
           );
 
-        })
+        }
+      )
 
     );
 
