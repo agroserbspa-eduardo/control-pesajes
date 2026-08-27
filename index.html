@@ -3,157 +3,103 @@
 
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="theme-color"
-    content="#333333">
+<meta name="theme-color"
+      content="#333333">
 
-  <link
-    rel="manifest"
-    href="manifest.json">
+<link rel="manifest"
+      href="manifest.json">
 
-  <title>Control de Pesajes</title>
+<title>Control de Pesajes</title>
 
 
-  <style>
+<style>
 
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #f2f2f2;
-    }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f2f2f2;
+}
 
-    .contenedor {
-      max-width: 600px;
-      margin: auto;
-    }
+.contenedor {
+  max-width: 600px;
+  margin: auto;
+}
 
-    h1 {
-      text-align: center;
-    }
+h1 {
+  text-align: center;
+}
 
-    .tarjeta {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      margin-top: 20px;
-    }
+.tarjeta {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
 
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
 
-    input,
-    button {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 15px;
-      margin-top: 8px;
-      font-size: 18px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
+input,
+button {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px;
+  margin-top: 8px;
+  font-size: 18px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
 
-    button {
-      cursor: pointer;
-      font-weight: bold;
-      margin-top: 15px;
-    }
+button {
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 15px;
+}
 
-    #trabajador {
-      margin-top: 10px;
-      padding: 15px;
-      background: #eee;
-      border-radius: 8px;
-      font-size: 18px;
-    }
+#trabajador {
+  margin-top: 10px;
+  padding: 15px;
+  background: #eee;
+  border-radius: 8px;
+  font-size: 18px;
+}
 
-    #lectorQR {
-      margin-top: 15px;
-      text-align: center;
-    }
+#lectorQR {
+  margin-top: 15px;
+  text-align: center;
+}
 
-    #lectorQR video {
-      width: 100%;
-      max-width: 400px;
-      border-radius: 10px;
-    }
+#lectorQR video {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+}
 
-    #cerrarQR {
-      display: none;
-    }
+#cerrarQR {
+  display: none;
+}
 
-    #estado {
-      text-align: center;
-      margin-top: 20px;
-      font-weight: bold;
-    }
+#estado {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+}
 
-    #pendientes {
-      text-align: center;
-      margin-top: 10px;
-    }
+#pendientes {
+  text-align: center;
+  margin-top: 10px;
+}
 
-    /* =========================================
-       CONSULTA DE PESAJES
-    ========================================= */
-
-    #consulta {
-      display: none;
-      margin-top: 20px;
-      background: #f8f8f8;
-      padding: 15px;
-      border-radius: 10px;
-    }
-
-    #listaPesajes {
-      margin-top: 15px;
-    }
-
-    .pesaje {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 12px;
-      margin-top: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .hora {
-      font-weight: bold;
-    }
-
-    .kilosRegistro {
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    #totalDia {
-      margin-top: 15px;
-      padding: 15px;
-      background: #ddd;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    #sinPesajes {
-      text-align: center;
-      padding: 15px;
-    }
-
-  </style>
+</style>
 
 </head>
 
@@ -162,130 +108,84 @@
 
 <div class="contenedor">
 
-  <h1>CONTROL DE PESAJES</h1>
+<h1>CONTROL DE PESAJES</h1>
 
 
-  <div class="tarjeta">
+<div class="tarjeta">
 
 
-    <!-- ========================================
-         TRABAJADOR
-    ========================================= -->
-
-    <label>
-      Código del trabajador
-    </label>
+<label>
+Código del trabajador
+</label>
 
 
-    <input
-      id="codigo"
-      type="text"
-      placeholder="Ej: Trab001"
-      autocomplete="off">
+<input
+  id="codigo"
+  type="text"
+  placeholder="Ej: Trab001"
+  autocomplete="off">
 
 
-    <button
-      type="button"
-      onclick="abrirEscaner()">
+<button
+  type="button"
+  onclick="abrirEscaner()">
 
-      📷 ESCANEAR QR
+📷 ESCANEAR QR
 
-    </button>
-
-
-    <div id="lectorQR"></div>
+</button>
 
 
-    <button
-      id="cerrarQR"
-      type="button"
-      onclick="cerrarEscaner()">
-
-      ✖ CERRAR CÁMARA
-
-    </button>
+<div id="lectorQR"></div>
 
 
-    <div id="trabajador">
+<button
+  id="cerrarQR"
+  type="button"
+  onclick="cerrarEscaner()">
 
-      Trabajador no seleccionado
+✖ CERRAR CÁMARA
 
-    </div>
-
-
-    <!-- ========================================
-         BOTÓN CONSULTAR
-    ========================================= -->
-
-    <button
-      type="button"
-      onclick="mostrarPesajes()">
-
-      📊 VER MIS PESAJES
-
-    </button>
+</button>
 
 
-    <!-- ========================================
-         KILOS
-    ========================================= -->
+<div id="trabajador">
 
-    <label>
-      Kilos
-    </label>
+Trabajador no seleccionado
+
+</div>
 
 
-    <input
-      id="kilos"
-      type="number"
-      step="0.1"
-      placeholder="Ej: 84.5">
+<label>
+Kilos
+</label>
 
 
-    <button
-      type="button"
-      onclick="guardarPesaje()">
-
-      ⚖️ GUARDAR PESAJE
-
-    </button>
+<input
+  id="kilos"
+  type="number"
+  step="0.1"
+  placeholder="Ej: 84.5">
 
 
-    <div id="estado"></div>
+<button
+  onclick="guardarPesaje()">
+
+GUARDAR PESAJE
+
+</button>
 
 
-    <div id="pendientes">
-
-      Pendientes: 0
-
-    </div>
+<div id="estado"></div>
 
 
-    <!-- ========================================
-         CONSULTA DE PESAJES
-    ========================================= -->
+<div id="pendientes">
 
-    <div id="consulta">
+Pendientes: 0
 
-      <h2>
-        📊 Pesajes de hoy
-      </h2>
+</div>
 
 
-      <div id="nombreConsulta"></div>
-
-
-      <div id="listaPesajes"></div>
-
-
-      <div id="totalDia">
-        TOTAL: 0 kg
-      </div>
-
-    </div>
-
-
-  </div>
+</div>
 
 </div>
 
@@ -293,33 +193,33 @@
 <script>
 
 
-// ==================================================
-// URL DE GOOGLE APPS SCRIPT
-// ==================================================
+// ==========================================
+// URL APPS SCRIPT
+// ==========================================
 
 const URL_APPS_SCRIPT =
   "https://script.google.com/macros/s/AKfycbzs9dBMJotH8zBQNYeeOIdejzlTbPBRkw0IErt0Td9eiHmvy497j7Mu2XZJRzc2J_YWkQ/exec";
 
 
-// ==================================================
+// ==========================================
 // TRABAJADORES
-// ==================================================
+// ==========================================
 
 let trabajadores = [];
 
 
-// ==================================================
-// QR
-// ==================================================
+// ==========================================
+// LECTOR QR
+// ==========================================
 
 let streamQR = null;
 
 let intervaloQR = null;
 
 
-// ==================================================
+// ==========================================
 // JSONP
-// ==================================================
+// ==========================================
 
 function jsonp(url) {
 
@@ -331,7 +231,7 @@ function jsonp(url) {
       "_" +
       Math.random()
         .toString(36)
-        .substring(2, 8);
+        .substring(2);
 
 
     const script =
@@ -356,7 +256,6 @@ function jsonp(url) {
 
       clearTimeout(tiempo);
 
-
       if (script.parentNode) {
 
         script.parentNode.removeChild(
@@ -365,15 +264,17 @@ function jsonp(url) {
 
       }
 
-
       try {
 
-        delete window[callbackName];
+        delete window[
+          callbackName
+        ];
 
       } catch(error) {
 
-        window[callbackName] =
-          undefined;
+        window[
+          callbackName
+        ] = undefined;
 
       }
 
@@ -421,9 +322,9 @@ function jsonp(url) {
 }
 
 
-// ==================================================
+// ==========================================
 // CARGAR TRABAJADORES
-// ==================================================
+// ==========================================
 
 async function cargarTrabajadores() {
 
@@ -469,12 +370,19 @@ async function cargarTrabajadores() {
         "✓ Trabajadores actualizados";
 
 
+      console.log(
+        "Trabajadores:",
+        trabajadores
+      );
+
+
       return;
+
 
     } catch(error) {
 
       console.log(
-        "Error cargando trabajadores:",
+        "Error Internet:",
         error
       );
 
@@ -482,10 +390,6 @@ async function cargarTrabajadores() {
 
   }
 
-
-  // ================================================
-  // SIN INTERNET
-  // ================================================
 
   const guardados =
     localStorage.getItem(
@@ -495,30 +399,17 @@ async function cargarTrabajadores() {
 
   if (guardados) {
 
-    try {
-
-      trabajadores =
-        JSON.parse(
-          guardados
-        );
+    trabajadores =
+      JSON.parse(
+        guardados
+      );
 
 
-      estado.textContent =
-        "✓ Trabajadores disponibles sin Internet";
+    estado.textContent =
+      "✓ Trabajadores disponibles sin Internet";
 
-
-    } catch(error) {
-
-      trabajadores = [];
-
-      estado.textContent =
-        "Error leyendo trabajadores guardados";
-
-    }
 
   } else {
-
-    trabajadores = [];
 
     estado.textContent =
       "No hay trabajadores guardados";
@@ -528,9 +419,9 @@ async function cargarTrabajadores() {
 }
 
 
-// ==================================================
+// ==========================================
 // BUSCAR TRABAJADOR
-// ==================================================
+// ==========================================
 
 document
   .getElementById("codigo")
@@ -546,10 +437,12 @@ document
   );
 
 
-function buscarTrabajador(codigo) {
+function buscarTrabajador(
+  codigo
+) {
 
   codigo =
-    String(codigo).trim();
+    codigo.trim();
 
 
   const trabajador =
@@ -598,9 +491,9 @@ function buscarTrabajador(codigo) {
 }
 
 
-// ==================================================
-// ABRIR ESCÁNER QR
-// ==================================================
+// ==========================================
+// ESCANEAR QR
+// ==========================================
 
 async function abrirEscaner() {
 
@@ -693,14 +586,18 @@ async function abrirEscaner() {
 
 
     if (
-      "BarcodeDetector" in window
+      "BarcodeDetector"
+      in window
     ) {
+
 
       const detector =
         new BarcodeDetector({
+
           formats: [
             "qr_code"
           ]
+
         });
 
 
@@ -720,8 +617,12 @@ async function abrirEscaner() {
                 codigos.length > 0
               ) {
 
+                const codigoQR =
+                  codigos[0].rawValue;
+
+
                 procesarQR(
-                  codigos[0].rawValue
+                  codigoQR
                 );
 
               }
@@ -729,7 +630,7 @@ async function abrirEscaner() {
             } catch(error) {
 
               console.log(
-                "Error leyendo QR:",
+                "Error lector QR:",
                 error
               );
 
@@ -763,14 +664,22 @@ async function abrirEscaner() {
 }
 
 
-// ==================================================
+// ==========================================
 // PROCESAR QR
-// ==================================================
+// ==========================================
 
-function procesarQR(valor) {
+function procesarQR(
+  valor
+) {
 
   valor =
     String(valor).trim();
+
+
+  console.log(
+    "QR leído:",
+    valor
+  );
 
 
   document.getElementById(
@@ -823,9 +732,9 @@ function procesarQR(valor) {
 }
 
 
-// ==================================================
+// ==========================================
 // CERRAR ESCÁNER
-// ==================================================
+// ==========================================
 
 function cerrarEscaner() {
 
@@ -860,9 +769,13 @@ function cerrarEscaner() {
   }
 
 
-  document.getElementById(
-    "lectorQR"
-  ).innerHTML =
+  const lector =
+    document.getElementById(
+      "lectorQR"
+    );
+
+
+  lector.innerHTML =
     "";
 
 
@@ -874,25 +787,19 @@ function cerrarEscaner() {
 }
 
 
-// ==================================================
+// ==========================================
 // BASE DE DATOS LOCAL
-// ==================================================
+// ==========================================
 
 const DB_NAME =
   "ControlPesajesDB";
 
-
 const DB_VERSION =
-  2;
-
+  1;
 
 const STORE_NAME =
   "pesajes";
 
-
-// ==================================================
-// ABRIR BASE DE DATOS
-// ==================================================
 
 function abrirBaseDatos() {
 
@@ -914,9 +821,10 @@ function abrirBaseDatos() {
 
 
           if (
-            !db.objectStoreNames.contains(
-              STORE_NAME
-            )
+            !db.objectStoreNames
+              .contains(
+                STORE_NAME
+              )
           ) {
 
             db.createObjectStore(
@@ -956,11 +864,13 @@ function abrirBaseDatos() {
 }
 
 
-// ==================================================
+// ==========================================
 // GUARDAR LOCAL
-// ==================================================
+// ==========================================
 
-async function guardarLocal(registro) {
+async function guardarLocal(
+  registro
+) {
 
   const db =
     await abrirBaseDatos();
@@ -982,20 +892,9 @@ async function guardarLocal(registro) {
         );
 
 
-      const solicitud =
-        almacen.put(
-          registro
-        );
-
-
-      solicitud.onerror =
-        function() {
-
-          reject(
-            solicitud.error
-          );
-
-        };
+      almacen.put(
+        registro
+      );
 
 
       transaccion.oncomplete =
@@ -1021,9 +920,9 @@ async function guardarLocal(registro) {
 }
 
 
-// ==================================================
-// OBTENER TODOS LOS PESAJES
-// ==================================================
+// ==========================================
+// OBTENER PENDIENTES
+// ==========================================
 
 async function obtenerPendientes() {
 
@@ -1076,11 +975,13 @@ async function obtenerPendientes() {
 }
 
 
-// ==================================================
+// ==========================================
 // ELIMINAR LOCAL
-// ==================================================
+// ==========================================
 
-async function eliminarLocal(id) {
+async function eliminarLocal(
+  id
+) {
 
   const db =
     await abrirBaseDatos();
@@ -1130,9 +1031,9 @@ async function eliminarLocal(id) {
 }
 
 
-// ==================================================
+// ==========================================
 // CONTADOR
-// ==================================================
+// ==========================================
 
 async function actualizarPendientes() {
 
@@ -1160,9 +1061,9 @@ async function actualizarPendientes() {
 }
 
 
-// ==================================================
+// ==========================================
 // GUARDAR PESAJE
-// ==================================================
+// ==========================================
 
 async function guardarPesaje() {
 
@@ -1232,6 +1133,26 @@ async function guardarPesaje() {
   }
 
 
+  // ==========================================
+  // FECHA Y HORA DE CHILE
+  // ==========================================
+
+  const fechaHoraChile =
+    new Date().toLocaleString(
+      "es-CL",
+      {
+        timeZone: "America/Santiago",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      }
+    );
+
+
   const registro = {
 
     id:
@@ -1239,16 +1160,16 @@ async function guardarPesaje() {
       "-" +
       Math.random()
         .toString(36)
-        .substring(2, 8),
+        .substring(
+          2,
+          8
+        ),
 
     fechaHora:
-      new Date().toISOString(),
+      fechaHoraChile,
 
     codigo:
       trabajador.codigo,
-
-    nombre:
-      trabajador.nombre,
 
     kilos:
       Number(kilos)
@@ -1258,9 +1179,7 @@ async function guardarPesaje() {
 
   try {
 
-    estado.textContent =
-      "Guardando en la tablet...";
-
+    // Primero guarda en la tablet
 
     await guardarLocal(
       registro
@@ -1271,7 +1190,7 @@ async function guardarPesaje() {
 
 
     estado.textContent =
-      "✓ Pesaje guardado en la tablet";
+      "✓ Pesaje guardado";
 
 
     document.getElementById(
@@ -1280,321 +1199,35 @@ async function guardarPesaje() {
       "";
 
 
-    if (navigator.onLine) {
+    // Si hay internet sincroniza
+
+    if (
+      navigator.onLine
+    ) {
 
       sincronizar();
 
     }
 
 
-    // Actualizar consulta automáticamente
-    const consulta =
-      document.getElementById(
-        "consulta"
-      );
-
-
-    if (
-      consulta.style.display === "block"
-    ) {
-
-      mostrarPesajes();
-
-    }
-
-
   } catch(error) {
-
-    console.error(
-      "ERROR:",
-      error
-    );
-
 
     estado.textContent =
-      "❌ Error al guardar en la tablet";
+      "Error al guardar";
 
-  }
-
-}
-
-
-// ==================================================
-// CONSULTAR PESAJE DEL TRABAJADOR
-// ==================================================
-
-async function mostrarPesajes() {
-
-  const codigo =
-    document.getElementById(
-      "codigo"
-    ).value.trim();
-
-
-  const trabajador =
-    trabajadores.find(
-      function(t) {
-
-        return String(
-          t.codigo
-        )
-        .toLowerCase()
-        ===
-        codigo.toLowerCase();
-
-      }
-    );
-
-
-  const consulta =
-    document.getElementById(
-      "consulta"
-    );
-
-
-  const lista =
-    document.getElementById(
-      "listaPesajes"
-    );
-
-
-  const totalElemento =
-    document.getElementById(
-      "totalDia"
-    );
-
-
-  const nombreConsulta =
-    document.getElementById(
-      "nombreConsulta"
-    );
-
-
-  if (!trabajador) {
-
-    consulta.style.display =
-      "block";
-
-
-    nombreConsulta.textContent =
-      "";
-
-
-    lista.innerHTML =
-      "<div id='sinPesajes'>Primero seleccione un trabajador.</div>";
-
-
-    totalElemento.textContent =
-      "TOTAL: 0 kg";
-
-
-    return;
-
-  }
-
-
-  consulta.style.display =
-    "block";
-
-
-  nombreConsulta.textContent =
-    trabajador.nombre +
-    " (" +
-    trabajador.codigo +
-    ")";
-
-
-  try {
-
-    const registros =
-      await obtenerPendientes();
-
-
-    // ==============================================
-    // FECHA DE HOY
-    // ==============================================
-
-    const hoy =
-      new Date();
-
-
-    const año =
-      hoy.getFullYear();
-
-
-    const mes =
-      hoy.getMonth();
-
-
-    const dia =
-      hoy.getDate();
-
-
-    // ==============================================
-    // FILTRAR POR TRABAJADOR Y FECHA
-    // ==============================================
-
-    const pesajesHoy =
-      registros.filter(
-        function(registro) {
-
-          const fecha =
-            new Date(
-              registro.fechaHora
-            );
-
-
-          return (
-            String(
-              registro.codigo
-            )
-            .toLowerCase()
-            ===
-            String(
-              trabajador.codigo
-            )
-            .toLowerCase()
-            &&
-            fecha.getFullYear() === año
-            &&
-            fecha.getMonth() === mes
-            &&
-            fecha.getDate() === dia
-          );
-
-        }
-      );
-
-
-    // ==============================================
-    // ORDENAR POR HORA
-    // ==============================================
-
-    pesajesHoy.sort(
-      function(a, b) {
-
-        return new Date(
-          a.fechaHora
-        ) -
-        new Date(
-          b.fechaHora
-        );
-
-      }
-    );
-
-
-    lista.innerHTML =
-      "";
-
-
-    if (
-      pesajesHoy.length === 0
-    ) {
-
-      lista.innerHTML =
-        "<div id='sinPesajes'>" +
-        "No hay pesajes registrados hoy." +
-        "</div>";
-
-
-      totalElemento.textContent =
-        "TOTAL: 0 kg";
-
-
-      return;
-
-    }
-
-
-    let total =
-      0;
-
-
-    pesajesHoy.forEach(
-      function(registro) {
-
-        const fecha =
-          new Date(
-            registro.fechaHora
-          );
-
-
-        const hora =
-          fecha.toLocaleTimeString(
-            "es-CL",
-            {
-              hour: "2-digit",
-              minute: "2-digit"
-            }
-          );
-
-
-        total +=
-          Number(
-            registro.kilos
-          );
-
-
-        const elemento =
-          document.createElement(
-            "div"
-          );
-
-
-        elemento.className =
-          "pesaje";
-
-
-        elemento.innerHTML =
-
-          "<span class='hora'>" +
-          hora +
-          "</span>" +
-
-          "<span class='kilosRegistro'>" +
-          Number(
-            registro.kilos
-          ).toFixed(1) +
-          " kg" +
-          "</span>";
-
-
-        lista.appendChild(
-          elemento
-        );
-
-      }
-    );
-
-
-    totalElemento.textContent =
-      "TOTAL: " +
-      total.toFixed(1) +
-      " kg";
-
-
-  } catch(error) {
 
     console.error(
-      "Error consultando pesajes:",
       error
     );
 
-
-    lista.innerHTML =
-      "<div id='sinPesajes'>" +
-      "No se pudieron consultar los pesajes." +
-      "</div>";
-
   }
 
 }
 
 
-// ==================================================
-// SINCRONIZAR UN REGISTRO
-// ==================================================
+// ==========================================
+// SINCRONIZAR UN PESAJE
+// ==========================================
 
 async function sincronizarRegistro(
   registro
@@ -1627,16 +1260,11 @@ async function sincronizarRegistro(
     );
 
 
-  if (
-    !resultado ||
-    !resultado.ok
-  ) {
+  if (!resultado.ok) {
 
     throw new Error(
-      resultado &&
-      resultado.error
-        ? resultado.error
-        : "No se pudo guardar"
+      resultado.error ||
+      "No se pudo guardar"
     );
 
   }
@@ -1647,91 +1275,65 @@ async function sincronizarRegistro(
 }
 
 
-// ==================================================
+// ==========================================
 // SINCRONIZAR
-// ==================================================
+// ==========================================
 
 async function sincronizar() {
 
-  if (!navigator.onLine) {
+  if (
+    !navigator.onLine
+  ) {
 
     return;
 
   }
 
 
-  try {
-
-    const pendientes =
-      await obtenerPendientes();
+  const pendientes =
+    await obtenerPendientes();
 
 
-    if (
-      pendientes.length === 0
-    ) {
+  for (
+    const registro
+    of pendientes
+  ) {
 
-      return;
+    try {
 
-    }
-
-
-    for (
-      const registro
-      of pendientes
-    ) {
-
-      try {
-
-        await sincronizarRegistro(
-          registro
-        );
+      await sincronizarRegistro(
+        registro
+      );
 
 
-        /*
-         IMPORTANTE:
-         Solo eliminamos el registro
-         local DESPUÉS de confirmar
-         que Google Sheets lo recibió.
-        */
-
-        await eliminarLocal(
-          registro.id
-        );
+      await eliminarLocal(
+        registro.id
+      );
 
 
-      } catch(error) {
+    } catch(error) {
 
-        console.log(
-          "Pendiente:",
-          error
-        );
+      console.log(
+        "Pendiente:",
+        error
+      );
 
 
-        break;
-
-      }
+      break;
 
     }
-
-
-    await actualizarPendientes();
-
-
-  } catch(error) {
-
-    console.log(
-      "Error sincronizando:",
-      error
-    );
 
   }
+
+
+  await actualizarPendientes();
 
 }
 
 
-// ==================================================
-// INTERNET DISPONIBLE
-// ==================================================
+// ==========================================
+// INTERNET
+// ==========================================
 
 window.addEventListener(
   "online",
@@ -1745,16 +1347,15 @@ window.addEventListener(
 
     cargarTrabajadores();
 
-
     sincronizar();
 
   }
 );
 
 
-// ==================================================
+// ==========================================
 // SIN INTERNET
-// ==================================================
+// ==========================================
 
 window.addEventListener(
   "offline",
@@ -1769,18 +1370,18 @@ window.addEventListener(
 );
 
 
-// ==================================================
-// INICIAR
-// ==================================================
+// ==========================================
+// INICIO
+// ==========================================
 
 cargarTrabajadores();
 
 actualizarPendientes();
 
 
-// ==================================================
+// ==========================================
 // SERVICE WORKER
-// ==================================================
+// ==========================================
 
 if (
   "serviceWorker" in navigator
@@ -1793,25 +1394,6 @@ if (
       navigator.serviceWorker
         .register(
           "sw.js"
-        )
-        .then(
-          function() {
-
-            console.log(
-              "Service Worker instalado"
-            );
-
-          }
-        )
-        .catch(
-          function(error) {
-
-            console.log(
-              "Error Service Worker:",
-              error
-            );
-
-          }
         );
 
     }
