@@ -3,317 +3,189 @@
 
 <head>
 
-<meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0">
-
-<meta
-  name="theme-color"
-  content="#333333">
-
-<link
-  rel="manifest"
-  href="manifest.json">
-
-<title>Control de Pesajes</title>
-
-
-<style>
-
-body {
-
-  font-family: Arial, sans-serif;
-
-  margin: 0;
-
-  padding: 20px;
-
-  background: #f2f2f2;
-
-}
-
-
-.contenedor {
-
-  max-width: 600px;
-
-  margin: auto;
-
-}
-
-
-h1 {
-
-  text-align: center;
-
-}
-
-
-.tarjeta {
-
-  background: white;
-
-  padding: 20px;
-
-  border-radius: 12px;
-
-  margin-top: 20px;
-
-}
-
-
-label {
-
-  display: block;
-
-  margin-top: 15px;
-
-  font-weight: bold;
-
-}
-
-
-input,
-button {
-
-  width: 100%;
-
-  box-sizing: border-box;
-
-  padding: 15px;
-
-  margin-top: 8px;
-
-  font-size: 18px;
-
-  border-radius: 8px;
-
-  border: 1px solid #ccc;
-
-}
-
-
-button {
-
-  cursor: pointer;
-
-  font-weight: bold;
-
-  margin-top: 15px;
-
-}
-
-
-#trabajador {
-
-  margin-top: 10px;
-
-  padding: 15px;
-
-  background: #eee;
-
-  border-radius: 8px;
-
-  font-size: 18px;
-
-}
-
-
-#lectorQR {
-
-  margin-top: 15px;
-
-  text-align: center;
-
-}
-
-
-#lectorQR video {
-
-  width: 100%;
-
-  max-width: 400px;
-
-  border-radius: 10px;
-
-}
-
-
-#cerrarQR {
-
-  display: none;
-
-}
-
-
-#estado {
-
-  text-align: center;
-
-  margin-top: 20px;
-
-  font-weight: bold;
-
-}
-
-
-#pendientes {
-
-  text-align: center;
-
-  margin-top: 10px;
-
-}
-
-
-#resumen {
-
-  background: white;
-
-  padding: 15px;
-
-  border-radius: 10px;
-
-  margin-top: 20px;
-
-}
-
-
-.registro {
-
-  border-bottom: 1px solid #ddd;
-
-  padding: 10px 0;
-
-}
-
-
-.registro:last-child {
-
-  border-bottom: none;
-
-}
-
-
-.verde {
-
-  color: green;
-
-}
-
-
-.rojo {
-
-  color: red;
-
-}
-
-</style>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="theme-color"
+    content="#333333">
+
+  <link
+    rel="manifest"
+    href="manifest.json">
+
+  <title>Control de Pesajes</title>
+
+
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f2f2f2;
+    }
+
+    .contenedor {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .tarjeta {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input,
+    button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 15px;
+      margin-top: 8px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    #trabajador {
+      margin-top: 10px;
+      padding: 15px;
+      background: #eee;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+
+    #lectorQR {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    #lectorQR video {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 10px;
+    }
+
+    #cerrarQR {
+      display: none;
+    }
+
+    #estado {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    #pendientes {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+  </style>
 
 </head>
 
 
 <body>
 
-
 <div class="contenedor">
 
+  <h1>CONTROL DE PESAJES</h1>
 
-<h1>CONTROL DE PESAJES</h1>
+  <div class="tarjeta">
 
+    <label>
+      Código del trabajador
+    </label>
 
-<div class="tarjeta">
-
-
-<label>
-Código del trabajador
-</label>
-
-
-<input
-  id="codigo"
-  type="text"
-  placeholder="Ej: Trab001"
-  autocomplete="off">
+    <input
+      id="codigo"
+      type="text"
+      placeholder="Ej: Trab001"
+      autocomplete="off">
 
 
-<button
-  type="button"
-  onclick="abrirEscaner()">
+    <button
+      type="button"
+      onclick="abrirEscaner()">
 
-📷 ESCANEAR QR
+      📷 ESCANEAR QR
 
-</button>
-
-
-<div id="lectorQR"></div>
+    </button>
 
 
-<button
-  id="cerrarQR"
-  type="button"
-  onclick="cerrarEscaner()">
-
-✖ CERRAR CÁMARA
-
-</button>
+    <div id="lectorQR"></div>
 
 
-<div id="trabajador">
+    <button
+      id="cerrarQR"
+      type="button"
+      onclick="cerrarEscaner()">
 
-Trabajador no seleccionado
+      ✖ CERRAR CÁMARA
 
-</div>
-
-
-<label>
-Kilos
-</label>
+    </button>
 
 
-<input
-  id="kilos"
-  type="number"
-  step="0.1"
-  placeholder="Ej: 84.5">
+    <div id="trabajador">
+
+      Trabajador no seleccionado
+
+    </div>
 
 
-<button
-  type="button"
-  onclick="guardarPesaje()">
-
-GUARDAR PESAJE
-
-</button>
+    <label>
+      Kilos
+    </label>
 
 
-<div id="estado"></div>
+    <input
+      id="kilos"
+      type="number"
+      step="0.1"
+      placeholder="Ej: 84.5">
 
 
-<div id="pendientes">
+    <button
+      type="button"
+      onclick="guardarPesaje()">
 
-Pendientes: 0
+      GUARDAR PESAJE
 
-</div>
-
-
-</div>
+    </button>
 
 
-<div id="resumen">
+    <div id="estado"></div>
 
-<h3>Registros de la tablet</h3>
 
-<div id="listaRegistros">
+    <div id="pendientes">
 
-No hay registros.
+      Pendientes: 0
 
-</div>
+    </div>
 
-</div>
-
+  </div>
 
 </div>
 
@@ -321,190 +193,143 @@ No hay registros.
 <script>
 
 
-/* ==================================================
-   URL GOOGLE APPS SCRIPT
-================================================== */
+// ==================================================
+// URL DE GOOGLE APPS SCRIPT
+// ==================================================
 
 const URL_APPS_SCRIPT =
-"https://script.google.com/macros/s/AKfycbzs9dBMJotH8zBQNYeeOIdejzlTbPBRkw0IErt0Td9eiHmvy497j7Mu2XZJRzc2J_YWkQ/exec";
+  "https://script.google.com/macros/s/AKfycbzs9dBMJotH8zBQNYeeOIdejzlTbPBRkw0IErt0Td9eiHmvy497j7Mu2XZJRzc2J_YWkQ/exec";
 
 
-/* ==================================================
-   TRABAJADORES
-================================================== */
+// ==================================================
+// TRABAJADORES
+// ==================================================
 
 let trabajadores = [];
 
 
-/* ==================================================
-   QR
-================================================== */
+// ==================================================
+// QR
+// ==================================================
 
 let streamQR = null;
 
 let intervaloQR = null;
 
 
-/* ==================================================
-   JSONP
-================================================== */
+// ==================================================
+// JSONP
+// ==================================================
 
 function jsonp(url) {
 
-  return new Promise(
-    function(resolve, reject) {
+  return new Promise(function(resolve, reject) {
 
-      const callbackName =
-        "callback_" +
-        Date.now() +
-        "_" +
-        Math.random()
-          .toString(36)
-          .substring(2, 8);
-
-
-      const script =
-        document.createElement("script");
+    const callbackName =
+      "callback_" +
+      Date.now() +
+      "_" +
+      Math.random()
+        .toString(36)
+        .substring(2, 8);
 
 
-      const tiempo =
-        setTimeout(
-          function() {
+    const script =
+      document.createElement("script");
 
-            limpiar();
 
-            reject(
-              new Error(
-                "Tiempo de espera agotado"
-              )
-            );
+    const tiempo =
+      setTimeout(function() {
 
-          },
-          15000
+        limpiar();
+
+        reject(
+          new Error(
+            "Tiempo de espera agotado"
+          )
         );
 
-
-      function limpiar() {
-
-        clearTimeout(tiempo);
+      }, 10000);
 
 
-        if (
-          script.parentNode
-        ) {
+    function limpiar() {
 
-          script.parentNode
-            .removeChild(
-              script
-            );
+      clearTimeout(tiempo);
 
-        }
+      if (script.parentNode) {
 
-
-        try {
-
-          delete window[
-            callbackName
-          ];
-
-        } catch(error) {
-
-          window[
-            callbackName
-          ] = undefined;
-
-        }
+        script.parentNode.removeChild(
+          script
+        );
 
       }
 
+      try {
 
-      window[
-        callbackName
-      ] =
-        function(datos) {
+        delete window[callbackName];
 
-          limpiar();
+      } catch(error) {
 
-          resolve(datos);
+        window[callbackName] =
+          undefined;
 
-        };
-
-
-      script.onerror =
-        function() {
-
-          limpiar();
-
-          reject(
-            new Error(
-              "No se pudo conectar con Google"
-            )
-          );
-
-        };
-
-
-      script.src =
-        url +
-        "&callback=" +
-        encodeURIComponent(
-          callbackName
-        );
-
-
-      document.body.appendChild(
-        script
-      );
+      }
 
     }
-  );
+
+
+    window[callbackName] =
+      function(datos) {
+
+        limpiar();
+
+        resolve(datos);
+
+      };
+
+
+    script.onerror =
+      function() {
+
+        limpiar();
+
+        reject(
+          new Error(
+            "No se pudo conectar con Apps Script"
+          )
+        );
+
+      };
+
+
+    script.src =
+      url +
+      "&callback=" +
+      encodeURIComponent(
+        callbackName
+      );
+
+
+    document.body.appendChild(
+      script
+    );
+
+  });
 
 }
 
 
-/* ==================================================
-   CARGAR TRABAJADORES
-================================================== */
+// ==================================================
+// CARGAR TRABAJADORES
+// ==================================================
 
 async function cargarTrabajadores() {
 
-  const guardados =
-    localStorage.getItem(
-      "trabajadores"
-    );
+  const estado =
+    document.getElementById("estado");
 
 
-  /*
-     PRIMERO cargar los trabajadores
-     guardados en la tablet.
-  */
-
-  if (guardados) {
-
-    try {
-
-      trabajadores =
-        JSON.parse(
-          guardados
-        );
-
-    } catch(error) {
-
-      trabajadores = [];
-
-    }
-
-  }
-
-
-  /*
-     SI HAY INTERNET,
-     actualizar desde Google.
-  */
-
-  if (
-    navigator.onLine
-  ) {
+  if (navigator.onLine) {
 
     try {
 
@@ -515,27 +340,38 @@ async function cargarTrabajadores() {
         );
 
 
-      if (
-        Array.isArray(lista)
-      ) {
+      if (!Array.isArray(lista)) {
 
-        trabajadores =
-          lista;
-
-
-        localStorage.setItem(
-          "trabajadores",
-          JSON.stringify(
-            trabajadores
-          )
+        throw new Error(
+          "Respuesta incorrecta"
         );
 
       }
 
+
+      trabajadores =
+        lista;
+
+
+      localStorage.setItem(
+        "trabajadores",
+        JSON.stringify(
+          trabajadores
+        )
+      );
+
+
+      estado.textContent =
+        "✓ Trabajadores actualizados";
+
+
+      return;
+
+
     } catch(error) {
 
       console.log(
-        "No se pudieron actualizar trabajadores",
+        "Error cargando trabajadores:",
         error
       );
 
@@ -544,32 +380,54 @@ async function cargarTrabajadores() {
   }
 
 
-  if (
-    trabajadores.length > 0
-  ) {
+  // ================================================
+  // SI NO HAY INTERNET
+  // ================================================
 
-    document.getElementById(
-      "estado"
-    ).textContent =
-      "✓ " +
-      trabajadores.length +
-      " trabajadores disponibles";
+  const guardados =
+    localStorage.getItem(
+      "trabajadores"
+    );
+
+
+  if (guardados) {
+
+    try {
+
+      trabajadores =
+        JSON.parse(
+          guardados
+        );
+
+
+      estado.textContent =
+        "✓ Trabajadores disponibles sin Internet";
+
+
+    } catch(error) {
+
+      trabajadores = [];
+
+      estado.textContent =
+        "Error leyendo trabajadores guardados";
+
+    }
 
   } else {
 
-    document.getElementById(
-      "estado"
-    ).textContent =
-      "No hay trabajadores cargados";
+    trabajadores = [];
+
+    estado.textContent =
+      "No hay trabajadores guardados";
 
   }
 
 }
 
 
-/* ==================================================
-   BUSCAR TRABAJADOR
-================================================== */
+// ==================================================
+// BUSCAR TRABAJADOR
+// ==================================================
 
 document
   .getElementById("codigo")
@@ -585,13 +443,10 @@ document
   );
 
 
-function buscarTrabajador(
-  codigo
-) {
+function buscarTrabajador(codigo) {
 
   codigo =
-    String(codigo)
-      .trim();
+    String(codigo).trim();
 
 
   const trabajador =
@@ -601,11 +456,9 @@ function buscarTrabajador(
         return String(
           t.codigo
         )
-        .trim()
         .toLowerCase()
         ===
-        codigo
-          .toLowerCase();
+        codigo.toLowerCase();
 
       }
     );
@@ -617,9 +470,7 @@ function buscarTrabajador(
     );
 
 
-  if (
-    trabajador
-  ) {
+  if (trabajador) {
 
     pantalla.textContent =
       trabajador.nombre +
@@ -627,12 +478,12 @@ function buscarTrabajador(
       trabajador.codigo +
       ")";
 
-  } else if (
-    codigo
-  ) {
+
+  } else if (codigo) {
 
     pantalla.textContent =
       "Trabajador no encontrado";
+
 
   } else {
 
@@ -641,15 +492,12 @@ function buscarTrabajador(
 
   }
 
-
-  return trabajador;
-
 }
 
 
-/* ==================================================
-   QR
-================================================== */
+// ==================================================
+// ABRIR ESCÁNER QR
+// ==================================================
 
 async function abrirEscaner() {
 
@@ -684,18 +532,6 @@ async function abrirEscaner() {
   }
 
 
-  if (
-    !("BarcodeDetector" in window)
-  ) {
-
-    estado.textContent =
-      "Este navegador no permite leer QR directamente.";
-
-    return;
-
-  }
-
-
   try {
 
     streamQR =
@@ -721,7 +557,7 @@ async function abrirEscaner() {
 
     video.setAttribute(
       "playsinline",
-      "true"
+      true
     );
 
 
@@ -747,66 +583,76 @@ async function abrirEscaner() {
 
 
     estado.textContent =
-      "Apunta la cámara al QR";
+      "Apunta la cámara al QR del trabajador";
 
 
     await video.play();
 
 
-    const detector =
-      new BarcodeDetector({
+    if (
+      "BarcodeDetector" in window
+    ) {
 
-        formats: [
-          "qr_code"
-        ]
-
-      });
-
-
-    intervaloQR =
-      setInterval(
-        async function() {
-
-          try {
-
-            const codigos =
-              await detector.detect(
-                video
-              );
+      const detector =
+        new BarcodeDetector({
+          formats: [
+            "qr_code"
+          ]
+        });
 
 
-            if (
-              codigos.length > 0
-            ) {
+      intervaloQR =
+        setInterval(
+          async function() {
 
-              const valor =
-                codigos[0]
-                  .rawValue;
+            try {
+
+              const codigos =
+                await detector.detect(
+                  video
+                );
 
 
-              procesarQR(
-                valor
+              if (
+                codigos.length > 0
+              ) {
+
+                const codigoQR =
+                  codigos[0].rawValue;
+
+
+                procesarQR(
+                  codigoQR
+                );
+
+              }
+
+            } catch(error) {
+
+              console.log(
+                "Error leyendo QR:",
+                error
               );
 
             }
 
-          } catch(error) {
+          },
+          300
+        );
 
-            console.log(
-              "Error QR",
-              error
-            );
 
-          }
+    } else {
 
-        },
-        300
-      );
+      estado.textContent =
+        "Este navegador no admite lectura QR directa.";
+
+    }
 
 
   } catch(error) {
 
     console.log(
+      "Error cámara:",
       error
     );
 
@@ -819,17 +665,20 @@ async function abrirEscaner() {
 }
 
 
-/* ==================================================
-   PROCESAR QR
-================================================== */
+// ==================================================
+// PROCESAR QR
+// ==================================================
 
-function procesarQR(
-  valor
-) {
+function procesarQR(valor) {
 
   valor =
-    String(valor)
-      .trim();
+    String(valor).trim();
+
+
+  console.log(
+    "QR leído:",
+    valor
+  );
 
 
   document.getElementById(
@@ -838,48 +687,57 @@ function procesarQR(
     valor;
 
 
-  const trabajador =
-    buscarTrabajador(
-      valor
-    );
+  buscarTrabajador(
+    valor
+  );
 
 
   cerrarEscaner();
 
 
-  const estado =
-    document.getElementById(
-      "estado"
+  const trabajador =
+    trabajadores.find(
+      function(t) {
+
+        return String(
+          t.codigo
+        )
+        .toLowerCase()
+        ===
+        valor.toLowerCase();
+
+      }
     );
 
 
-  if (
-    trabajador
-  ) {
+  if (trabajador) {
 
-    estado.textContent =
+    document.getElementById(
+      "estado"
+    ).textContent =
       "✓ QR reconocido: " +
       trabajador.nombre;
 
+
   } else {
 
-    estado.textContent =
-      "QR leído, pero trabajador no encontrado";
+    document.getElementById(
+      "estado"
+    ).textContent =
+      "QR leído, pero el trabajador no existe";
 
   }
 
 }
 
 
-/* ==================================================
-   CERRAR QR
-================================================== */
+// ==================================================
+// CERRAR ESCÁNER
+// ==================================================
 
 function cerrarEscaner() {
 
-  if (
-    intervaloQR
-  ) {
+  if (intervaloQR) {
 
     clearInterval(
       intervaloQR
@@ -891,9 +749,7 @@ function cerrarEscaner() {
   }
 
 
-  if (
-    streamQR
-  ) {
+  if (streamQR) {
 
     streamQR
       .getTracks()
@@ -926,21 +782,26 @@ function cerrarEscaner() {
 }
 
 
-/* ==================================================
-   BASE DE DATOS LOCAL
-================================================== */
+// ==================================================
+// BASE DE DATOS LOCAL
+// IMPORTANTE: VERSION 2
+// ==================================================
 
 const DB_NAME =
   "ControlPesajesDB";
 
 
 const DB_VERSION =
-  1;
+  2;
 
 
 const STORE_NAME =
   "pesajes";
 
+
+// ==================================================
+// ABRIR BASE DE DATOS
+// ==================================================
 
 function abrirBaseDatos() {
 
@@ -962,10 +823,9 @@ function abrirBaseDatos() {
 
 
           if (
-            !db.objectStoreNames
-              .contains(
-                STORE_NAME
-              )
+            !db.objectStoreNames.contains(
+              STORE_NAME
+            )
           ) {
 
             db.createObjectStore(
@@ -999,19 +859,29 @@ function abrirBaseDatos() {
 
         };
 
+
+      solicitud.onblocked =
+        function() {
+
+          reject(
+            new Error(
+              "La base de datos está bloqueada. Cierre otras ventanas de la aplicación."
+            )
+          );
+
+        };
+
     }
   );
 
 }
 
 
-/* ==================================================
-   GUARDAR LOCAL
-================================================== */
+// ==================================================
+// GUARDAR LOCALMENTE
+// ==================================================
 
-async function guardarLocal(
-  registro
-) {
+async function guardarLocal(registro) {
 
   const db =
     await abrirBaseDatos();
@@ -1033,9 +903,20 @@ async function guardarLocal(
         );
 
 
-      almacen.put(
-        registro
-      );
+      const solicitud =
+        almacen.put(
+          registro
+        );
+
+
+      solicitud.onerror =
+        function() {
+
+          reject(
+            solicitud.error
+          );
+
+        };
 
 
       transaccion.oncomplete =
@@ -1061,9 +942,9 @@ async function guardarLocal(
 }
 
 
-/* ==================================================
-   OBTENER PENDIENTES
-================================================== */
+// ==================================================
+// OBTENER PENDIENTES
+// ==================================================
 
 async function obtenerPendientes() {
 
@@ -1116,13 +997,11 @@ async function obtenerPendientes() {
 }
 
 
-/* ==================================================
-   ELIMINAR LOCAL
-================================================== */
+// ==================================================
+// ELIMINAR LOCAL
+// ==================================================
 
-async function eliminarLocal(
-  id
-) {
+async function eliminarLocal(id) {
 
   const db =
     await abrirBaseDatos();
@@ -1144,9 +1023,20 @@ async function eliminarLocal(
         );
 
 
-      almacen.delete(
-        id
-      );
+      const solicitud =
+        almacen.delete(
+          id
+        );
+
+
+      solicitud.onerror =
+        function() {
+
+          reject(
+            solicitud.error
+          );
+
+        };
 
 
       transaccion.oncomplete =
@@ -1172,125 +1062,9 @@ async function eliminarLocal(
 }
 
 
-/* ==================================================
-   MOSTRAR REGISTROS LOCALES
-================================================== */
-
-async function mostrarRegistros() {
-
-  try {
-
-    const registros =
-      await obtenerPendientes();
-
-
-    const lista =
-      document.getElementById(
-        "listaRegistros"
-      );
-
-
-    if (
-      registros.length === 0
-    ) {
-
-      lista.innerHTML =
-        "No hay registros pendientes.";
-
-      return;
-
-    }
-
-
-    registros.sort(
-      function(a, b) {
-
-        return b.fechaHora
-          .localeCompare(
-            a.fechaHora
-          );
-
-      }
-    );
-
-
-    lista.innerHTML =
-      "";
-
-
-    registros.forEach(
-      function(registro) {
-
-        const trabajador =
-          trabajadores.find(
-            function(t) {
-
-              return String(
-                t.codigo
-              ).toLowerCase()
-              ===
-              String(
-                registro.codigo
-              ).toLowerCase();
-
-            }
-          );
-
-
-        const nombre =
-          trabajador
-            ? trabajador.nombre
-            : registro.codigo;
-
-
-        const div =
-          document.createElement(
-            "div"
-          );
-
-
-        div.className =
-          "registro";
-
-
-        div.innerHTML =
-          "<strong>" +
-          nombre +
-          "</strong><br>" +
-          "Código: " +
-          registro.codigo +
-          "<br>" +
-          "Peso: " +
-          registro.kilos +
-          " kg<br>" +
-          "Fecha: " +
-          new Date(
-            registro.fechaHora
-          ).toLocaleString();
-
-
-        lista.appendChild(
-          div
-        );
-
-      }
-    );
-
-  } catch(error) {
-
-    console.log(
-      "Error mostrando registros",
-      error
-    );
-
-  }
-
-}
-
-
-/* ==================================================
-   CONTADOR
-================================================== */
+// ==================================================
+// ACTUALIZAR CONTADOR
+// ==================================================
 
 async function actualizarPendientes() {
 
@@ -1303,15 +1077,14 @@ async function actualizarPendientes() {
     document.getElementById(
       "pendientes"
     ).textContent =
-      "Pendientes de sincronización: " +
+      "Pendientes: " +
       pendientes.length;
 
-
-    await mostrarRegistros();
 
   } catch(error) {
 
     console.log(
+      "Error contador:",
       error
     );
 
@@ -1320,17 +1093,16 @@ async function actualizarPendientes() {
 }
 
 
-/* ==================================================
-   GUARDAR PESAJE
-================================================== */
+// ==================================================
+// GUARDAR PESAJE
+// ==================================================
 
 async function guardarPesaje() {
 
   const codigo =
     document.getElementById(
       "codigo"
-    ).value
-      .trim();
+    ).value.trim();
 
 
   const kilos =
@@ -1345,23 +1117,23 @@ async function guardarPesaje() {
     );
 
 
-  /* ================================================
-     VALIDAR CÓDIGO
-  ================================================= */
+  // ================================================
+  // VALIDAR CÓDIGO
+  // ================================================
 
   if (!codigo) {
 
     estado.textContent =
-      "Ingrese el código del trabajador.";
+      "Ingrese el código";
 
     return;
 
   }
 
 
-  /* ================================================
-     VALIDAR KILOS
-  ================================================= */
+  // ================================================
+  // VALIDAR KILOS
+  // ================================================
 
   if (
     !kilos ||
@@ -1369,36 +1141,45 @@ async function guardarPesaje() {
   ) {
 
     estado.textContent =
-      "Ingrese los kilos.";
+      "Ingrese los kilos";
 
     return;
 
   }
 
 
-  /* ================================================
-     BUSCAR TRABAJADOR
-  ================================================= */
+  // ================================================
+  // BUSCAR TRABAJADOR
+  // ================================================
 
   const trabajador =
-    buscarTrabajador(
-      codigo
+    trabajadores.find(
+      function(t) {
+
+        return String(
+          t.codigo
+        )
+        .toLowerCase()
+        ===
+        codigo.toLowerCase();
+
+      }
     );
 
 
   if (!trabajador) {
 
     estado.textContent =
-      "Trabajador no encontrado.";
+      "Trabajador no encontrado";
 
     return;
 
   }
 
 
-  /* ================================================
-     CREAR REGISTRO
-  ================================================= */
+  // ================================================
+  // CREAR REGISTRO
+  // ================================================
 
   const registro = {
 
@@ -1407,16 +1188,20 @@ async function guardarPesaje() {
       "-" +
       Math.random()
         .toString(36)
-        .substring(
-          2,
-          8
-        ),
+        .substring(2, 8),
+
 
     fechaHora:
       new Date().toISOString(),
 
+
     codigo:
       trabajador.codigo,
+
+
+    nombre:
+      trabajador.nombre,
+
 
     kilos:
       Number(kilos)
@@ -1424,12 +1209,15 @@ async function guardarPesaje() {
   };
 
 
-  /* ================================================
-     IMPORTANTE:
-     PRIMERO GUARDAR EN LA TABLET
-  ================================================= */
+  // ================================================
+  // GUARDAR EN LA TABLET
+  // ================================================
 
   try {
+
+    estado.textContent =
+      "Guardando en la tablet...";
+
 
     await guardarLocal(
       registro
@@ -1440,7 +1228,7 @@ async function guardarPesaje() {
 
 
     estado.textContent =
-      "✓ PESAJE GUARDADO EN LA TABLET";
+      "✓ Pesaje guardado en la tablet";
 
 
     document.getElementById(
@@ -1449,37 +1237,36 @@ async function guardarPesaje() {
       "";
 
 
-    /*
-       Si hay Internet,
-       intentamos sincronizar.
-    */
+    // ==============================================
+    // SI HAY INTERNET, SINCRONIZAR
+    // ==============================================
 
-    if (
-      navigator.onLine
-    ) {
+    if (navigator.onLine) {
 
       sincronizar();
 
     }
 
+
   } catch(error) {
 
     console.error(
+      "ERROR GUARDANDO LOCALMENTE:",
       error
     );
 
 
     estado.textContent =
-      "❌ ERROR AL GUARDAR EN LA TABLET";
+      "❌ Error al guardar en la tablet";
 
   }
 
 }
 
 
-/* ==================================================
-   SINCRONIZAR UN REGISTRO
-================================================== */
+// ==================================================
+// SINCRONIZAR REGISTRO
+// ==================================================
 
 async function sincronizarRegistro(
   registro
@@ -1532,15 +1319,13 @@ async function sincronizarRegistro(
 }
 
 
-/* ==================================================
-   SINCRONIZAR
-================================================== */
+// ==================================================
+// SINCRONIZAR TODOS LOS PENDIENTES
+// ==================================================
 
 async function sincronizar() {
 
-  if (
-    !navigator.onLine
-  ) {
+  if (!navigator.onLine) {
 
     return;
 
@@ -1594,7 +1379,6 @@ async function sincronizar() {
           error
         );
 
-
         break;
 
       }
@@ -1616,21 +1400,24 @@ async function sincronizar() {
       document.getElementById(
         "estado"
       ).textContent =
-        "✓ Todo sincronizado con Google Sheets";
+        "✓ Todos los pesajes sincronizados";
 
     } else {
 
       document.getElementById(
         "estado"
       ).textContent =
-        "Hay pesajes pendientes de sincronizar.";
+        "Hay " +
+        restantes.length +
+        " pesaje(s) pendientes";
 
     }
+
 
   } catch(error) {
 
     console.log(
-      "Error sincronizando",
+      "Error sincronizando:",
       error
     );
 
@@ -1639,9 +1426,9 @@ async function sincronizar() {
 }
 
 
-/* ==================================================
-   CUANDO VUELVE INTERNET
-================================================== */
+// ==================================================
+// CUANDO VUELVE INTERNET
+// ==================================================
 
 window.addEventListener(
   "online",
@@ -1661,9 +1448,9 @@ window.addEventListener(
 );
 
 
-/* ==================================================
-   CUANDO SE PIERDE INTERNET
-================================================== */
+// ==================================================
+// CUANDO SE PIERDE INTERNET
+// ==================================================
 
 window.addEventListener(
   "offline",
@@ -1678,18 +1465,18 @@ window.addEventListener(
 );
 
 
-/* ==================================================
-   INICIAR
-================================================== */
+// ==================================================
+// INICIO
+// ==================================================
 
 cargarTrabajadores();
 
 actualizarPendientes();
 
 
-/* ==================================================
-   SERVICE WORKER
-================================================== */
+// ==================================================
+// SERVICE WORKER
+// ==================================================
 
 if (
   "serviceWorker" in navigator
@@ -1707,7 +1494,7 @@ if (
           function() {
 
             console.log(
-              "Service Worker activo"
+              "Service Worker instalado"
             );
 
           }
@@ -1716,7 +1503,7 @@ if (
           function(error) {
 
             console.log(
-              "Error Service Worker",
+              "Error Service Worker:",
               error
             );
 
@@ -1729,7 +1516,6 @@ if (
 }
 
 </script>
-
 
 </body>
 
