@@ -3,216 +3,317 @@
 
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="theme-color"
-    content="#333333">
+<meta
+  name="theme-color"
+  content="#333333">
 
-  <link
-    rel="manifest"
-    href="manifest.json">
+<link
+  rel="manifest"
+  href="manifest.json">
 
-  <title>Control de Pesajes</title>
+<title>Control de Pesajes</title>
 
-  <style>
 
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #f2f2f2;
-    }
+<style>
 
-    .contenedor {
-      max-width: 600px;
-      margin: auto;
-    }
+body {
 
-    h1 {
-      text-align: center;
-    }
+  font-family: Arial, sans-serif;
 
-    .tarjeta {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      margin-top: 20px;
-    }
+  margin: 0;
 
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
+  padding: 20px;
 
-    input,
-    button {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 15px;
-      margin-top: 8px;
-      font-size: 18px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
+  background: #f2f2f2;
 
-    button {
-      cursor: pointer;
-      font-weight: bold;
-      margin-top: 15px;
-    }
+}
 
-    #trabajador {
-      margin-top: 10px;
-      padding: 15px;
-      background: #eee;
-      border-radius: 8px;
-      font-size: 18px;
-    }
 
-    #lectorQR {
-      margin-top: 15px;
-      text-align: center;
-    }
+.contenedor {
 
-    #lectorQR video {
-      width: 100%;
-      max-width: 400px;
-      border-radius: 10px;
-    }
+  max-width: 600px;
 
-    #cerrarQR {
-      display: none;
-    }
+  margin: auto;
 
-    #estado {
-      text-align: center;
-      margin-top: 20px;
-      font-weight: bold;
-    }
+}
 
-    #pendientes {
-      text-align: center;
-      margin-top: 10px;
-      font-weight: bold;
-    }
 
-    #registros {
-      margin-top: 20px;
-    }
+h1 {
 
-    .registro {
-      background: #f5f5f5;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 12px;
-      margin-top: 8px;
-    }
+  text-align: center;
 
-    .sin-registros {
-      text-align: center;
-      color: #777;
-    }
+}
 
-  </style>
+
+.tarjeta {
+
+  background: white;
+
+  padding: 20px;
+
+  border-radius: 12px;
+
+  margin-top: 20px;
+
+}
+
+
+label {
+
+  display: block;
+
+  margin-top: 15px;
+
+  font-weight: bold;
+
+}
+
+
+input,
+button {
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 15px;
+
+  margin-top: 8px;
+
+  font-size: 18px;
+
+  border-radius: 8px;
+
+  border: 1px solid #ccc;
+
+}
+
+
+button {
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+  margin-top: 15px;
+
+}
+
+
+#trabajador {
+
+  margin-top: 10px;
+
+  padding: 15px;
+
+  background: #eee;
+
+  border-radius: 8px;
+
+  font-size: 18px;
+
+}
+
+
+#lectorQR {
+
+  margin-top: 15px;
+
+  text-align: center;
+
+}
+
+
+#lectorQR video {
+
+  width: 100%;
+
+  max-width: 400px;
+
+  border-radius: 10px;
+
+}
+
+
+#cerrarQR {
+
+  display: none;
+
+}
+
+
+#estado {
+
+  text-align: center;
+
+  margin-top: 20px;
+
+  font-weight: bold;
+
+}
+
+
+#pendientes {
+
+  text-align: center;
+
+  margin-top: 10px;
+
+}
+
+
+#resumen {
+
+  background: white;
+
+  padding: 15px;
+
+  border-radius: 10px;
+
+  margin-top: 20px;
+
+}
+
+
+.registro {
+
+  border-bottom: 1px solid #ddd;
+
+  padding: 10px 0;
+
+}
+
+
+.registro:last-child {
+
+  border-bottom: none;
+
+}
+
+
+.verde {
+
+  color: green;
+
+}
+
+
+.rojo {
+
+  color: red;
+
+}
+
+</style>
 
 </head>
 
 
 <body>
 
+
 <div class="contenedor">
 
-  <h1>CONTROL DE PESAJES</h1>
 
-  <div class="tarjeta">
-
-    <label>
-      Código del trabajador
-    </label>
-
-    <input
-      id="codigo"
-      type="text"
-      placeholder="Ej: Trab001"
-      autocomplete="off">
+<h1>CONTROL DE PESAJES</h1>
 
 
-    <button
-      type="button"
-      onclick="abrirEscaner()">
-
-      📷 ESCANEAR QR
-
-    </button>
+<div class="tarjeta">
 
 
-    <div id="lectorQR"></div>
+<label>
+Código del trabajador
+</label>
 
 
-    <button
-      id="cerrarQR"
-      type="button"
-      onclick="cerrarEscaner()">
-
-      ✖ CERRAR CÁMARA
-
-    </button>
+<input
+  id="codigo"
+  type="text"
+  placeholder="Ej: Trab001"
+  autocomplete="off">
 
 
-    <div id="trabajador">
-      Trabajador no seleccionado
-    </div>
+<button
+  type="button"
+  onclick="abrirEscaner()">
+
+📷 ESCANEAR QR
+
+</button>
 
 
-    <label>
-      Kilos
-    </label>
-
-    <input
-      id="kilos"
-      type="number"
-      step="0.1"
-      placeholder="Ej: 84.5">
+<div id="lectorQR"></div>
 
 
-    <button
-      type="button"
-      onclick="guardarPesaje()">
+<button
+  id="cerrarQR"
+  type="button"
+  onclick="cerrarEscaner()">
 
-      GUARDAR PESAJE
+✖ CERRAR CÁMARA
 
-    </button>
-
-
-    <div id="estado"></div>
+</button>
 
 
-    <div id="pendientes">
-      Pendientes: 0
-    </div>
+<div id="trabajador">
+
+Trabajador no seleccionado
+
+</div>
 
 
-    <div id="registros">
+<label>
+Kilos
+</label>
 
-      <h3>
-        Registros guardados
-      </h3>
 
-      <div id="listaRegistros">
-        <div class="sin-registros">
-          No hay registros todavía
-        </div>
-      </div>
+<input
+  id="kilos"
+  type="number"
+  step="0.1"
+  placeholder="Ej: 84.5">
 
-    </div>
 
-  </div>
+<button
+  type="button"
+  onclick="guardarPesaje()">
+
+GUARDAR PESAJE
+
+</button>
+
+
+<div id="estado"></div>
+
+
+<div id="pendientes">
+
+Pendientes: 0
+
+</div>
+
+
+</div>
+
+
+<div id="resumen">
+
+<h3>Registros de la tablet</h3>
+
+<div id="listaRegistros">
+
+No hay registros.
+
+</div>
+
+</div>
+
 
 </div>
 
@@ -220,355 +321,140 @@
 <script>
 
 
-// ==================================================
-// URL DE GOOGLE APPS SCRIPT
-// ==================================================
+/* ==================================================
+   URL GOOGLE APPS SCRIPT
+================================================== */
 
 const URL_APPS_SCRIPT =
-  "https://script.google.com/macros/s/AKfycbzs9dBMJotH8zBQNYeeOIdejzlTbPBRkw0IErt0Td9eiHmvy497j7Mu2XZJRzc2J_YWkQ/exec";
+"https://script.google.com/macros/s/AKfycbzs9dBMJotH8zBQNYeeOIdejzlTbPBRkw0IErt0Td9eiHmvy497j7Mu2XZJRzc2J_YWkQ/exec";
 
 
-// ==================================================
-// TRABAJADORES
-// ==================================================
+/* ==================================================
+   TRABAJADORES
+================================================== */
 
 let trabajadores = [];
 
 
-// ==================================================
-// QR
-// ==================================================
+/* ==================================================
+   QR
+================================================== */
 
 let streamQR = null;
 
 let intervaloQR = null;
 
-let qrProcesado = false;
 
-
-// ==================================================
-// BASE DE DATOS LOCAL
-// ==================================================
-
-const DB_NAME =
-  "ControlPesajesDB";
-
-const DB_VERSION =
-  1;
-
-const STORE_NAME =
-  "pesajes";
-
-
-// ==================================================
-// JSONP
-// ==================================================
+/* ==================================================
+   JSONP
+================================================== */
 
 function jsonp(url) {
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(
+    function(resolve, reject) {
 
-    const callbackName =
-      "callback_" +
-      Date.now() +
-      "_" +
-      Math.random()
-        .toString(36)
-        .substring(2);
-
-
-    const script =
-      document.createElement("script");
+      const callbackName =
+        "callback_" +
+        Date.now() +
+        "_" +
+        Math.random()
+          .toString(36)
+          .substring(2, 8);
 
 
-    let terminado = false;
+      const script =
+        document.createElement("script");
 
 
-    const tiempo =
-      setTimeout(function() {
+      const tiempo =
+        setTimeout(
+          function() {
 
-        if (terminado) {
-          return;
-        }
+            limpiar();
 
-        terminado = true;
+            reject(
+              new Error(
+                "Tiempo de espera agotado"
+              )
+            );
 
-        limpiar();
-
-        reject(
-          new Error(
-            "Tiempo de espera agotado"
-          )
+          },
+          15000
         );
 
-      }, 10000);
 
+      function limpiar() {
 
-    function limpiar() {
-
-      clearTimeout(tiempo);
-
-      if (script.parentNode) {
-
-        script.parentNode.removeChild(
-          script
-        );
-
-      }
-
-      try {
-
-        delete window[
-          callbackName
-        ];
-
-      } catch(error) {
-
-        window[
-          callbackName
-        ] = undefined;
-
-      }
-
-    }
-
-
-    window[callbackName] =
-      function(datos) {
-
-        if (terminado) {
-          return;
-        }
-
-        terminado = true;
-
-        limpiar();
-
-        resolve(datos);
-
-      };
-
-
-    script.onerror =
-      function() {
-
-        if (terminado) {
-          return;
-        }
-
-        terminado = true;
-
-        limpiar();
-
-        reject(
-          new Error(
-            "No se pudo conectar con Google"
-          )
-        );
-
-      };
-
-
-    script.src =
-      url +
-      "&callback=" +
-      encodeURIComponent(
-        callbackName
-      );
-
-
-    document.body.appendChild(
-      script
-    );
-
-  });
-
-}
-
-
-// ==================================================
-// ABRIR BASE DE DATOS
-// ==================================================
-
-function abrirBaseDatos() {
-
-  return new Promise(function(resolve, reject) {
-
-    const solicitud =
-      indexedDB.open(
-        DB_NAME,
-        DB_VERSION
-      );
-
-
-    solicitud.onupgradeneeded =
-      function(event) {
-
-        const db =
-          event.target.result;
+        clearTimeout(tiempo);
 
 
         if (
-          !db.objectStoreNames.contains(
-            STORE_NAME
-          )
+          script.parentNode
         ) {
 
-          db.createObjectStore(
-            STORE_NAME,
-            {
-              keyPath: "id"
-            }
-          );
+          script.parentNode
+            .removeChild(
+              script
+            );
 
         }
 
-      };
+
+        try {
+
+          delete window[
+            callbackName
+          ];
+
+        } catch(error) {
+
+          window[
+            callbackName
+          ] = undefined;
+
+        }
+
+      }
 
 
-    solicitud.onsuccess =
-      function(event) {
+      window[
+        callbackName
+      ] =
+        function(datos) {
 
-        resolve(
-          event.target.result
+          limpiar();
+
+          resolve(datos);
+
+        };
+
+
+      script.onerror =
+        function() {
+
+          limpiar();
+
+          reject(
+            new Error(
+              "No se pudo conectar con Google"
+            )
+          );
+
+        };
+
+
+      script.src =
+        url +
+        "&callback=" +
+        encodeURIComponent(
+          callbackName
         );
 
-      };
 
-
-    solicitud.onerror =
-      function() {
-
-        reject(
-          solicitud.error
-        );
-
-      };
-
-  });
-
-}
-
-
-// ==================================================
-// GUARDAR LOCAL
-// ==================================================
-
-async function guardarLocal(registro) {
-
-  const db =
-    await abrirBaseDatos();
-
-
-  return new Promise(function(resolve, reject) {
-
-    const transaccion =
-      db.transaction(
-        STORE_NAME,
-        "readwrite"
+      document.body.appendChild(
+        script
       );
-
-
-    const almacen =
-      transaccion.objectStore(
-        STORE_NAME
-      );
-
-
-    almacen.put(
-      registro
-    );
-
-
-    transaccion.oncomplete =
-      function() {
-
-        resolve();
-
-      };
-
-
-    transaccion.onerror =
-      function() {
-
-        reject(
-          transaccion.error
-        );
-
-      };
-
-  });
-
-}
-
-
-// ==================================================
-// OBTENER TODOS LOS REGISTROS
-// ==================================================
-
-async function obtenerRegistros() {
-
-  const db =
-    await abrirBaseDatos();
-
-
-  return new Promise(function(resolve, reject) {
-
-    const transaccion =
-      db.transaction(
-        STORE_NAME,
-        "readonly"
-      );
-
-
-    const almacen =
-      transaccion.objectStore(
-        STORE_NAME
-      );
-
-
-    const solicitud =
-      almacen.getAll();
-
-
-    solicitud.onsuccess =
-      function() {
-
-        resolve(
-          solicitud.result
-        );
-
-      };
-
-
-    solicitud.onerror =
-      function() {
-
-        reject(
-          solicitud.error
-        );
-
-      };
-
-  });
-
-}
-
-
-// ==================================================
-// OBTENER PENDIENTES
-// ==================================================
-
-async function obtenerPendientes() {
-
-  const registros =
-    await obtenerRegistros();
-
-
-  return registros.filter(
-    function(registro) {
-
-      return registro.sincronizado !== true;
 
     }
   );
@@ -576,288 +462,49 @@ async function obtenerPendientes() {
 }
 
 
-// ==================================================
-// MARCAR COMO SINCRONIZADO
-// ==================================================
-
-async function marcarSincronizado(id) {
-
-  const db =
-    await abrirBaseDatos();
-
-
-  return new Promise(function(resolve, reject) {
-
-    const transaccion =
-      db.transaction(
-        STORE_NAME,
-        "readwrite"
-      );
-
-
-    const almacen =
-      transaccion.objectStore(
-        STORE_NAME
-      );
-
-
-    const solicitud =
-      almacen.get(id);
-
-
-    solicitud.onsuccess =
-      function() {
-
-        const registro =
-          solicitud.result;
-
-
-        if (!registro) {
-
-          resolve();
-
-          return;
-
-        }
-
-
-        registro.sincronizado =
-          true;
-
-
-        almacen.put(
-          registro
-        );
-
-      };
-
-
-    solicitud.onerror =
-      function() {
-
-        reject(
-          solicitud.error
-        );
-
-      };
-
-
-    transaccion.oncomplete =
-      function() {
-
-        resolve();
-
-      };
-
-
-    transaccion.onerror =
-      function() {
-
-        reject(
-          transaccion.error
-        );
-
-      };
-
-  });
-
-}
-
-
-// ==================================================
-// CONTADOR
-// ==================================================
-
-async function actualizarPendientes() {
-
-  try {
-
-    const pendientes =
-      await obtenerPendientes();
-
-
-    document.getElementById(
-      "pendientes"
-    ).textContent =
-      "Pendientes de sincronización: " +
-      pendientes.length;
-
-
-  } catch(error) {
-
-    console.log(
-      "Error contador:",
-      error
-    );
-
-  }
-
-}
-
-
-// ==================================================
-// MOSTRAR REGISTROS
-// ==================================================
-
-async function mostrarRegistros() {
-
-  try {
-
-    const registros =
-      await obtenerRegistros();
-
-
-    const lista =
-      document.getElementById(
-        "listaRegistros"
-      );
-
-
-    if (
-      registros.length === 0
-    ) {
-
-      lista.innerHTML =
-        '<div class="sin-registros">' +
-        'No hay registros todavía' +
-        '</div>';
-
-      return;
-
-    }
-
-
-    registros.sort(
-      function(a, b) {
-
-        return new Date(b.fechaHora)
-          -
-          new Date(a.fechaHora);
-
-      }
-    );
-
-
-    lista.innerHTML = "";
-
-
-    registros.forEach(
-      function(registro) {
-
-        const trabajador =
-          trabajadores.find(
-            function(t) {
-
-              return String(
-                t.codigo
-              ).toLowerCase()
-              ===
-              String(
-                registro.codigo
-              ).toLowerCase();
-
-            }
-          );
-
-
-        const nombre =
-          trabajador
-            ? trabajador.nombre
-            : registro.codigo;
-
-
-        const fecha =
-          new Date(
-            registro.fechaHora
-          );
-
-
-        const fechaTexto =
-          fecha.toLocaleDateString(
-            "es-CL"
-          );
-
-
-        const horaTexto =
-          fecha.toLocaleTimeString(
-            "es-CL",
-            {
-              hour: "2-digit",
-              minute: "2-digit"
-            }
-          );
-
-
-        const estado =
-          registro.sincronizado === true
-            ? "✓ Sincronizado"
-            : "⏳ Pendiente";
-
-
-        const elemento =
-          document.createElement(
-            "div"
-          );
-
-
-        elemento.className =
-          "registro";
-
-
-        elemento.innerHTML =
-          "<strong>" +
-          nombre +
-          "</strong><br>" +
-          "Código: " +
-          registro.codigo +
-          "<br>" +
-          "Peso: " +
-          registro.kilos +
-          " kg<br>" +
-          fechaTexto +
-          " " +
-          horaTexto +
-          "<br>" +
-          estado;
-
-
-        lista.appendChild(
-          elemento
-        );
-
-      }
-    );
-
-
-  } catch(error) {
-
-    console.log(
-      "Error mostrando registros:",
-      error
-    );
-
-  }
-
-}
-
-
-// ==================================================
-// CARGAR TRABAJADORES
-// ==================================================
+/* ==================================================
+   CARGAR TRABAJADORES
+================================================== */
 
 async function cargarTrabajadores() {
 
-  const estado =
-    document.getElementById(
-      "estado"
+  const guardados =
+    localStorage.getItem(
+      "trabajadores"
     );
 
 
-  // ----------------------------------------------
-  // SI HAY INTERNET
-  // ----------------------------------------------
+  /*
+     PRIMERO cargar los trabajadores
+     guardados en la tablet.
+  */
 
-  if (navigator.onLine) {
+  if (guardados) {
+
+    try {
+
+      trabajadores =
+        JSON.parse(
+          guardados
+        );
+
+    } catch(error) {
+
+      trabajadores = [];
+
+    }
+
+  }
+
+
+  /*
+     SI HAY INTERNET,
+     actualizar desde Google.
+  */
+
+  if (
+    navigator.onLine
+  ) {
 
     try {
 
@@ -869,42 +516,26 @@ async function cargarTrabajadores() {
 
 
       if (
-        !Array.isArray(lista)
+        Array.isArray(lista)
       ) {
 
-        throw new Error(
-          "Respuesta incorrecta"
+        trabajadores =
+          lista;
+
+
+        localStorage.setItem(
+          "trabajadores",
+          JSON.stringify(
+            trabajadores
+          )
         );
 
       }
 
-
-      trabajadores =
-        lista;
-
-
-      localStorage.setItem(
-        "trabajadores",
-        JSON.stringify(
-          trabajadores
-        )
-      );
-
-
-      estado.textContent =
-        "✓ Trabajadores actualizados";
-
-
-      await mostrarRegistros();
-
-
-      return;
-
-
     } catch(error) {
 
       console.log(
-        "No se pudo actualizar trabajadores:",
+        "No se pudieron actualizar trabajadores",
         error
       );
 
@@ -913,57 +544,35 @@ async function cargarTrabajadores() {
   }
 
 
-  // ----------------------------------------------
-  // SIN INTERNET
-  // ----------------------------------------------
+  if (
+    trabajadores.length > 0
+  ) {
 
-  const guardados =
-    localStorage.getItem(
-      "trabajadores"
-    );
-
-
-  if (guardados) {
-
-    try {
-
-      trabajadores =
-        JSON.parse(
-          guardados
-        );
-
-
-      estado.textContent =
-        "✓ Trabajadores disponibles sin Internet";
-
-
-    } catch(error) {
-
-      trabajadores = [];
-
-    }
+    document.getElementById(
+      "estado"
+    ).textContent =
+      "✓ " +
+      trabajadores.length +
+      " trabajadores disponibles";
 
   } else {
 
-    estado.textContent =
-      "No hay trabajadores guardados en la tablet";
+    document.getElementById(
+      "estado"
+    ).textContent =
+      "No hay trabajadores cargados";
 
   }
-
-
-  await mostrarRegistros();
 
 }
 
 
-// ==================================================
-// BUSCAR TRABAJADOR
-// ==================================================
+/* ==================================================
+   BUSCAR TRABAJADOR
+================================================== */
 
 document
-  .getElementById(
-    "codigo"
-  )
+  .getElementById("codigo")
   .addEventListener(
     "input",
     function() {
@@ -976,7 +585,9 @@ document
   );
 
 
-function buscarTrabajador(codigo) {
+function buscarTrabajador(
+  codigo
+) {
 
   codigo =
     String(codigo)
@@ -993,7 +604,8 @@ function buscarTrabajador(codigo) {
         .trim()
         .toLowerCase()
         ===
-        codigo.toLowerCase();
+        codigo
+          .toLowerCase();
 
       }
     );
@@ -1005,7 +617,9 @@ function buscarTrabajador(codigo) {
     );
 
 
-  if (trabajador) {
+  if (
+    trabajador
+  ) {
 
     pantalla.textContent =
       trabajador.nombre +
@@ -1013,12 +627,12 @@ function buscarTrabajador(codigo) {
       trabajador.codigo +
       ")";
 
-
-  } else if (codigo) {
+  } else if (
+    codigo
+  ) {
 
     pantalla.textContent =
       "Trabajador no encontrado";
-
 
   } else {
 
@@ -1027,12 +641,15 @@ function buscarTrabajador(codigo) {
 
   }
 
+
+  return trabajador;
+
 }
 
 
-// ==================================================
-// ABRIR ESCÁNER QR
-// ==================================================
+/* ==================================================
+   QR
+================================================== */
 
 async function abrirEscaner() {
 
@@ -1054,10 +671,6 @@ async function abrirEscaner() {
     );
 
 
-  qrProcesado =
-    false;
-
-
   if (
     !navigator.mediaDevices ||
     !navigator.mediaDevices.getUserMedia
@@ -1065,6 +678,18 @@ async function abrirEscaner() {
 
     estado.textContent =
       "La cámara no está disponible.";
+
+    return;
+
+  }
+
+
+  if (
+    !("BarcodeDetector" in window)
+  ) {
+
+    estado.textContent =
+      "Este navegador no permite leer QR directamente.";
 
     return;
 
@@ -1104,10 +729,6 @@ async function abrirEscaner() {
       true;
 
 
-    video.muted =
-      true;
-
-
     video.srcObject =
       streamQR;
 
@@ -1126,85 +747,66 @@ async function abrirEscaner() {
 
 
     estado.textContent =
-      "Apunta la cámara al QR del trabajador";
+      "Apunta la cámara al QR";
 
 
     await video.play();
 
 
-    if (
-      "BarcodeDetector"
-      in window
-    ) {
+    const detector =
+      new BarcodeDetector({
 
-      const detector =
-        new BarcodeDetector({
+        formats: [
+          "qr_code"
+        ]
 
-          formats: [
-            "qr_code"
-          ]
-
-        });
+      });
 
 
-      intervaloQR =
-        setInterval(
-          async function() {
+    intervaloQR =
+      setInterval(
+        async function() {
 
-            if (qrProcesado) {
-              return;
-            }
+          try {
 
-
-            try {
-
-              const codigos =
-                await detector.detect(
-                  video
-                );
+            const codigos =
+              await detector.detect(
+                video
+              );
 
 
-              if (
-                codigos.length > 0
-              ) {
+            if (
+              codigos.length > 0
+            ) {
 
-                const codigoQR =
-                  codigos[0].rawValue;
-
-
-                procesarQR(
-                  codigoQR
-                );
-
-              }
+              const valor =
+                codigos[0]
+                  .rawValue;
 
 
-            } catch(error) {
-
-              console.log(
-                "Error QR:",
-                error
+              procesarQR(
+                valor
               );
 
             }
 
-          },
-          300
-        );
+          } catch(error) {
 
+            console.log(
+              "Error QR",
+              error
+            );
 
-    } else {
+          }
 
-      estado.textContent =
-        "Tu navegador no permite leer QR directamente.";
-
-    }
+        },
+        300
+      );
 
 
   } catch(error) {
 
     console.log(
-      "Error cámara:",
       error
     );
 
@@ -1217,20 +819,13 @@ async function abrirEscaner() {
 }
 
 
-// ==================================================
-// PROCESAR QR
-// ==================================================
+/* ==================================================
+   PROCESAR QR
+================================================== */
 
-function procesarQR(valor) {
-
-  if (qrProcesado) {
-    return;
-  }
-
-
-  qrProcesado =
-    true;
-
+function procesarQR(
+  valor
+) {
 
   valor =
     String(valor)
@@ -1243,58 +838,48 @@ function procesarQR(valor) {
     valor;
 
 
-  buscarTrabajador(
-    valor
-  );
+  const trabajador =
+    buscarTrabajador(
+      valor
+    );
 
 
   cerrarEscaner();
 
 
-  const trabajador =
-    trabajadores.find(
-      function(t) {
-
-        return String(
-          t.codigo
-        )
-        .trim()
-        .toLowerCase()
-        ===
-        valor.toLowerCase();
-
-      }
+  const estado =
+    document.getElementById(
+      "estado"
     );
 
 
-  if (trabajador) {
+  if (
+    trabajador
+  ) {
 
-    document.getElementById(
-      "estado"
-    ).textContent =
+    estado.textContent =
       "✓ QR reconocido: " +
       trabajador.nombre;
 
-
   } else {
 
-    document.getElementById(
-      "estado"
-    ).textContent =
-      "QR leído, pero el trabajador no existe";
+    estado.textContent =
+      "QR leído, pero trabajador no encontrado";
 
   }
 
 }
 
 
-// ==================================================
-// CERRAR ESCÁNER
-// ==================================================
+/* ==================================================
+   CERRAR QR
+================================================== */
 
 function cerrarEscaner() {
 
-  if (intervaloQR) {
+  if (
+    intervaloQR
+  ) {
 
     clearInterval(
       intervaloQR
@@ -1306,7 +891,9 @@ function cerrarEscaner() {
   }
 
 
-  if (streamQR) {
+  if (
+    streamQR
+  ) {
 
     streamQR
       .getTracks()
@@ -1339,19 +926,414 @@ function cerrarEscaner() {
 }
 
 
-// ==================================================
-// GUARDAR PESAJE
-// ==================================================
+/* ==================================================
+   BASE DE DATOS LOCAL
+================================================== */
+
+const DB_NAME =
+  "ControlPesajesDB";
+
+
+const DB_VERSION =
+  1;
+
+
+const STORE_NAME =
+  "pesajes";
+
+
+function abrirBaseDatos() {
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const solicitud =
+        indexedDB.open(
+          DB_NAME,
+          DB_VERSION
+        );
+
+
+      solicitud.onupgradeneeded =
+        function(event) {
+
+          const db =
+            event.target.result;
+
+
+          if (
+            !db.objectStoreNames
+              .contains(
+                STORE_NAME
+              )
+          ) {
+
+            db.createObjectStore(
+              STORE_NAME,
+              {
+                keyPath: "id"
+              }
+            );
+
+          }
+
+        };
+
+
+      solicitud.onsuccess =
+        function(event) {
+
+          resolve(
+            event.target.result
+          );
+
+        };
+
+
+      solicitud.onerror =
+        function() {
+
+          reject(
+            solicitud.error
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+/* ==================================================
+   GUARDAR LOCAL
+================================================== */
+
+async function guardarLocal(
+  registro
+) {
+
+  const db =
+    await abrirBaseDatos();
+
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const transaccion =
+        db.transaction(
+          STORE_NAME,
+          "readwrite"
+        );
+
+
+      const almacen =
+        transaccion.objectStore(
+          STORE_NAME
+        );
+
+
+      almacen.put(
+        registro
+      );
+
+
+      transaccion.oncomplete =
+        function() {
+
+          resolve();
+
+        };
+
+
+      transaccion.onerror =
+        function() {
+
+          reject(
+            transaccion.error
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+/* ==================================================
+   OBTENER PENDIENTES
+================================================== */
+
+async function obtenerPendientes() {
+
+  const db =
+    await abrirBaseDatos();
+
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const transaccion =
+        db.transaction(
+          STORE_NAME,
+          "readonly"
+        );
+
+
+      const almacen =
+        transaccion.objectStore(
+          STORE_NAME
+        );
+
+
+      const solicitud =
+        almacen.getAll();
+
+
+      solicitud.onsuccess =
+        function() {
+
+          resolve(
+            solicitud.result
+          );
+
+        };
+
+
+      solicitud.onerror =
+        function() {
+
+          reject(
+            solicitud.error
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+/* ==================================================
+   ELIMINAR LOCAL
+================================================== */
+
+async function eliminarLocal(
+  id
+) {
+
+  const db =
+    await abrirBaseDatos();
+
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const transaccion =
+        db.transaction(
+          STORE_NAME,
+          "readwrite"
+        );
+
+
+      const almacen =
+        transaccion.objectStore(
+          STORE_NAME
+        );
+
+
+      almacen.delete(
+        id
+      );
+
+
+      transaccion.oncomplete =
+        function() {
+
+          resolve();
+
+        };
+
+
+      transaccion.onerror =
+        function() {
+
+          reject(
+            transaccion.error
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+/* ==================================================
+   MOSTRAR REGISTROS LOCALES
+================================================== */
+
+async function mostrarRegistros() {
+
+  try {
+
+    const registros =
+      await obtenerPendientes();
+
+
+    const lista =
+      document.getElementById(
+        "listaRegistros"
+      );
+
+
+    if (
+      registros.length === 0
+    ) {
+
+      lista.innerHTML =
+        "No hay registros pendientes.";
+
+      return;
+
+    }
+
+
+    registros.sort(
+      function(a, b) {
+
+        return b.fechaHora
+          .localeCompare(
+            a.fechaHora
+          );
+
+      }
+    );
+
+
+    lista.innerHTML =
+      "";
+
+
+    registros.forEach(
+      function(registro) {
+
+        const trabajador =
+          trabajadores.find(
+            function(t) {
+
+              return String(
+                t.codigo
+              ).toLowerCase()
+              ===
+              String(
+                registro.codigo
+              ).toLowerCase();
+
+            }
+          );
+
+
+        const nombre =
+          trabajador
+            ? trabajador.nombre
+            : registro.codigo;
+
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+
+        div.className =
+          "registro";
+
+
+        div.innerHTML =
+          "<strong>" +
+          nombre +
+          "</strong><br>" +
+          "Código: " +
+          registro.codigo +
+          "<br>" +
+          "Peso: " +
+          registro.kilos +
+          " kg<br>" +
+          "Fecha: " +
+          new Date(
+            registro.fechaHora
+          ).toLocaleString();
+
+
+        lista.appendChild(
+          div
+        );
+
+      }
+    );
+
+  } catch(error) {
+
+    console.log(
+      "Error mostrando registros",
+      error
+    );
+
+  }
+
+}
+
+
+/* ==================================================
+   CONTADOR
+================================================== */
+
+async function actualizarPendientes() {
+
+  try {
+
+    const pendientes =
+      await obtenerPendientes();
+
+
+    document.getElementById(
+      "pendientes"
+    ).textContent =
+      "Pendientes de sincronización: " +
+      pendientes.length;
+
+
+    await mostrarRegistros();
+
+  } catch(error) {
+
+    console.log(
+      error
+    );
+
+  }
+
+}
+
+
+/* ==================================================
+   GUARDAR PESAJE
+================================================== */
 
 async function guardarPesaje() {
 
   const codigo =
     document.getElementById(
       "codigo"
-    ).value.trim();
+    ).value
+      .trim();
 
 
-  const kilosTexto =
+  const kilos =
     document.getElementById(
       "kilos"
     ).value;
@@ -1363,74 +1345,60 @@ async function guardarPesaje() {
     );
 
 
-  // ----------------------------------------------
-  // VALIDAR CÓDIGO
-  // ----------------------------------------------
+  /* ================================================
+     VALIDAR CÓDIGO
+  ================================================= */
 
   if (!codigo) {
 
     estado.textContent =
-      "Ingrese o escanee el código del trabajador";
+      "Ingrese el código del trabajador.";
 
     return;
 
   }
 
 
-  // ----------------------------------------------
-  // VALIDAR KILOS
-  // ----------------------------------------------
-
-  const kilos =
-    Number(kilosTexto);
-
+  /* ================================================
+     VALIDAR KILOS
+  ================================================= */
 
   if (
     !kilos ||
-    kilos <= 0
+    Number(kilos) <= 0
   ) {
 
     estado.textContent =
-      "Ingrese los kilos";
+      "Ingrese los kilos.";
 
     return;
 
   }
 
 
-  // ----------------------------------------------
-  // BUSCAR TRABAJADOR
-  // ----------------------------------------------
+  /* ================================================
+     BUSCAR TRABAJADOR
+  ================================================= */
 
   const trabajador =
-    trabajadores.find(
-      function(t) {
-
-        return String(
-          t.codigo
-        )
-        .trim()
-        .toLowerCase()
-        ===
-        codigo.toLowerCase();
-
-      }
+    buscarTrabajador(
+      codigo
     );
 
 
   if (!trabajador) {
 
     estado.textContent =
-      "Trabajador no encontrado";
+      "Trabajador no encontrado.";
 
     return;
 
   }
 
 
-  // ----------------------------------------------
-  // CREAR REGISTRO
-  // ----------------------------------------------
+  /* ================================================
+     CREAR REGISTRO
+  ================================================= */
 
   const registro = {
 
@@ -1439,7 +1407,10 @@ async function guardarPesaje() {
       "-" +
       Math.random()
         .toString(36)
-        .substring(2, 8),
+        .substring(
+          2,
+          8
+        ),
 
     fechaHora:
       new Date().toISOString(),
@@ -1448,17 +1419,15 @@ async function guardarPesaje() {
       trabajador.codigo,
 
     kilos:
-      kilos,
-
-    sincronizado:
-      false
+      Number(kilos)
 
   };
 
 
-  // ----------------------------------------------
-  // GUARDAR EN LA TABLET
-  // ----------------------------------------------
+  /* ================================================
+     IMPORTANTE:
+     PRIMERO GUARDAR EN LA TABLET
+  ================================================= */
 
   try {
 
@@ -1467,8 +1436,11 @@ async function guardarPesaje() {
     );
 
 
+    await actualizarPendientes();
+
+
     estado.textContent =
-      "✓ PESO GUARDADO EN LA TABLET";
+      "✓ PESAJE GUARDADO EN LA TABLET";
 
 
     document.getElementById(
@@ -1477,22 +1449,18 @@ async function guardarPesaje() {
       "";
 
 
-    await actualizarPendientes();
+    /*
+       Si hay Internet,
+       intentamos sincronizar.
+    */
 
-
-    await mostrarRegistros();
-
-
-    // --------------------------------------------
-    // INTENTAR SINCRONIZAR
-    // --------------------------------------------
-
-    if (navigator.onLine) {
+    if (
+      navigator.onLine
+    ) {
 
       sincronizar();
 
     }
-
 
   } catch(error) {
 
@@ -1502,18 +1470,20 @@ async function guardarPesaje() {
 
 
     estado.textContent =
-      "❌ Error al guardar en la tablet";
+      "❌ ERROR AL GUARDAR EN LA TABLET";
 
   }
 
 }
 
 
-// ==================================================
-// SINCRONIZAR UN REGISTRO
-// ==================================================
+/* ==================================================
+   SINCRONIZAR UN REGISTRO
+================================================== */
 
-async function sincronizarRegistro(registro) {
+async function sincronizarRegistro(
+  registro
+) {
 
   const url =
     URL_APPS_SCRIPT +
@@ -1544,14 +1514,14 @@ async function sincronizarRegistro(registro) {
 
   if (
     !resultado ||
-    resultado.ok !== true
+    !resultado.ok
   ) {
 
     throw new Error(
       resultado &&
       resultado.error
         ? resultado.error
-        : "No se pudo guardar"
+        : "No se pudo guardar en Google Sheets"
     );
 
   }
@@ -1562,9 +1532,9 @@ async function sincronizarRegistro(registro) {
 }
 
 
-// ==================================================
-// SINCRONIZAR
-// ==================================================
+/* ==================================================
+   SINCRONIZAR
+================================================== */
 
 async function sincronizar() {
 
@@ -1577,80 +1547,101 @@ async function sincronizar() {
   }
 
 
-  let pendientes;
-
-
   try {
 
-    pendientes =
+    const pendientes =
       await obtenerPendientes();
+
+
+    if (
+      pendientes.length === 0
+    ) {
+
+      return;
+
+    }
+
+
+    document.getElementById(
+      "estado"
+    ).textContent =
+      "Sincronizando " +
+      pendientes.length +
+      " pesaje(s)...";
+
+
+    for (
+      const registro
+      of pendientes
+    ) {
+
+      try {
+
+        await sincronizarRegistro(
+          registro
+        );
+
+
+        await eliminarLocal(
+          registro.id
+        );
+
+
+      } catch(error) {
+
+        console.log(
+          "No se pudo sincronizar:",
+          error
+        );
+
+
+        break;
+
+      }
+
+    }
+
+
+    await actualizarPendientes();
+
+
+    const restantes =
+      await obtenerPendientes();
+
+
+    if (
+      restantes.length === 0
+    ) {
+
+      document.getElementById(
+        "estado"
+      ).textContent =
+        "✓ Todo sincronizado con Google Sheets";
+
+    } else {
+
+      document.getElementById(
+        "estado"
+      ).textContent =
+        "Hay pesajes pendientes de sincronizar.";
+
+    }
 
   } catch(error) {
 
     console.log(
-      "Error obteniendo pendientes:",
+      "Error sincronizando",
       error
     );
-
-    return;
-
-  }
-
-
-  if (
-    pendientes.length === 0
-  ) {
-
-    await actualizarPendientes();
-
-    return;
-
-  }
-
-
-  for (
-    const registro
-    of pendientes
-  ) {
-
-    try {
-
-      await sincronizarRegistro(
-        registro
-      );
-
-
-      await marcarSincronizado(
-        registro.id
-      );
-
-
-      await actualizarPendientes();
-
-
-      await mostrarRegistros();
-
-
-    } catch(error) {
-
-      console.log(
-        "No se pudo sincronizar:",
-        error
-      );
-
-
-      break;
-
-    }
 
   }
 
 }
 
 
-// ==================================================
-// CUANDO VUELVE INTERNET
-// ==================================================
+/* ==================================================
+   CUANDO VUELVE INTERNET
+================================================== */
 
 window.addEventListener(
   "online",
@@ -1664,16 +1655,15 @@ window.addEventListener(
 
     cargarTrabajadores();
 
-
     sincronizar();
 
   }
 );
 
 
-// ==================================================
-// CUANDO SE PIERDE INTERNET
-// ==================================================
+/* ==================================================
+   CUANDO SE PIERDE INTERNET
+================================================== */
 
 window.addEventListener(
   "offline",
@@ -1688,38 +1678,21 @@ window.addEventListener(
 );
 
 
-// ==================================================
-// INICIO
-// ==================================================
+/* ==================================================
+   INICIAR
+================================================== */
 
-async function iniciar() {
+cargarTrabajadores();
 
-  await cargarTrabajadores();
-
-  await actualizarPendientes();
-
-  await mostrarRegistros();
+actualizarPendientes();
 
 
-  if (navigator.onLine) {
-
-    sincronizar();
-
-  }
-
-}
-
-
-iniciar();
-
-
-// ==================================================
-// SERVICE WORKER
-// ==================================================
+/* ==================================================
+   SERVICE WORKER
+================================================== */
 
 if (
-  "serviceWorker"
-  in navigator
+  "serviceWorker" in navigator
 ) {
 
   window.addEventListener(
@@ -1743,7 +1716,7 @@ if (
           function(error) {
 
             console.log(
-              "Error Service Worker:",
+              "Error Service Worker",
               error
             );
 
@@ -1756,6 +1729,7 @@ if (
 }
 
 </script>
+
 
 </body>
 
