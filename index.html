@@ -267,6 +267,7 @@ function jsonp(url) {
           tiempo
         );
 
+
         if (script.parentNode) {
 
           script.parentNode.removeChild(
@@ -274,6 +275,7 @@ function jsonp(url) {
           );
 
         }
+
 
         try {
 
@@ -386,7 +388,14 @@ async function cargarTrabajadores() {
         "✓ Trabajadores actualizados";
 
 
+      console.log(
+        "Trabajadores:",
+        trabajadores
+      );
+
+
       return;
+
 
     } catch(error) {
 
@@ -416,6 +425,7 @@ async function cargarTrabajadores() {
 
     estado.textContent =
       "✓ Trabajadores disponibles sin Internet";
+
 
   } else {
 
@@ -484,10 +494,12 @@ function buscarTrabajador(
       trabajador.codigo +
       ")";
 
+
   } else if (codigo) {
 
     pantalla.textContent =
       "Trabajador no encontrado";
+
 
   } else {
 
@@ -543,9 +555,11 @@ async function abrirEscaner() {
         .getUserMedia({
 
           video: {
+
             facingMode: {
               ideal: "environment"
             }
+
           },
 
           audio: false
@@ -624,12 +638,8 @@ async function abrirEscaner() {
                 codigos.length > 0
               ) {
 
-                const codigoQR =
-                  codigos[0].rawValue;
-
-
                 procesarQR(
-                  codigoQR
+                  codigos[0].rawValue
                 );
 
               }
@@ -646,6 +656,7 @@ async function abrirEscaner() {
           },
           300
         );
+
 
     } else {
 
@@ -679,7 +690,9 @@ function procesarQR(
 ) {
 
   valor =
-    String(valor).trim();
+    String(
+      valor
+    ).trim();
 
 
   document.getElementById(
@@ -718,6 +731,7 @@ function procesarQR(
     ).textContent =
       "✓ QR reconocido: " +
       trabajador.nombre;
+
 
   } else {
 
@@ -1044,6 +1058,7 @@ async function actualizarPendientes() {
       "Pendientes: " +
       pendientes.length;
 
+
   } catch(error) {
 
     console.log(
@@ -1051,89 +1066,6 @@ async function actualizarPendientes() {
     );
 
   }
-
-}
-
-
-/* ==================================================
-   FECHA Y HORA LOCAL DE CHILE
-================================================== */
-
-function obtenerFechaHoraChile() {
-
-  const ahora =
-    new Date();
-
-
-  const partes =
-    new Intl.DateTimeFormat(
-      "en-CA",
-      {
-        timeZone:
-          "America/Santiago",
-
-        year:
-          "numeric",
-
-        month:
-          "2-digit",
-
-        day:
-          "2-digit",
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        second:
-          "2-digit",
-
-        hour12:
-          false
-
-      }
-    ).formatToParts(
-      ahora
-    );
-
-
-  const valores = {};
-
-
-  partes.forEach(
-    function(parte) {
-
-      if (
-        parte.type !==
-        "literal"
-      ) {
-
-        valores[
-          parte.type
-        ] =
-          parte.value;
-
-      }
-
-    }
-  );
-
-
-  return (
-    valores.year +
-    "-" +
-    valores.month +
-    "-" +
-    valores.day +
-    "T" +
-    valores.hour +
-    ":" +
-    valores.minute +
-    ":" +
-    valores.second
-  );
 
 }
 
@@ -1222,20 +1154,24 @@ async function guardarPesaje() {
           8
         ),
 
+
     /*
-       AHORA SE GUARDA
-       DIRECTAMENTE CON
-       HORA DE CHILE.
+       SE MANTIENE EL FORMATO
+       QUE YA TENÍAS FUNCIONANDO.
     */
 
     fechaHora:
-      obtenerFechaHoraChile(),
+      new Date().toISOString(),
+
 
     codigo:
       trabajador.codigo,
 
+
     kilos:
-      Number(kilos)
+      Number(
+        kilos
+      )
 
   };
 
@@ -1285,7 +1221,7 @@ async function guardarPesaje() {
 
 
 /* ==================================================
-   SINCRONIZAR UN PESAJE
+   SINCRONIZAR REGISTRO
 ================================================== */
 
 async function sincronizarRegistro(
