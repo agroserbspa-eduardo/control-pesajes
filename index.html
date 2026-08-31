@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
@@ -55,7 +56,6 @@ label {
 }
 
 input,
-select,
 button {
   width: 100%;
   box-sizing: border-box;
@@ -168,14 +168,6 @@ button {
 
 }
 
-#contenedorPeso {
-  display: block;
-}
-
-#contenedorJornada {
-  display: none;
-}
-
 </style>
 
 </head>
@@ -199,18 +191,28 @@ Código del trabajador
 
 
 <input
+
   id="codigo"
+
   type="text"
+
   placeholder="Ej: 1"
+
   autocomplete="off"
+
 >
 
 
 <button
+
   type="button"
+
   onclick="abrirEscaner()"
+
 >
+
 📷 ESCANEAR QR
+
 </button>
 
 
@@ -218,61 +220,43 @@ Código del trabajador
 
 
 <button
+
   id="cerrarQR"
+
   type="button"
+
   onclick="cerrarEscaner()"
+
 >
+
 ✖ CERRAR CÁMARA
+
 </button>
 
 
 <div id="trabajador">
+
 Trabajador no seleccionado
+
 </div>
 
 
 <label>
-Tipo de registro
-</label>
-
-
-<select
-  id="tipoRegistro"
-  onchange="cambiarTipoRegistro()"
->
-
-<option value="peso">
-⚖️ Peso
-</option>
-
-<option value="jornada">
-📅 Jornada
-</option>
-
-</select>
-
-
-<div id="contenedorPeso">
-
-
-<label>
-Kilos
+Peso (kg)
 </label>
 
 
 <input
-  id="kilos"
+
+  id="peso"
+
   type="number"
+
   step="0.1"
-  min="0"
+
   placeholder="Ej: 84.5"
+
 >
-
-
-</div>
-
-
-<div id="contenedorJornada">
 
 
 <label>
@@ -280,27 +264,27 @@ Jornada
 </label>
 
 
-<select id="jornada">
+<input
 
-<option value="DÍA">
-DÍA COMPLETO
-</option>
+  id="jornada"
 
-<option value="MEDIO DÍA">
-MEDIO DÍA
-</option>
+  type="text"
 
-</select>
+  placeholder="Ej: Día completo o Medio día"
 
-
-</div>
+>
 
 
 <button
+
   type="button"
+
   onclick="guardarPesaje()"
+
 >
+
 GUARDAR REGISTRO
+
 </button>
 
 
@@ -345,7 +329,6 @@ Total: 0 kg
 </div>
 
 
-
 <script>
 
 
@@ -354,7 +337,7 @@ Total: 0 kg
 // ==================================================
 
 const URL_APPS_SCRIPT =
-  "https://script.google.com/macros/s/AKfycbzs9dBMJotH8zBQNYeeOIdejzlTbPBRkw0IErt0Td9eiHmvy497j7Mu2XZJRzc2J_YWkQ/exec";
+"https://script.google.com/macros/s/AKfycbzs9dBMJotH8zBQNYeeOIdejzlTbPBRkw0IErt0Td9eiHmvy497j7Mu2XZJRzc2J_YWkQ/exec";
 
 
 // ==================================================
@@ -374,226 +357,162 @@ let intervaloQR = null;
 
 
 // ==================================================
-// CAMBIAR TIPO DE REGISTRO
-// ==================================================
-
-function cambiarTipoRegistro() {
-
-  const tipo =
-    document.getElementById(
-      "tipoRegistro"
-    ).value;
-
-
-  const contenedorPeso =
-    document.getElementById(
-      "contenedorPeso"
-    );
-
-
-  const contenedorJornada =
-    document.getElementById(
-      "contenedorJornada"
-    );
-
-
-  if (
-    tipo === "peso"
-  ) {
-
-    contenedorPeso.style.display =
-      "block";
-
-
-    contenedorJornada.style.display =
-      "none";
-
-
-  } else {
-
-
-    contenedorPeso.style.display =
-      "none";
-
-
-    contenedorJornada.style.display =
-      "block";
-
-  }
-
-}
-
-
-// ==================================================
 // JSONP
 // ==================================================
 
 function jsonp(url) {
 
-  return new Promise(
-    function(resolve, reject) {
+  return new Promise(function(resolve, reject) {
+
+    const callbackName =
+
+      "callback_" +
+
+      Date.now() +
+
+      "_" +
+
+      Math.random()
+        .toString(36)
+        .substring(2);
 
 
-      const callbackName =
-        "callback_" +
-        Date.now() +
-        "_" +
-        Math.random()
-          .toString(36)
-          .substring(2);
+    const script =
+      document.createElement(
+        "script"
+      );
 
 
-      const script =
-        document.createElement(
-          "script"
-        );
+    let terminado =
+      false;
 
 
-      let terminado =
-        false;
+    const tiempo =
+      setTimeout(
+        function() {
 
+          if (terminado) {
+            return;
+          }
 
-      const tiempo =
-        setTimeout(
-          function() {
+          terminado =
+            true;
 
-            if (
-              terminado
-            ) {
-              return;
-            }
+          limpiar();
 
-
-            terminado =
-              true;
-
-
-            limpiar();
-
-
-            reject(
-              new Error(
-                "Tiempo de espera agotado"
-              )
-            );
-
-          },
-          15000
-        );
-
-
-      function limpiar() {
-
-
-        clearTimeout(
-          tiempo
-        );
-
-
-        if (
-          script.parentNode
-        ) {
-
-          script.parentNode.removeChild(
-            script
+          reject(
+            new Error(
+              "Tiempo de espera agotado"
+            )
           );
 
-        }
+        },
+        15000
+      );
 
 
-        try {
+    function limpiar() {
 
-          delete window[
-            callbackName
-          ];
+      clearTimeout(
+        tiempo
+      );
 
-        } catch(error) {
 
-          window[
-            callbackName
-          ] =
-            undefined;
+      if (
+        script.parentNode
+      ) {
 
-        }
+        script.parentNode.removeChild(
+          script
+        );
 
       }
 
 
-      window[
-        callbackName
-      ] =
-      function(datos) {
+      try {
 
-
-        if (
-          terminado
-        ) {
-          return;
-        }
-
-
-        terminado =
-          true;
-
-
-        limpiar();
-
-
-        resolve(
-          datos
-        );
-
-      };
-
-
-      script.onerror =
-      function() {
-
-
-        if (
-          terminado
-        ) {
-          return;
-        }
-
-
-        terminado =
-          true;
-
-
-        limpiar();
-
-
-        reject(
-          new Error(
-            "No se pudo conectar"
-          )
-        );
-
-      };
-
-
-      const separador =
-        url.includes("?")
-          ? "&"
-          : "?";
-
-
-      script.src =
-        url +
-        separador +
-        "callback=" +
-        encodeURIComponent(
+        delete window[
           callbackName
-        );
+        ];
 
+      } catch(error) {
 
-      document.body.appendChild(
-        script
-      );
+        window[
+          callbackName
+        ] =
+        undefined;
+
+      }
 
     }
-  );
+
+
+    window[
+      callbackName
+    ] =
+    function(datos) {
+
+      if (terminado) {
+        return;
+      }
+
+      terminado =
+        true;
+
+      limpiar();
+
+      resolve(
+        datos
+      );
+
+    };
+
+
+    script.onerror =
+    function() {
+
+      if (terminado) {
+        return;
+      }
+
+      terminado =
+        true;
+
+      limpiar();
+
+      reject(
+        new Error(
+          "No se pudo conectar"
+        )
+      );
+
+    };
+
+
+    const separador =
+      url.includes("?")
+        ? "&"
+        : "?";
+
+
+    script.src =
+
+      url +
+
+      separador +
+
+      "callback=" +
+
+      encodeURIComponent(
+        callbackName
+      );
+
+
+    document.body.appendChild(
+      script
+    );
+
+  });
 
 }
 
@@ -603,7 +522,6 @@ function jsonp(url) {
 // ==================================================
 
 async function cargarTrabajadores() {
-
 
   const estado =
     document.getElementById(
@@ -617,11 +535,13 @@ async function cargarTrabajadores() {
 
     try {
 
-
       const lista =
         await jsonp(
+
           URL_APPS_SCRIPT +
+
           "?action=trabajadores"
+
         );
 
 
@@ -643,10 +563,13 @@ async function cargarTrabajadores() {
 
 
       localStorage.setItem(
+
         "trabajadores",
+
         JSON.stringify(
           trabajadores
         )
+
       );
 
 
@@ -660,7 +583,7 @@ async function cargarTrabajadores() {
     } catch(error) {
 
       console.log(
-        "Error al cargar trabajadores:",
+        "Error trabajadores:",
         error
       );
 
@@ -713,7 +636,9 @@ document
     "codigo"
   )
   .addEventListener(
+
     "input",
+
     function() {
 
       buscarTrabajador(
@@ -721,13 +646,11 @@ document
       );
 
     }
+
   );
 
 
-function buscarTrabajador(
-  codigo
-) {
-
+function buscarTrabajador(codigo) {
 
   codigo =
     String(
@@ -742,9 +665,7 @@ function buscarTrabajador(
     );
 
 
-  if (
-    !codigo
-  ) {
+  if (!codigo) {
 
     pantalla.textContent =
       "Trabajador no seleccionado";
@@ -770,21 +691,22 @@ function buscarTrabajador(
         .trim()
         .toLowerCase()
         ===
-        codigo
-        .toLowerCase();
+        codigo.toLowerCase();
 
       }
     );
 
 
-  if (
-    trabajador
-  ) {
+  if (trabajador) {
 
     pantalla.textContent =
+
       trabajador.nombre +
+
       " (" +
+
       trabajador.codigo +
+
       ")";
 
 
@@ -816,11 +738,10 @@ function buscarTrabajador(
 
 
 // ==================================================
-// ESCANEAR QR
+// ABRIR ESCÁNER QR
 // ==================================================
 
 async function abrirEscaner() {
-
 
   const lector =
     document.getElementById(
@@ -854,7 +775,6 @@ async function abrirEscaner() {
 
 
   try {
-
 
     streamQR =
       await navigator
@@ -921,7 +841,6 @@ async function abrirEscaner() {
       in window
     ) {
 
-
       const detector =
         new BarcodeDetector({
 
@@ -934,10 +853,10 @@ async function abrirEscaner() {
 
       intervaloQR =
         setInterval(
+
           async function() {
 
             try {
-
 
               const codigos =
                 await detector.detect(
@@ -948,7 +867,6 @@ async function abrirEscaner() {
               if (
                 codigos.length > 0
               ) {
-
 
                 const codigoQR =
                   codigos[0]
@@ -961,7 +879,6 @@ async function abrirEscaner() {
 
               }
 
-
             } catch(error) {
 
               console.log(
@@ -971,7 +888,9 @@ async function abrirEscaner() {
             }
 
           },
+
           300
+
         );
 
 
@@ -984,7 +903,6 @@ async function abrirEscaner() {
 
 
   } catch(error) {
-
 
     console.log(
       error
@@ -1003,10 +921,7 @@ async function abrirEscaner() {
 // PROCESAR QR
 // ==================================================
 
-function procesarQR(
-  valor
-) {
-
+function procesarQR(valor) {
 
   valor =
     String(
@@ -1037,7 +952,6 @@ function procesarQR(
 
 function cerrarEscaner() {
 
-
   if (
     intervaloQR
   ) {
@@ -1056,7 +970,6 @@ function cerrarEscaner() {
   if (
     streamQR
   ) {
-
 
     streamQR
       .getTracks()
@@ -1097,6 +1010,9 @@ const DB_NAME =
   "ControlPesajesDB";
 
 
+// Subimos la versión para actualizar
+// la estructura anterior
+
 const DB_VERSION =
   3;
 
@@ -1111,10 +1027,8 @@ const STORE_NAME =
 
 function abrirBaseDatos() {
 
-
   return new Promise(
     function(resolve, reject) {
-
 
       let solicitud;
 
@@ -1126,7 +1040,6 @@ function abrirBaseDatos() {
             DB_NAME,
             DB_VERSION
           );
-
 
       } catch(error) {
 
@@ -1142,7 +1055,6 @@ function abrirBaseDatos() {
       solicitud.onupgradeneeded =
         function(event) {
 
-
           const db =
             event.target.result;
 
@@ -1153,7 +1065,6 @@ function abrirBaseDatos() {
                 STORE_NAME
               )
           ) {
-
 
             db.createObjectStore(
               STORE_NAME,
@@ -1170,7 +1081,6 @@ function abrirBaseDatos() {
 
       solicitud.onsuccess =
         function(event) {
-
 
           const db =
             event.target.result;
@@ -1194,7 +1104,6 @@ function abrirBaseDatos() {
       solicitud.onerror =
         function() {
 
-
           reject(
             solicitud.error ||
             new Error(
@@ -1207,7 +1116,6 @@ function abrirBaseDatos() {
 
       solicitud.onblocked =
         function() {
-
 
           reject(
             new Error(
@@ -1227,10 +1135,7 @@ function abrirBaseDatos() {
 // GUARDAR LOCAL
 // ==================================================
 
-async function guardarLocal(
-  registro
-) {
-
+async function guardarLocal(registro) {
 
   const db =
     await abrirBaseDatos();
@@ -1239,14 +1144,9 @@ async function guardarLocal(
   return new Promise(
     function(resolve, reject) {
 
-
-      let transaccion;
-
-
       try {
 
-
-        transaccion =
+        const transaccion =
           db.transaction(
             STORE_NAME,
             "readwrite"
@@ -1264,65 +1164,40 @@ async function guardarLocal(
         );
 
 
+        transaccion.oncomplete =
+          function() {
+
+            db.close();
+
+            resolve();
+
+          };
+
+
+        transaccion.onerror =
+          function() {
+
+            db.close();
+
+            reject(
+              transaccion.error ||
+              new Error(
+                "Error al guardar"
+              )
+            );
+
+          };
+
+
       } catch(error) {
 
-
         db.close();
-
 
         reject(
           error
         );
 
-
-        return;
-
       }
-
-
-      transaccion.oncomplete =
-        function() {
-
-
-          db.close();
-
-
-          resolve();
-
-        };
-
-
-      transaccion.onerror =
-        function() {
-
-
-          db.close();
-
-
-          reject(
-            transaccion.error ||
-            new Error(
-              "Error al guardar"
-            )
-          );
-
-        };
-
-
-      transaccion.onabort =
-        function() {
-
-
-          db.close();
-
-
-          reject(
-            new Error(
-              "Transacción cancelada"
-            )
-          );
-
-        };
 
     }
   );
@@ -1336,7 +1211,6 @@ async function guardarLocal(
 
 async function obtenerPendientes() {
 
-
   const db =
     await abrirBaseDatos();
 
@@ -1344,9 +1218,7 @@ async function obtenerPendientes() {
   return new Promise(
     function(resolve, reject) {
 
-
       try {
-
 
         const transaccion =
           db.transaction(
@@ -1368,14 +1240,12 @@ async function obtenerPendientes() {
         solicitud.onsuccess =
           function() {
 
-
             const resultado =
               solicitud.result ||
               [];
 
 
             db.close();
-
 
             resolve(
               resultado
@@ -1387,9 +1257,7 @@ async function obtenerPendientes() {
         solicitud.onerror =
           function() {
 
-
             db.close();
-
 
             reject(
               solicitud.error
@@ -1400,9 +1268,7 @@ async function obtenerPendientes() {
 
       } catch(error) {
 
-
         db.close();
-
 
         reject(
           error
@@ -1420,10 +1286,7 @@ async function obtenerPendientes() {
 // ELIMINAR REGISTRO LOCAL
 // ==================================================
 
-async function eliminarLocal(
-  id
-) {
-
+async function eliminarLocal(id) {
 
   const db =
     await abrirBaseDatos();
@@ -1432,9 +1295,7 @@ async function eliminarLocal(
   return new Promise(
     function(resolve, reject) {
 
-
       try {
-
 
         const transaccion =
           db.transaction(
@@ -1457,9 +1318,7 @@ async function eliminarLocal(
         transaccion.oncomplete =
           function() {
 
-
             db.close();
-
 
             resolve();
 
@@ -1469,9 +1328,7 @@ async function eliminarLocal(
         transaccion.onerror =
           function() {
 
-
             db.close();
-
 
             reject(
               transaccion.error
@@ -1482,9 +1339,7 @@ async function eliminarLocal(
 
       } catch(error) {
 
-
         db.close();
-
 
         reject(
           error
@@ -1504,9 +1359,7 @@ async function eliminarLocal(
 
 async function actualizarPendientes() {
 
-
   try {
-
 
     const pendientes =
       await obtenerPendientes();
@@ -1515,22 +1368,17 @@ async function actualizarPendientes() {
     document.getElementById(
       "pendientes"
     ).textContent =
+
       "Pendientes de sincronización: " +
+
       pendientes.length;
 
 
   } catch(error) {
 
-
     console.error(
       error
     );
-
-
-    document.getElementById(
-      "pendientes"
-    ).textContent =
-      "Pendientes de sincronización: ?";
 
   }
 
@@ -1541,10 +1389,7 @@ async function actualizarPendientes() {
 // MOSTRAR REGISTROS DEL TRABAJADOR
 // ==================================================
 
-async function mostrarRegistrosTrabajador(
-  codigo
-) {
-
+async function mostrarRegistrosTrabajador(codigo) {
 
   const lista =
     document.getElementById(
@@ -1558,9 +1403,7 @@ async function mostrarRegistrosTrabajador(
     );
 
 
-  if (
-    !codigo
-  ) {
+  if (!codigo) {
 
     lista.textContent =
       "Seleccione un trabajador";
@@ -1577,7 +1420,6 @@ async function mostrarRegistrosTrabajador(
 
   try {
 
-
     const registros =
       await obtenerPendientes();
 
@@ -1589,11 +1431,13 @@ async function mostrarRegistrosTrabajador(
           return String(
             registro.codigo
           )
+          .trim()
           .toLowerCase()
           ===
           String(
             codigo
           )
+          .trim()
           .toLowerCase();
 
         }
@@ -1621,6 +1465,39 @@ async function mostrarRegistrosTrabajador(
     registrosTrabajador.forEach(
       function(registro) {
 
+        // ==========================================
+        // SUMAR SOLO PESOS
+        // ==========================================
+
+        if (
+
+          registro.peso !== "" &&
+
+          registro.peso !== null &&
+
+          registro.peso !== undefined
+
+        ) {
+
+          const numero =
+            Number(
+              registro.peso
+            );
+
+
+          if (
+            !isNaN(
+              numero
+            )
+          ) {
+
+            total +=
+              numero;
+
+          }
+
+        }
+
 
         const fila =
           document.createElement(
@@ -1643,36 +1520,50 @@ async function mostrarRegistrosTrabajador(
 
 
         // ==========================================
-        // MOSTRAR PESO O JORNADA
+        // MOSTRAR PESO Y/O JORNADA
         // ==========================================
 
+        let texto =
+          "";
+
+
         if (
-          registro.tipo === "jornada"
+
+          registro.peso !== "" &&
+
+          registro.peso !== null &&
+
+          registro.peso !== undefined
+
         ) {
 
-          informacion.textContent =
-            "📅 " +
-            registro.jornada;
-
-
-        } else {
-
-
-          const peso =
-            Number(
-              registro.kilos
-            );
-
-
-          total +=
-            peso;
-
-
-          informacion.textContent =
-            peso +
+          texto +=
+            registro.peso +
             " kg";
 
         }
+
+
+        if (
+          registro.jornada
+        ) {
+
+          if (texto) {
+
+            texto +=
+              " - ";
+
+          }
+
+
+          texto +=
+            registro.jornada;
+
+        }
+
+
+        informacion.textContent =
+          texto;
 
 
         const boton =
@@ -1696,16 +1587,13 @@ async function mostrarRegistrosTrabajador(
         boton.onclick =
           async function() {
 
-
             if (
               confirm(
                 "¿Eliminar este registro?"
               )
             ) {
 
-
               try {
-
 
                 await eliminarLocal(
                   registro.id
@@ -1721,7 +1609,6 @@ async function mostrarRegistrosTrabajador(
 
 
               } catch(error) {
-
 
                 console.error(
                   error
@@ -1765,7 +1652,6 @@ async function mostrarRegistrosTrabajador(
 
   } catch(error) {
 
-
     console.error(
       error
     );
@@ -1789,20 +1675,30 @@ async function mostrarRegistrosTrabajador(
 
 async function guardarPesaje() {
 
-
   const codigo =
-    document.getElementById(
-      "codigo"
-    )
-    .value
-    .trim();
+    document
+      .getElementById(
+        "codigo"
+      )
+      .value
+      .trim();
 
 
-  const tipo =
-    document.getElementById(
-      "tipoRegistro"
-    )
-    .value;
+  const peso =
+    document
+      .getElementById(
+        "peso"
+      )
+      .value;
+
+
+  const jornada =
+    document
+      .getElementById(
+        "jornada"
+      )
+      .value
+      .trim();
 
 
   const estado =
@@ -1811,9 +1707,11 @@ async function guardarPesaje() {
     );
 
 
-  if (
-    !codigo
-  ) {
+  // ==================================================
+  // VALIDAR CÓDIGO
+  // ==================================================
+
+  if (!codigo) {
 
     estado.textContent =
       "Ingrese el código";
@@ -1823,9 +1721,26 @@ async function guardarPesaje() {
   }
 
 
-  // ================================================
+  // ==================================================
+  // VALIDAR PESO O JORNADA
+  // ==================================================
+
+  if (
+    peso === "" &&
+    jornada === ""
+  ) {
+
+    estado.textContent =
+      "Ingrese un peso o una jornada";
+
+    return;
+
+  }
+
+
+  // ==================================================
   // BUSCAR TRABAJADOR
-  // ================================================
+  // ==================================================
 
   const trabajador =
     trabajadores.find(
@@ -1837,16 +1752,13 @@ async function guardarPesaje() {
         .trim()
         .toLowerCase()
         ===
-        codigo
-        .toLowerCase();
+        codigo.toLowerCase();
 
       }
     );
 
 
-  if (
-    !trabajador
-  ) {
+  if (!trabajador) {
 
     estado.textContent =
       "Trabajador no encontrado";
@@ -1856,15 +1768,18 @@ async function guardarPesaje() {
   }
 
 
-  // ================================================
+  // ==================================================
   // CREAR REGISTRO
-  // ================================================
+  // ==================================================
 
   const registro = {
 
     id:
+
       Date.now() +
+
       "-" +
+
       Math.random()
         .toString(36)
         .substring(
@@ -1872,122 +1787,48 @@ async function guardarPesaje() {
           8
         ),
 
+
     fechaHora:
+
       new Date()
         .toISOString(),
 
+
     codigo:
+
       trabajador.codigo,
 
-    tipo:
-      tipo,
 
-    kilos:
-      "",
+    peso:
+
+      peso === ""
+
+        ? ""
+
+        : Number(
+            peso
+          ),
+
 
     jornada:
-      ""
+
+      jornada
 
   };
 
 
-  // ================================================
-  // REGISTRO DE PESO
-  // ================================================
-
-  if (
-    tipo === "peso"
-  ) {
-
-
-    const kilos =
-      document.getElementById(
-        "kilos"
-      )
-      .value
-      .trim();
-
-
-    if (
-      kilos === ""
-    ) {
-
-      estado.textContent =
-        "Ingrese los kilos";
-
-      return;
-
-    }
-
-
-    const peso =
-      Number(
-        kilos
-      );
-
-
-    if (
-      isNaN(
-        peso
-      ) ||
-      peso <= 0
-    ) {
-
-      estado.textContent =
-        "Ingrese un peso válido";
-
-      return;
-
-    }
-
-
-    registro.kilos =
-      peso;
-
-  }
-
-
-  // ================================================
-  // REGISTRO DE JORNADA
-  // ================================================
-
-  if (
-    tipo === "jornada"
-  ) {
-
-
-    const jornada =
-      document.getElementById(
-        "jornada"
-      )
-      .value;
-
-
-    registro.jornada =
-      jornada;
-
-  }
-
-
   try {
-
 
     estado.textContent =
       "Guardando...";
 
 
-    // ==============================================
     // GUARDAR PRIMERO EN LA TABLET
-    // ==============================================
 
     await guardarLocal(
       registro
     );
 
-
-    // ==============================================
-    // ACTUALIZAR PANTALLA
-    // ==============================================
 
     await actualizarPendientes();
 
@@ -2001,22 +1842,25 @@ async function guardarPesaje() {
       "✓ Registro guardado en la tablet";
 
 
-    // Limpiar peso
+    // LIMPIAR CAMPOS
 
     document.getElementById(
-      "kilos"
+      "peso"
     ).value =
       "";
 
 
-    // ==============================================
+    document.getElementById(
+      "jornada"
+    ).value =
+      "";
+
+
     // SINCRONIZAR
-    // ==============================================
 
     if (
       navigator.onLine
     ) {
-
 
       sincronizar()
         .catch(
@@ -2035,7 +1879,6 @@ async function guardarPesaje() {
 
   } catch(error) {
 
-
     console.error(
       "ERROR AL GUARDAR:",
       error
@@ -2048,9 +1891,12 @@ async function guardarPesaje() {
 
     alert(
       "Error al guardar:\n\n" +
+
       (
         error.message ||
+
         error.name ||
+
         "Error desconocido"
       )
     );
@@ -2064,44 +1910,66 @@ async function guardarPesaje() {
 // SINCRONIZAR UN REGISTRO
 // ==================================================
 
-async function sincronizarRegistro(
-  registro
-) {
-
+async function sincronizarRegistro(registro) {
 
   const url =
+
     URL_APPS_SCRIPT +
 
     "?action=guardar" +
 
     "&id=" +
+
     encodeURIComponent(
       registro.id
     ) +
 
     "&fechaHora=" +
+
     encodeURIComponent(
       registro.fechaHora
     ) +
 
     "&codigo=" +
+
     encodeURIComponent(
       registro.codigo
     ) +
 
-    "&tipo=" +
-    encodeURIComponent(
-      registro.tipo
-    ) +
+    "&peso=" +
 
-    "&kilos=" +
     encodeURIComponent(
-      registro.kilos
+
+      registro.peso === undefined ||
+
+      registro.peso === null
+
+        ?
+
+        ""
+
+        :
+
+        registro.peso
+
     ) +
 
     "&jornada=" +
+
     encodeURIComponent(
-      registro.jornada
+
+      registro.jornada === undefined ||
+
+      registro.jornada === null
+
+        ?
+
+        ""
+
+        :
+
+        registro.jornada
+
     );
 
 
@@ -2112,8 +1980,11 @@ async function sincronizarRegistro(
 
 
   if (
+
     !resultado ||
-    !resultado.ok
+
+    resultado.ok !== true
+
   ) {
 
     throw new Error(
@@ -2145,7 +2016,6 @@ async function sincronizarRegistro(
 
 async function sincronizar() {
 
-
   if (
     !navigator.onLine
   ) {
@@ -2164,9 +2034,7 @@ async function sincronizar() {
     of pendientes
   ) {
 
-
     try {
-
 
       await sincronizarRegistro(
         registro
@@ -2179,7 +2047,6 @@ async function sincronizar() {
 
 
     } catch(error) {
-
 
       console.log(
         "Pendiente sin sincronizar:",
@@ -2198,18 +2065,19 @@ async function sincronizar() {
 
 
   const codigo =
-    document.getElementById(
-      "codigo"
-    )
-    .value
-    .trim();
+    document
+      .getElementById(
+        "codigo"
+      )
+      .value
+      .trim();
 
 
   if (
     codigo
   ) {
 
-    await mostrarRegistrosTrabajador(
+    mostrarRegistrosTrabajador(
       codigo
     );
 
@@ -2223,9 +2091,10 @@ async function sincronizar() {
 // ==================================================
 
 window.addEventListener(
-  "online",
-  async function() {
 
+  "online",
+
+  async function() {
 
     document.getElementById(
       "estado"
@@ -2234,7 +2103,6 @@ window.addEventListener(
 
 
     try {
-
 
       await cargarTrabajadores();
 
@@ -2257,6 +2125,7 @@ window.addEventListener(
     }
 
   }
+
 );
 
 
@@ -2265,9 +2134,10 @@ window.addEventListener(
 // ==================================================
 
 window.addEventListener(
-  "offline",
-  function() {
 
+  "offline",
+
+  function() {
 
     document.getElementById(
       "estado"
@@ -2275,15 +2145,15 @@ window.addEventListener(
       "Sin Internet. Guardando en la tablet.";
 
   }
+
 );
 
 
 // ==================================================
-// INICIO
+// INICIAR APLICACIÓN
 // ==================================================
 
 async function iniciarAplicacion() {
-
 
   try {
 
@@ -2315,7 +2185,6 @@ async function iniciarAplicacion() {
     navigator.onLine
   ) {
 
-
     try {
 
       await sincronizar();
@@ -2345,11 +2214,11 @@ if (
   in navigator
 ) {
 
-
   window.addEventListener(
-    "load",
-    function() {
 
+    "load",
+
+    function() {
 
       navigator.serviceWorker
         .register(
@@ -2376,6 +2245,7 @@ if (
         );
 
     }
+
   );
 
 }
