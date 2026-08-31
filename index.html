@@ -102,6 +102,11 @@ button {
   margin-top: 10px;
 }
 
+
+/* ==================================================
+   REGISTROS
+================================================== */
+
 #listaPesajes {
   margin-top: 20px;
 }
@@ -112,11 +117,32 @@ button {
   border-radius: 10px;
   padding: 12px;
   margin-top: 10px;
+  position: relative;
+  padding-right: 55px;
 }
 
-.pesaje button {
-  margin-top: 10px;
-  background: #eee;
+
+/* ==================================================
+   BOTÓN X
+================================================== */
+
+.botonEliminar {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+
+  width: 38px;
+  height: 38px;
+
+  padding: 0;
+  margin: 0;
+
+  border: none;
+  background: transparent;
+
+  font-size: 20px;
+
+  cursor: pointer;
 }
 
 </style>
@@ -1060,7 +1086,7 @@ async function actualizarPendientes() {
 
 
 // ==================================================
-// MOSTRAR PESAJES LOCALES
+// MOSTRAR PESAJES
 // ==================================================
 
 function mostrarPesajes(
@@ -1123,8 +1149,16 @@ function mostrarPesajes(
           "button";
 
 
+        boton.className =
+          "botonEliminar";
+
+
         boton.textContent =
-          "🗑 ELIMINAR PESAJE";
+          "❌";
+
+
+        boton.title =
+          "Eliminar pesaje";
 
 
         boton.onclick =
@@ -1182,8 +1216,7 @@ async function eliminarPesaje(
   try {
 
     /*
-       PRIMERO LO ELIMINAMOS
-       DE LA TABLET.
+       ELIMINAR DE LA TABLET
     */
 
     await eliminarLocal(
@@ -1201,10 +1234,8 @@ async function eliminarPesaje(
 
 
     /*
-       SI YA ESTABA SINCRONIZADO
-       NO ESTARÁ EN LA TABLET.
-       EN ESE CASO LO ELIMINAMOS
-       DIRECTAMENTE DE GOOGLE SHEETS.
+       ELIMINAR DE GOOGLE SHEETS
+       SI YA EXISTE
     */
 
     if (
@@ -1528,7 +1559,7 @@ async function sincronizar() {
 
 
 // ==================================================
-// CUANDO VUELVE INTERNET
+// INTERNET
 // ==================================================
 
 window.addEventListener(
