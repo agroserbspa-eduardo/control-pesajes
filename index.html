@@ -18,7 +18,6 @@
 
 <title>Control de Pesajes</title>
 
-
 <style>
 
 body {
@@ -33,7 +32,6 @@ body {
 
 }
 
-
 .contenedor {
 
   max-width: 600px;
@@ -42,13 +40,11 @@ body {
 
 }
 
-
 h1 {
 
   text-align: center;
 
 }
-
 
 .tarjeta {
 
@@ -61,7 +57,6 @@ h1 {
   margin-top: 20px;
 
 }
-
 
 button {
 
@@ -85,7 +80,6 @@ button {
 
 }
 
-
 input,
 select {
 
@@ -105,7 +99,6 @@ select {
 
 }
 
-
 label {
 
   display: block;
@@ -116,13 +109,11 @@ label {
 
 }
 
-
 .oculto {
 
   display: none;
 
 }
-
 
 #estado {
 
@@ -134,7 +125,6 @@ label {
 
 }
 
-
 #pendientes {
 
   text-align: center;
@@ -142,7 +132,6 @@ label {
   margin-top: 10px;
 
 }
-
 
 .trabajadorItem {
 
@@ -153,7 +142,6 @@ label {
   background: #eeeeee;
 
 }
-
 
 .trabajadorSeleccionado {
 
@@ -169,8 +157,9 @@ label {
 
   text-align: center;
 
-}
+  margin-top: 15px;
 
+}
 
 .separador {
 
@@ -180,13 +169,11 @@ label {
 
 }
 
-
 #listaRegistros {
 
   margin-top: 15px;
 
 }
-
 
 .registro {
 
@@ -206,13 +193,11 @@ label {
 
 }
 
-
 .infoRegistro {
 
   flex: 1;
 
 }
-
 
 .botonEliminar {
 
@@ -223,7 +208,6 @@ label {
   margin: 0;
 
 }
-
 
 #totalTrabajador {
 
@@ -242,7 +226,6 @@ label {
   font-weight: bold;
 
 }
-
 
 </style>
 
@@ -420,6 +403,21 @@ Nombre del trabajador
 >
 
 
+<!-- BOTÓN PARA CAMBIAR TRABAJADOR -->
+
+<button
+  type="button"
+  onclick="abrirSeleccionTrabajador()"
+>
+
+👤 SELECCIONAR TRABAJADOR
+
+</button>
+
+
+
+<!-- TRABAJADOR ACTUAL -->
+
 <div
   id="trabajadorSeleccionado"
   class="trabajadorSeleccionado"
@@ -427,6 +425,9 @@ Nombre del trabajador
 
 </div>
 
+
+
+<!-- PESO -->
 
 <label>
 
@@ -444,6 +445,9 @@ Peso (kg)
 >
 
 
+
+<!-- JORNADA -->
+
 <label>
 
 Jornada
@@ -452,6 +456,7 @@ Jornada
 
 
 <select id="jornada">
+
 
 <option value="">
 
@@ -477,6 +482,9 @@ Medio día
 </select>
 
 
+
+<!-- GUARDAR -->
+
 <button
   type="button"
   onclick="guardarRegistroFormulario()"
@@ -487,15 +495,10 @@ Medio día
 </button>
 
 
-<button
-  type="button"
-  onclick="cancelarTrabajador()"
->
 
-⬅ CANCELAR
-
-</button>
-
+<!-- ================================================= -->
+<!-- REGISTROS LOCALES -->
+<!-- ================================================= -->
 
 <div id="registrosTrabajador">
 
@@ -560,6 +563,7 @@ const URL_APPS_SCRIPT =
   "https://script.google.com/macros/s/AKfycbxCDWwilSh4v7eukRicKgGR0eEFbGlbYmxqlRVwTtOYsTvO26rHYp-T1iQTjUdh0kLg_w/exec";
 
 
+
 // ==================================================
 // TRABAJADORES
 // ==================================================
@@ -567,6 +571,7 @@ const URL_APPS_SCRIPT =
 let trabajadores = [];
 
 let trabajadorSeleccionado = null;
+
 
 
 // ==================================================
@@ -580,16 +585,15 @@ const DB_VERSION =
   5;
 
 
-// ALMACÉN REGISTROS
 
 const STORE_REGISTROS =
   "pesajes";
 
 
-// ALMACÉN TRABAJADORES NUEVOS
 
 const STORE_TRABAJADORES =
   "trabajadores";
+
 
 
 // ==================================================
@@ -627,10 +631,6 @@ function abrirBaseDatos() {
             event.target.result;
 
 
-          // ==========================================
-          // REGISTROS
-          // ==========================================
-
           if (
 
             !db.objectStoreNames.contains(
@@ -651,10 +651,6 @@ function abrirBaseDatos() {
 
           }
 
-
-          // ==========================================
-          // TRABAJADORES NUEVOS
-          // ==========================================
 
           if (
 
@@ -716,8 +712,9 @@ function abrirBaseDatos() {
 }
 
 
+
 // ==================================================
-// GUARDAR EN UN ALMACÉN
+// GUARDAR EN ALMACÉN
 // ==================================================
 
 async function guardarEnAlmacen(
@@ -777,8 +774,9 @@ async function guardarEnAlmacen(
 }
 
 
+
 // ==================================================
-// OBTENER DE UN ALMACÉN
+// OBTENER DE ALMACÉN
 // ==================================================
 
 async function obtenerDeAlmacen(
@@ -843,8 +841,9 @@ async function obtenerDeAlmacen(
 }
 
 
+
 // ==================================================
-// ELIMINAR DE UN ALMACÉN
+// ELIMINAR DE ALMACÉN
 // ==================================================
 
 async function eliminarDeAlmacen(
@@ -902,6 +901,7 @@ async function eliminarDeAlmacen(
   );
 
 }
+
 
 
 // ==================================================
@@ -1084,6 +1084,7 @@ function jsonp(url) {
 }
 
 
+
 // ==================================================
 // CARGAR TRABAJADORES
 // ==================================================
@@ -1099,10 +1100,6 @@ async function cargarTrabajadores() {
   let trabajadoresInternet =
     [];
 
-
-  // ================================================
-  // INTENTAR CARGAR DESDE GOOGLE
-  // ================================================
 
   if (
     navigator.onLine
@@ -1158,9 +1155,6 @@ async function cargarTrabajadores() {
   }
 
 
-  // ================================================
-  // SI NO SE PUDO INTERNET
-  // ================================================
 
   if (
     trabajadoresInternet.length === 0
@@ -1196,9 +1190,6 @@ async function cargarTrabajadores() {
   }
 
 
-  // ================================================
-  // AGREGAR TRABAJADORES NUEVOS LOCALES
-  // ================================================
 
   const nuevosLocales =
     await obtenerDeAlmacen(
@@ -1213,7 +1204,6 @@ async function cargarTrabajadores() {
     ];
 
 
-  // ELIMINAR DUPLICADOS POR CÓDIGO
 
   const codigos =
     new Set();
@@ -1253,9 +1243,6 @@ async function cargarTrabajadores() {
     );
 
 
-  // ================================================
-  // ORDENAR POR NOMBRE
-  // ================================================
 
   trabajadores.sort(
     function(a, b) {
@@ -1276,6 +1263,7 @@ async function cargarTrabajadores() {
   );
 
 
+
   if (
     !navigator.onLine
   ) {
@@ -1286,6 +1274,7 @@ async function cargarTrabajadores() {
   }
 
 }
+
 
 
 // ==================================================
@@ -1312,6 +1301,7 @@ async function abrirSeleccionTrabajador() {
   mostrarListaTrabajadores();
 
 }
+
 
 
 // ==================================================
@@ -1383,6 +1373,7 @@ function mostrarListaTrabajadores() {
 }
 
 
+
 // ==================================================
 // SELECCIONAR TRABAJADOR
 // ==================================================
@@ -1435,7 +1426,22 @@ async function seleccionarTrabajador(
     trabajador.codigo
   );
 
+
+  setTimeout(
+    function() {
+
+      document
+        .getElementById(
+          "peso"
+        )
+        .focus();
+
+    },
+    100
+  );
+
 }
+
 
 
 // ==================================================
@@ -1472,6 +1478,7 @@ function abrirAgregarTrabajador() {
       "";
 
 }
+
 
 
 // ==================================================
@@ -1528,15 +1535,12 @@ async function guardarNuevoTrabajador() {
   }
 
 
-  // ================================================
-  // EVITAR DUPLICADOS LOCALES
-  // ================================================
-
   const existe =
     trabajadores.find(
       function(t) {
 
         return (
+
           String(
             t.codigo
           )
@@ -1591,8 +1595,6 @@ async function guardarNuevoTrabajador() {
 
   try {
 
-    // GUARDAR PRIMERO LOCAL
-
     await guardarEnAlmacen(
 
       STORE_TRABAJADORES,
@@ -1630,10 +1632,6 @@ async function guardarNuevoTrabajador() {
       "✓ Trabajador guardado en la tablet";
 
 
-    // ================================================
-    // INTENTAR SINCRONIZAR
-    // ================================================
-
     if (
       navigator.onLine
     ) {
@@ -1664,8 +1662,6 @@ async function guardarNuevoTrabajador() {
     }
 
 
-    // VOLVER A LISTA
-
     abrirSeleccionTrabajador();
 
 
@@ -1682,6 +1678,7 @@ async function guardarNuevoTrabajador() {
   }
 
 }
+
 
 
 // ==================================================
@@ -1737,6 +1734,7 @@ function crearRegistro(
 }
 
 
+
 // ==================================================
 // GUARDAR REGISTRO FORMULARIO
 // ==================================================
@@ -1775,6 +1773,7 @@ async function guardarRegistroFormulario() {
         "jornada"
       )
       .value;
+
 
 
   // VALIDAR
@@ -1853,13 +1852,10 @@ async function guardarRegistroFormulario() {
     );
 
 
-    // LIMPIAR TRABAJADOR
 
-    trabajadorSeleccionado =
-      null;
-
-
-    // LIMPIAR FORMULARIO
+    // ================================================
+    // SOLO LIMPIAR PESO
+    // ================================================
 
     document
       .getElementById(
@@ -1869,6 +1865,11 @@ async function guardarRegistroFormulario() {
         "";
 
 
+
+    // ================================================
+    // SOLO LIMPIAR JORNADA
+    // ================================================
+
     document
       .getElementById(
         "jornada"
@@ -1877,9 +1878,27 @@ async function guardarRegistroFormulario() {
         "";
 
 
-    // VOLVER PRINCIPAL
 
-    volverPrincipal();
+    // ================================================
+    // EL TRABAJADOR SIGUE SELECCIONADO
+    // ================================================
+
+
+    await mostrarRegistrosTrabajador(
+      trabajadorSeleccionado.codigo
+    );
+
+
+
+    // ================================================
+    // VOLVER AUTOMÁTICAMENTE AL CAMPO PESO
+    // ================================================
+
+    document
+      .getElementById(
+        "peso"
+      )
+      .focus();
 
 
   } catch (error) {
@@ -1897,6 +1916,7 @@ async function guardarRegistroFormulario() {
 }
 
 
+
 // ==================================================
 // GUARDAR REGISTRO LOCAL
 // ==================================================
@@ -1910,8 +1930,6 @@ async function guardarRegistroLocal(
       "estado"
     );
 
-
-  // GUARDAR EN TABLET
 
   await guardarEnAlmacen(
 
@@ -1929,20 +1947,14 @@ async function guardarRegistroLocal(
     "✓ Registro guardado en la tablet";
 
 
-  // INTENTAR SINCRONIZAR
-
   if (
     navigator.onLine
   ) {
 
     try {
 
-      // PRIMERO TRABAJADORES
-
       await sincronizarTrabajadores();
 
-
-      // DESPUÉS REGISTROS
 
       await sincronizarRegistros();
 
@@ -1966,6 +1978,7 @@ async function guardarRegistroLocal(
   }
 
 }
+
 
 
 // ==================================================
@@ -2038,6 +2051,7 @@ async function sincronizarTrabajador(
 }
 
 
+
 // ==================================================
 // SINCRONIZAR TRABAJADORES
 // ==================================================
@@ -2098,8 +2112,6 @@ async function sincronizarTrabajadores() {
   }
 
 
-  // RECARGAR LISTA LOCAL
-
   const restantes =
     await obtenerDeAlmacen(
       STORE_TRABAJADORES
@@ -2109,6 +2121,7 @@ async function sincronizarTrabajadores() {
   return restantes;
 
 }
+
 
 
 // ==================================================
@@ -2217,6 +2230,7 @@ async function sincronizarRegistro(
 }
 
 
+
 // ==================================================
 // SINCRONIZAR REGISTROS
 // ==================================================
@@ -2282,6 +2296,7 @@ async function sincronizarRegistros() {
 }
 
 
+
 // ==================================================
 // SINCRONIZACIÓN COMPLETA
 // ==================================================
@@ -2297,25 +2312,16 @@ async function sincronizar() {
   }
 
 
-  // ================================================
-  // 1. PRIMERO TRABAJADORES
-  // ================================================
-
   await sincronizarTrabajadores();
 
-
-  // ================================================
-  // 2. DESPUÉS REGISTROS
-  // ================================================
 
   await sincronizarRegistros();
 
 
-  // RECARGAR TRABAJADORES
-
   await cargarTrabajadores();
 
 }
+
 
 
 // ==================================================
@@ -2364,8 +2370,9 @@ async function actualizarPendientes() {
 }
 
 
+
 // ==================================================
-// MOSTRAR REGISTROS LOCALES DEL TRABAJADOR
+// MOSTRAR REGISTROS DEL TRABAJADOR
 // ==================================================
 
 async function mostrarRegistrosTrabajador(
@@ -2629,6 +2636,7 @@ async function mostrarRegistrosTrabajador(
 }
 
 
+
 // ==================================================
 // VOLVER PRINCIPAL
 // ==================================================
@@ -2652,16 +2660,6 @@ function volverPrincipal() {
 
 }
 
-
-// ==================================================
-// CANCELAR TRABAJADOR
-// ==================================================
-
-function cancelarTrabajador() {
-
-  volverPrincipal();
-
-}
 
 
 // ==================================================
@@ -2708,6 +2706,7 @@ function ocultarPantallas() {
 }
 
 
+
 // ==================================================
 // CUANDO VUELVE INTERNET
 // ==================================================
@@ -2750,6 +2749,7 @@ window.addEventListener(
 );
 
 
+
 // ==================================================
 // SIN INTERNET
 // ==================================================
@@ -2770,6 +2770,7 @@ window.addEventListener(
   }
 
 );
+
 
 
 // ==================================================
@@ -2832,6 +2833,7 @@ async function iniciarAplicacion() {
   }
 
 }
+
 
 
 // ==================================================
