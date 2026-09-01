@@ -18,156 +18,422 @@
 
 <title>Control de Pesajes</title>
 
+
 <style>
 
 body {
+
   font-family: Arial, sans-serif;
+
   margin: 0;
+
   padding: 20px;
+
   background: #f2f2f2;
+
 }
+
 
 .contenedor {
+
   max-width: 600px;
+
   margin: auto;
+
 }
+
 
 h1 {
+
   text-align: center;
+
 }
+
 
 .tarjeta {
+
   background: white;
+
   padding: 20px;
+
   border-radius: 12px;
+
   margin-top: 20px;
+
 }
 
-label {
-  display: block;
+
+button {
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 16px;
+
   margin-top: 15px;
+
+  font-size: 18px;
+
   font-weight: bold;
+
+  border-radius: 8px;
+
+  border: 1px solid #bbb;
+
+  cursor: pointer;
+
 }
+
 
 input,
 select {
+
   width: 100%;
+
   box-sizing: border-box;
+
   padding: 15px;
+
   margin-top: 8px;
+
   font-size: 18px;
+
   border-radius: 8px;
+
   border: 1px solid #ccc;
+
 }
 
-button {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 16px;
+
+label {
+
+  display: block;
+
   margin-top: 15px;
-  font-size: 18px;
+
   font-weight: bold;
-  border-radius: 8px;
-  border: 1px solid #bbb;
-  cursor: pointer;
+
 }
 
-#trabajador {
-  margin-top: 15px;
-  padding: 15px;
-  background: #eeeeee;
-  border-radius: 8px;
-  font-size: 18px;
+
+.oculto {
+
+  display: none;
+
 }
+
 
 #estado {
+
   text-align: center;
+
   margin-top: 20px;
+
   font-weight: bold;
+
 }
+
 
 #pendientes {
+
   text-align: center;
+
   margin-top: 10px;
+
 }
 
-#registrosTrabajador {
-  margin-top: 25px;
+
+.trabajadorItem {
+
+  width: 100%;
+
+  text-align: left;
+
+  background: #eeeeee;
+
 }
+
+
+.trabajadorSeleccionado {
+
+  padding: 15px;
+
+  background: #eeeeee;
+
+  border-radius: 8px;
+
+  font-size: 20px;
+
+  font-weight: bold;
+
+  text-align: center;
+
+}
+
+
+.separador {
+
+  margin-top: 20px;
+
+  border-top: 1px solid #ddd;
+
+}
+
+
+#listaRegistros {
+
+  margin-top: 15px;
+
+}
+
 
 .registro {
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   background: #eeeeee;
+
   padding: 12px;
+
   margin-top: 8px;
+
   border-radius: 8px;
+
 }
+
 
 .infoRegistro {
+
   flex: 1;
+
 }
+
 
 .botonEliminar {
+
   width: auto;
+
   padding: 8px 12px;
+
   margin: 0;
+
 }
 
+
 #totalTrabajador {
+
   margin-top: 15px;
+
   padding: 15px;
+
   background: #eeeeee;
+
   border-radius: 8px;
+
   text-align: center;
+
   font-size: 24px;
+
   font-weight: bold;
+
 }
+
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <div class="contenedor">
 
+
 <h1>
+
 CONTROL DE PESAJES
+
 </h1>
+
 
 <div class="tarjeta">
 
 
-<!-- CÓDIGO DEL TRABAJADOR -->
+<!-- ================================================= -->
+<!-- PANTALLA PRINCIPAL -->
+<!-- ================================================= -->
 
-<label>
-Código del trabajador
-</label>
+<div id="pantallaPrincipal">
 
-<input
-  id="codigo"
-  type="text"
-  placeholder="Ej: 1"
-  autocomplete="off"
+
+<button
+  type="button"
+  onclick="abrirSeleccionTrabajador()"
 >
 
+👤 SELECCIONAR TRABAJADOR
 
-<!-- TRABAJADOR -->
+</button>
 
-<div id="trabajador">
-
-Trabajador no seleccionado
 
 </div>
 
 
-<!-- PESO -->
+
+<!-- ================================================= -->
+<!-- LISTA TRABAJADORES -->
+<!-- ================================================= -->
+
+<div
+  id="pantallaTrabajadores"
+  class="oculto"
+>
+
+
+<h2>
+
+SELECCIONAR TRABAJADOR
+
+</h2>
+
+
+<div id="listaTrabajadores">
+
+Cargando trabajadores...
+
+</div>
+
+
+<div class="separador">
+
+</div>
+
+
+<button
+  type="button"
+  onclick="abrirAgregarTrabajador()"
+>
+
+➕ AGREGAR NUEVO TRABAJADOR
+
+</button>
+
+
+<button
+  type="button"
+  onclick="volverPrincipal()"
+>
+
+⬅ VOLVER
+
+</button>
+
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- AGREGAR TRABAJADOR -->
+<!-- ================================================= -->
+
+<div
+  id="pantallaAgregar"
+  class="oculto"
+>
+
+
+<h2>
+
+NUEVO TRABAJADOR
+
+</h2>
+
 
 <label>
-Peso (kg)
+
+Código del trabajador
+
 </label>
+
+
+<input
+  id="nuevoCodigo"
+  type="text"
+  autocomplete="off"
+  placeholder="Ej: 1"
+>
+
+
+<label>
+
+Nombre del trabajador
+
+</label>
+
+
+<input
+  id="nuevoNombre"
+  type="text"
+  autocomplete="off"
+  placeholder="Nombre completo"
+>
+
+
+<button
+  type="button"
+  onclick="guardarNuevoTrabajador()"
+>
+
+💾 GUARDAR TRABAJADOR
+
+</button>
+
+
+<button
+  type="button"
+  onclick="abrirSeleccionTrabajador()"
+>
+
+⬅ VOLVER
+
+</button>
+
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- FORMULARIO -->
+<!-- ================================================= -->
+
+<div
+  id="pantallaFormulario"
+  class="oculto"
+>
+
+
+<div
+  id="trabajadorSeleccionado"
+  class="trabajadorSeleccionado"
+>
+
+</div>
+
+
+<label>
+
+Peso (kg)
+
+</label>
+
 
 <input
   id="peso"
@@ -178,30 +444,38 @@ Peso (kg)
 >
 
 
-<!-- JORNADA -->
-
 <label>
+
 Jornada
+
 </label>
+
 
 <select id="jornada">
 
-  <option value="">
-    Seleccione una jornada
-  </option>
+<option value="">
 
-  <option value="Día completo">
-    Día completo
-  </option>
+Seleccione una jornada
 
-  <option value="Medio día">
-    Medio día
-  </option>
+</option>
+
+
+<option value="Día completo">
+
+Día completo
+
+</option>
+
+
+<option value="Medio día">
+
+Medio día
+
+</option>
+
 
 </select>
 
-
-<!-- GUARDAR -->
 
 <button
   type="button"
@@ -213,9 +487,52 @@ Jornada
 </button>
 
 
-<!-- ESTADO -->
+<button
+  type="button"
+  onclick="cancelarTrabajador()"
+>
 
-<div id="estado"></div>
+⬅ CANCELAR
+
+</button>
+
+
+<div id="registrosTrabajador">
+
+
+<h2>
+
+REGISTROS PENDIENTES
+
+</h2>
+
+
+<div id="listaRegistros">
+
+</div>
+
+
+<div id="totalTrabajador">
+
+Total: 0 kg
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- ESTADO -->
+<!-- ================================================= -->
+
+<div id="estado">
+
+</div>
 
 
 <div id="pendientes">
@@ -225,31 +542,11 @@ Pendientes de sincronización: 0
 </div>
 
 
-<!-- REGISTROS -->
+</div>
 
-<div id="registrosTrabajador">
-
-<h2>
-REGISTROS DEL TRABAJADOR
-</h2>
-
-<div id="listaRegistros">
-
-Seleccione un trabajador
 
 </div>
 
-<div id="totalTrabajador">
-
-Total: 0 kg
-
-</div>
-
-</div>
-
-</div>
-
-</div>
 
 
 <script>
@@ -260,7 +557,7 @@ Total: 0 kg
 // ==================================================
 
 const URL_APPS_SCRIPT =
-"https://script.google.com/macros/s/AKfycbxCDWwilSh4v7eukRicKgGR0eEFbGlbYmxqlRVwTtOYsTvO26rHYp-T1iQTjUdh0kLg_w/exec";
+  "https://script.google.com/macros/s/AKfycbxCDWwilSh4v7eukRicKgGR0eEFbGlbYmxqlRVwTtOYsTvO26rHYp-T1iQTjUdh0kLg_w/exec";
 
 
 // ==================================================
@@ -269,21 +566,30 @@ const URL_APPS_SCRIPT =
 
 let trabajadores = [];
 
+let trabajadorSeleccionado = null;
+
 
 // ==================================================
-// BASE DE DATOS LOCAL
+// BASE DE DATOS
 // ==================================================
 
 const DB_NAME =
-"ControlPesajesDB";
-
+  "ControlPesajesDB";
 
 const DB_VERSION =
-4;
+  5;
 
 
-const STORE_NAME =
-"pesajes";
+// ALMACÉN REGISTROS
+
+const STORE_REGISTROS =
+  "pesajes";
+
+
+// ALMACÉN TRABAJADORES NUEVOS
+
+const STORE_TRABAJADORES =
+  "trabajadores";
 
 
 // ==================================================
@@ -308,6 +614,7 @@ function abrirBaseDatos() {
       } catch (error) {
 
         reject(error);
+
         return;
 
       }
@@ -320,21 +627,51 @@ function abrirBaseDatos() {
             event.target.result;
 
 
+          // ==========================================
+          // REGISTROS
+          // ==========================================
+
           if (
 
-            !db
-              .objectStoreNames
-              .contains(
-                STORE_NAME
-              )
+            !db.objectStoreNames.contains(
+              STORE_REGISTROS
+            )
 
           ) {
 
             db.createObjectStore(
-              STORE_NAME,
+
+              STORE_REGISTROS,
+
               {
                 keyPath: "id"
               }
+
+            );
+
+          }
+
+
+          // ==========================================
+          // TRABAJADORES NUEVOS
+          // ==========================================
+
+          if (
+
+            !db.objectStoreNames.contains(
+              STORE_TRABAJADORES
+            )
+
+          ) {
+
+            db.createObjectStore(
+
+              STORE_TRABAJADORES,
+
+              {
+                keyPath: "id"
+              }
+
             );
 
           }
@@ -345,10 +682,9 @@ function abrirBaseDatos() {
       solicitud.onsuccess =
         function(event) {
 
-          const db =
-            event.target.result;
-
-          resolve(db);
+          resolve(
+            event.target.result
+          );
 
         };
 
@@ -381,10 +717,13 @@ function abrirBaseDatos() {
 
 
 // ==================================================
-// GUARDAR REGISTRO LOCAL
+// GUARDAR EN UN ALMACÉN
 // ==================================================
 
-async function guardarLocal(registro) {
+async function guardarEnAlmacen(
+  almacenNombre,
+  datos
+) {
 
   const db =
     await abrirBaseDatos();
@@ -395,19 +734,19 @@ async function guardarLocal(registro) {
 
       const transaccion =
         db.transaction(
-          STORE_NAME,
+          almacenNombre,
           "readwrite"
         );
 
 
       const almacen =
         transaccion.objectStore(
-          STORE_NAME
+          almacenNombre
         );
 
 
       almacen.put(
-        registro
+        datos
       );
 
 
@@ -439,10 +778,12 @@ async function guardarLocal(registro) {
 
 
 // ==================================================
-// OBTENER REGISTROS LOCALES
+// OBTENER DE UN ALMACÉN
 // ==================================================
 
-async function obtenerPendientes() {
+async function obtenerDeAlmacen(
+  almacenNombre
+) {
 
   const db =
     await abrirBaseDatos();
@@ -453,14 +794,14 @@ async function obtenerPendientes() {
 
       const transaccion =
         db.transaction(
-          STORE_NAME,
+          almacenNombre,
           "readonly"
         );
 
 
       const almacen =
         transaccion.objectStore(
-          STORE_NAME
+          almacenNombre
         );
 
 
@@ -471,7 +812,7 @@ async function obtenerPendientes() {
       solicitud.onsuccess =
         function() {
 
-          const registros =
+          const datos =
             solicitud.result ||
             [];
 
@@ -479,7 +820,7 @@ async function obtenerPendientes() {
           db.close();
 
           resolve(
-            registros
+            datos
           );
 
         };
@@ -503,10 +844,13 @@ async function obtenerPendientes() {
 
 
 // ==================================================
-// ELIMINAR REGISTRO LOCAL
+// ELIMINAR DE UN ALMACÉN
 // ==================================================
 
-async function eliminarLocal(id) {
+async function eliminarDeAlmacen(
+  almacenNombre,
+  id
+) {
 
   const db =
     await abrirBaseDatos();
@@ -517,14 +861,14 @@ async function eliminarLocal(id) {
 
       const transaccion =
         db.transaction(
-          STORE_NAME,
+          almacenNombre,
           "readwrite"
         );
 
 
       const almacen =
         transaccion.objectStore(
-          STORE_NAME
+          almacenNombre
         );
 
 
@@ -591,10 +935,15 @@ function jsonp(url) {
 
       const tiempo =
         setTimeout(
+
           function() {
 
-            if (terminado) {
+            if (
+              terminado
+            ) {
+
               return;
+
             }
 
 
@@ -612,7 +961,9 @@ function jsonp(url) {
             );
 
           },
+
           15000
+
         );
 
 
@@ -645,7 +996,7 @@ function jsonp(url) {
           window[
             callbackName
           ] =
-          undefined;
+            undefined;
 
         }
 
@@ -655,32 +1006,40 @@ function jsonp(url) {
       window[
         callbackName
       ] =
-      function(datos) {
+        function(datos) {
 
-        if (terminado) {
-          return;
-        }
+          if (
+            terminado
+          ) {
 
+            return;
 
-        terminado =
-          true;
-
-
-        limpiar();
+          }
 
 
-        resolve(
-          datos
-        );
+          terminado =
+            true;
 
-      };
+
+          limpiar();
+
+
+          resolve(
+            datos
+          );
+
+        };
 
 
       script.onerror =
         function() {
 
-          if (terminado) {
+          if (
+            terminado
+          ) {
+
             return;
+
           }
 
 
@@ -737,6 +1096,14 @@ async function cargarTrabajadores() {
     );
 
 
+  let trabajadoresInternet =
+    [];
+
+
+  // ================================================
+  // INTENTAR CARGAR DESDE GOOGLE
+  // ================================================
+
   if (
     navigator.onLine
   ) {
@@ -765,20 +1132,19 @@ async function cargarTrabajadores() {
       }
 
 
-      trabajadores =
+      trabajadoresInternet =
         lista;
 
 
       localStorage.setItem(
+
         "trabajadores",
+
         JSON.stringify(
-          trabajadores
+          trabajadoresInternet
         )
+
       );
-
-
-      return;
-
 
     } catch (error) {
 
@@ -792,31 +1158,130 @@ async function cargarTrabajadores() {
   }
 
 
-  const guardados =
-    localStorage.getItem(
-      "trabajadores"
+  // ================================================
+  // SI NO SE PUDO INTERNET
+  // ================================================
+
+  if (
+    trabajadoresInternet.length === 0
+  ) {
+
+    const guardados =
+      localStorage.getItem(
+        "trabajadores"
+      );
+
+
+    if (
+      guardados
+    ) {
+
+      try {
+
+        trabajadoresInternet =
+          JSON.parse(
+            guardados
+          );
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+      }
+
+    }
+
+  }
+
+
+  // ================================================
+  // AGREGAR TRABAJADORES NUEVOS LOCALES
+  // ================================================
+
+  const nuevosLocales =
+    await obtenerDeAlmacen(
+      STORE_TRABAJADORES
     );
 
 
-  if (guardados) {
+  trabajadores =
+    [
+      ...trabajadoresInternet,
+      ...nuevosLocales
+    ];
 
-    try {
 
-      trabajadores =
-        JSON.parse(
-          guardados
+  // ELIMINAR DUPLICADOS POR CÓDIGO
+
+  const codigos =
+    new Set();
+
+
+  trabajadores =
+    trabajadores.filter(
+      function(t) {
+
+        const codigo =
+          String(
+            t.codigo
+          )
+            .trim()
+            .toLowerCase();
+
+
+        if (
+          codigos.has(
+            codigo
+          )
+        ) {
+
+          return false;
+
+        }
+
+
+        codigos.add(
+          codigo
         );
 
 
-      estado.textContent =
-        "Trabajadores disponibles sin Internet";
+        return true;
+
+      }
+    );
 
 
-    } catch (error) {
+  // ================================================
+  // ORDENAR POR NOMBRE
+  // ================================================
 
-      console.error(error);
+  trabajadores.sort(
+    function(a, b) {
+
+      return String(
+        a.nombre
+      ).localeCompare(
+
+        String(
+          b.nombre
+        ),
+
+        "es"
+
+      );
 
     }
+  );
+
+
+  if (
+    !navigator.onLine
+  ) {
+
+    estado.textContent =
+      "Trabajadores disponibles sin Internet";
 
   }
 
@@ -824,139 +1289,397 @@ async function cargarTrabajadores() {
 
 
 // ==================================================
-// BUSCAR TRABAJADOR
+// ABRIR LISTA TRABAJADORES
 // ==================================================
 
-document
-  .getElementById(
-    "codigo"
-  )
-  .addEventListener(
+async function abrirSeleccionTrabajador() {
 
-    "input",
-
-    function() {
-
-      buscarTrabajador(
-        this.value
-      );
-
-    }
-
-  );
+  ocultarPantallas();
 
 
-function buscarTrabajador(codigo) {
-
-  codigo =
-    String(codigo)
-      .trim();
-
-
-  const pantalla =
-    document.getElementById(
-      "trabajador"
+  document
+    .getElementById(
+      "pantallaTrabajadores"
+    )
+    .classList.remove(
+      "oculto"
     );
 
 
-  if (!codigo) {
-
-    pantalla.textContent =
-      "Trabajador no seleccionado";
+  await cargarTrabajadores();
 
 
-    document
-      .getElementById(
-        "listaRegistros"
-      )
-      .textContent =
-      "Seleccione un trabajador";
+  mostrarListaTrabajadores();
+
+}
 
 
-    document
-      .getElementById(
-        "totalTrabajador"
-      )
-      .textContent =
-      "Total: 0 kg";
+// ==================================================
+// MOSTRAR LISTA
+// ==================================================
 
+function mostrarListaTrabajadores() {
+
+  const lista =
+    document.getElementById(
+      "listaTrabajadores"
+    );
+
+
+  lista.innerHTML =
+    "";
+
+
+  if (
+    trabajadores.length === 0
+  ) {
+
+    lista.textContent =
+      "No hay trabajadores disponibles";
 
     return;
 
   }
 
 
-  const trabajador =
-    buscarTrabajadorPorCodigo(
-      codigo
-    );
+  trabajadores.forEach(
+    function(trabajador) {
+
+      const boton =
+        document.createElement(
+          "button"
+        );
 
 
-  if (trabajador) {
-
-    pantalla.textContent =
-      trabajador.nombre +
-      " (" +
-      trabajador.codigo +
-      ")";
+      boton.className =
+        "trabajadorItem";
 
 
-    mostrarRegistrosTrabajador(
-      trabajador.codigo
-    );
+      boton.type =
+        "button";
 
 
-  } else {
-
-    pantalla.textContent =
-      "Trabajador no encontrado";
+      boton.textContent =
+        trabajador.nombre;
 
 
-    document
-      .getElementById(
-        "listaRegistros"
-      )
-      .textContent =
-      "Seleccione un trabajador";
+      boton.onclick =
+        function() {
+
+          seleccionarTrabajador(
+            trabajador
+          );
+
+        };
 
 
-    document
-      .getElementById(
-        "totalTrabajador"
-      )
-      .textContent =
-      "Total: 0 kg";
+      lista.appendChild(
+        boton
+      );
 
-  }
+    }
+  );
 
 }
 
 
 // ==================================================
-// BUSCAR TRABAJADOR POR CÓDIGO
+// SELECCIONAR TRABAJADOR
 // ==================================================
 
-function buscarTrabajadorPorCodigo(codigo) {
+async function seleccionarTrabajador(
+  trabajador
+) {
 
-  return trabajadores.find(
+  trabajadorSeleccionado =
+    trabajador;
 
-    function(t) {
 
-      return String(
-        t.codigo
+  ocultarPantallas();
+
+
+  document
+    .getElementById(
+      "pantallaFormulario"
+    )
+    .classList.remove(
+      "oculto"
+    );
+
+
+  document
+    .getElementById(
+      "trabajadorSeleccionado"
+    )
+    .textContent =
+      trabajador.nombre;
+
+
+  document
+    .getElementById(
+      "peso"
+    )
+    .value =
+      "";
+
+
+  document
+    .getElementById(
+      "jornada"
+    )
+    .value =
+      "";
+
+
+  await mostrarRegistrosTrabajador(
+    trabajador.codigo
+  );
+
+}
+
+
+// ==================================================
+// ABRIR AGREGAR TRABAJADOR
+// ==================================================
+
+function abrirAgregarTrabajador() {
+
+  ocultarPantallas();
+
+
+  document
+    .getElementById(
+      "pantallaAgregar"
+    )
+    .classList.remove(
+      "oculto"
+    );
+
+
+  document
+    .getElementById(
+      "nuevoCodigo"
+    )
+    .value =
+      "";
+
+
+  document
+    .getElementById(
+      "nuevoNombre"
+    )
+    .value =
+      "";
+
+}
+
+
+// ==================================================
+// GUARDAR NUEVO TRABAJADOR
+// ==================================================
+
+async function guardarNuevoTrabajador() {
+
+  const estado =
+    document.getElementById(
+      "estado"
+    );
+
+
+  const codigo =
+    document
+      .getElementById(
+        "nuevoCodigo"
       )
-      .trim()
-      .toLowerCase()
-      ===
-      String(
-        codigo
+      .value
+      .trim();
+
+
+  const nombre =
+    document
+      .getElementById(
+        "nuevoNombre"
       )
-      .trim()
-      .toLowerCase();
+      .value
+      .trim();
+
+
+  if (
+    !codigo
+  ) {
+
+    estado.textContent =
+      "Ingrese el código del trabajador";
+
+    return;
+
+  }
+
+
+  if (
+    !nombre
+  ) {
+
+    estado.textContent =
+      "Ingrese el nombre del trabajador";
+
+    return;
+
+  }
+
+
+  // ================================================
+  // EVITAR DUPLICADOS LOCALES
+  // ================================================
+
+  const existe =
+    trabajadores.find(
+      function(t) {
+
+        return (
+          String(
+            t.codigo
+          )
+            .trim()
+            .toLowerCase()
+
+          ===
+
+          codigo
+            .toLowerCase()
+
+        );
+
+      }
+    );
+
+
+  if (
+    existe
+  ) {
+
+    estado.textContent =
+      "Ese código ya existe";
+
+    return;
+
+  }
+
+
+  const trabajador = {
+
+    id:
+
+      "LOCAL-T-" +
+      Date.now() +
+      "-" +
+      Math
+        .random()
+        .toString(36)
+        .substring(2, 8),
+
+
+    codigo:
+      codigo,
+
+
+    nombre:
+      nombre
+
+  };
+
+
+  try {
+
+    // GUARDAR PRIMERO LOCAL
+
+    await guardarEnAlmacen(
+
+      STORE_TRABAJADORES,
+
+      trabajador
+
+    );
+
+
+    trabajadores.push(
+      trabajador
+    );
+
+
+    trabajadores.sort(
+      function(a, b) {
+
+        return String(
+          a.nombre
+        ).localeCompare(
+
+          String(
+            b.nombre
+          ),
+
+          "es"
+
+        );
+
+      }
+    );
+
+
+    estado.textContent =
+      "✓ Trabajador guardado en la tablet";
+
+
+    // ================================================
+    // INTENTAR SINCRONIZAR
+    // ================================================
+
+    if (
+      navigator.onLine
+    ) {
+
+      try {
+
+        await sincronizarTrabajadores();
+
+
+        await cargarTrabajadores();
+
+
+        estado.textContent =
+          "✓ Trabajador sincronizado";
+
+      } catch (error) {
+
+        console.log(
+          error
+        );
+
+
+        estado.textContent =
+          "✓ Trabajador guardado. Pendiente de sincronización";
+
+      }
 
     }
 
-  );
+
+    // VOLVER A LISTA
+
+    abrirSeleccionTrabajador();
+
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    estado.textContent =
+      "No se pudo guardar el trabajador";
+
+  }
 
 }
 
@@ -970,25 +1693,12 @@ function crearRegistro(
   jornada
 ) {
 
-  const codigo =
-    document
-      .getElementById(
-        "codigo"
-      )
-      .value
-      .trim();
-
-
-  const trabajador =
-    buscarTrabajadorPorCodigo(
-      codigo
-    );
-
-
-  if (!trabajador) {
+  if (
+    !trabajadorSeleccionado
+  ) {
 
     throw new Error(
-      "Trabajador no encontrado"
+      "Seleccione un trabajador"
     );
 
   }
@@ -997,6 +1707,7 @@ function crearRegistro(
   return {
 
     id:
+
       Date.now() +
       "-" +
       Math
@@ -1011,7 +1722,7 @@ function crearRegistro(
 
 
     codigo:
-      trabajador.codigo,
+      trabajadorSeleccionado.codigo,
 
 
     peso:
@@ -1027,7 +1738,7 @@ function crearRegistro(
 
 
 // ==================================================
-// GUARDAR REGISTRO DEL FORMULARIO
+// GUARDAR REGISTRO FORMULARIO
 // ==================================================
 
 async function guardarRegistroFormulario() {
@@ -1038,13 +1749,16 @@ async function guardarRegistroFormulario() {
     );
 
 
-  const codigo =
-    document
-      .getElementById(
-        "codigo"
-      )
-      .value
-      .trim();
+  if (
+    !trabajadorSeleccionado
+  ) {
+
+    estado.textContent =
+      "Seleccione un trabajador";
+
+    return;
+
+  }
 
 
   const valorPeso =
@@ -1063,41 +1777,14 @@ async function guardarRegistroFormulario() {
       .value;
 
 
-  // VALIDAR CÓDIGO
-
-  if (!codigo) {
-
-    estado.textContent =
-      "Ingrese el código del trabajador";
-
-    return;
-
-  }
-
-
-  // VALIDAR TRABAJADOR
-
-  const trabajador =
-    buscarTrabajadorPorCodigo(
-      codigo
-    );
-
-
-  if (!trabajador) {
-
-    estado.textContent =
-      "Trabajador no encontrado";
-
-    return;
-
-  }
-
-
-  // VALIDAR QUE HAYA PESO O JORNADA
+  // VALIDAR
 
   if (
+
     valorPeso === "" &&
+
     jornada === ""
+
   ) {
 
     estado.textContent =
@@ -1112,22 +1799,34 @@ async function guardarRegistroFormulario() {
     "";
 
 
-  // VALIDAR PESO SI SE INGRESÓ
-
   if (
     valorPeso !== ""
   ) {
 
     peso =
       Number(
-        String(valorPeso)
-          .replace(",", ".")
+
+        String(
+          valorPeso
+        )
+          .replace(
+            ",",
+            "."
+          )
+
       );
 
 
     if (
-      isNaN(peso) ||
+
+      isNaN(
+        peso
+      )
+
+      ||
+
       peso <= 0
+
     ) {
 
       estado.textContent =
@@ -1154,29 +1853,41 @@ async function guardarRegistroFormulario() {
     );
 
 
-    // LIMPIAR PESO
+    // LIMPIAR TRABAJADOR
+
+    trabajadorSeleccionado =
+      null;
+
+
+    // LIMPIAR FORMULARIO
 
     document
       .getElementById(
         "peso"
       )
       .value =
-      "";
+        "";
 
-
-    // LIMPIAR JORNADA
 
     document
       .getElementById(
         "jornada"
       )
       .value =
-      "";
+        "";
+
+
+    // VOLVER PRINCIPAL
+
+    volverPrincipal();
 
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
+
 
     estado.textContent =
       error.message;
@@ -1187,10 +1898,12 @@ async function guardarRegistroFormulario() {
 
 
 // ==================================================
-// GUARDAR LOCAL Y SINCRONIZAR
+// GUARDAR REGISTRO LOCAL
 // ==================================================
 
-async function guardarRegistroLocal(registro) {
+async function guardarRegistroLocal(
+  registro
+) {
 
   const estado =
     document.getElementById(
@@ -1198,19 +1911,18 @@ async function guardarRegistroLocal(registro) {
     );
 
 
-  // GUARDAR EN LA TABLET
+  // GUARDAR EN TABLET
 
-  await guardarLocal(
+  await guardarEnAlmacen(
+
+    STORE_REGISTROS,
+
     registro
+
   );
 
 
   await actualizarPendientes();
-
-
-  await mostrarRegistrosTrabajador(
-    registro.codigo
-  );
 
 
   estado.textContent =
@@ -1225,7 +1937,14 @@ async function guardarRegistroLocal(registro) {
 
     try {
 
-      await sincronizar();
+      // PRIMERO TRABAJADORES
+
+      await sincronizarTrabajadores();
+
+
+      // DESPUÉS REGISTROS
+
+      await sincronizarRegistros();
 
 
       estado.textContent =
@@ -1250,6 +1969,356 @@ async function guardarRegistroLocal(registro) {
 
 
 // ==================================================
+// SINCRONIZAR UN TRABAJADOR
+// ==================================================
+
+async function sincronizarTrabajador(
+  trabajador
+) {
+
+  const url =
+
+    URL_APPS_SCRIPT +
+
+    "?action=agregarTrabajador" +
+
+    "&id=" +
+
+    encodeURIComponent(
+      trabajador.id
+    ) +
+
+    "&codigo=" +
+
+    encodeURIComponent(
+      trabajador.codigo
+    ) +
+
+    "&nombre=" +
+
+    encodeURIComponent(
+      trabajador.nombre
+    );
+
+
+  const resultado =
+    await jsonp(
+      url
+    );
+
+
+  if (
+
+    !resultado ||
+
+    resultado.ok !== true
+
+  ) {
+
+    throw new Error(
+
+      resultado &&
+      resultado.error
+
+        ?
+
+        resultado.error
+
+        :
+
+        "No se pudo sincronizar el trabajador"
+
+    );
+
+  }
+
+
+  return resultado;
+
+}
+
+
+// ==================================================
+// SINCRONIZAR TRABAJADORES
+// ==================================================
+
+async function sincronizarTrabajadores() {
+
+  if (
+    !navigator.onLine
+  ) {
+
+    return;
+
+  }
+
+
+  const pendientes =
+    await obtenerDeAlmacen(
+      STORE_TRABAJADORES
+    );
+
+
+  for (
+
+    const trabajador
+
+    of pendientes
+
+  ) {
+
+    try {
+
+      await sincronizarTrabajador(
+        trabajador
+      );
+
+
+      await eliminarDeAlmacen(
+
+        STORE_TRABAJADORES,
+
+        trabajador.id
+
+      );
+
+
+    } catch (error) {
+
+      console.log(
+        "No se pudo sincronizar trabajador:",
+        error
+      );
+
+
+      break;
+
+    }
+
+  }
+
+
+  // RECARGAR LISTA LOCAL
+
+  const restantes =
+    await obtenerDeAlmacen(
+      STORE_TRABAJADORES
+    );
+
+
+  return restantes;
+
+}
+
+
+// ==================================================
+// SINCRONIZAR UN REGISTRO
+// ==================================================
+
+async function sincronizarRegistro(
+  registro
+) {
+
+  const url =
+
+    URL_APPS_SCRIPT +
+
+    "?action=guardar" +
+
+    "&id=" +
+
+    encodeURIComponent(
+      registro.id
+    ) +
+
+    "&fechaHora=" +
+
+    encodeURIComponent(
+      registro.fechaHora
+    ) +
+
+    "&codigo=" +
+
+    encodeURIComponent(
+      registro.codigo
+    ) +
+
+    "&peso=" +
+
+    encodeURIComponent(
+
+      registro.peso === undefined ||
+
+      registro.peso === null
+
+        ?
+
+        ""
+
+        :
+
+        registro.peso
+
+    ) +
+
+    "&jornada=" +
+
+    encodeURIComponent(
+
+      registro.jornada === undefined ||
+
+      registro.jornada === null
+
+        ?
+
+        ""
+
+        :
+
+        registro.jornada
+
+    );
+
+
+  const resultado =
+    await jsonp(
+      url
+    );
+
+
+  if (
+
+    !resultado ||
+
+    resultado.ok !== true
+
+  ) {
+
+    throw new Error(
+
+      resultado &&
+      resultado.error
+
+        ?
+
+        resultado.error
+
+        :
+
+        "No se pudo sincronizar"
+
+    );
+
+  }
+
+
+  return true;
+
+}
+
+
+// ==================================================
+// SINCRONIZAR REGISTROS
+// ==================================================
+
+async function sincronizarRegistros() {
+
+  if (
+    !navigator.onLine
+  ) {
+
+    return;
+
+  }
+
+
+  const pendientes =
+    await obtenerDeAlmacen(
+      STORE_REGISTROS
+    );
+
+
+  for (
+
+    const registro
+
+    of pendientes
+
+  ) {
+
+    try {
+
+      await sincronizarRegistro(
+        registro
+      );
+
+
+      await eliminarDeAlmacen(
+
+        STORE_REGISTROS,
+
+        registro.id
+
+      );
+
+
+    } catch (error) {
+
+      console.log(
+        "No se pudo sincronizar:",
+        error
+      );
+
+
+      break;
+
+    }
+
+  }
+
+
+  await actualizarPendientes();
+
+}
+
+
+// ==================================================
+// SINCRONIZACIÓN COMPLETA
+// ==================================================
+
+async function sincronizar() {
+
+  if (
+    !navigator.onLine
+  ) {
+
+    return;
+
+  }
+
+
+  // ================================================
+  // 1. PRIMERO TRABAJADORES
+  // ================================================
+
+  await sincronizarTrabajadores();
+
+
+  // ================================================
+  // 2. DESPUÉS REGISTROS
+  // ================================================
+
+  await sincronizarRegistros();
+
+
+  // RECARGAR TRABAJADORES
+
+  await cargarTrabajadores();
+
+}
+
+
+// ==================================================
 // ACTUALIZAR PENDIENTES
 // ==================================================
 
@@ -1257,8 +2326,16 @@ async function actualizarPendientes() {
 
   try {
 
-    const pendientes =
-      await obtenerPendientes();
+    const registros =
+      await obtenerDeAlmacen(
+        STORE_REGISTROS
+      );
+
+
+    const trabajadoresPendientes =
+      await obtenerDeAlmacen(
+        STORE_TRABAJADORES
+      );
 
 
     document
@@ -1266,13 +2343,21 @@ async function actualizarPendientes() {
         "pendientes"
       )
       .textContent =
+
       "Pendientes de sincronización: " +
-      pendientes.length;
+
+      (
+        registros.length +
+
+        trabajadoresPendientes.length
+      );
 
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
 
   }
 
@@ -1280,10 +2365,12 @@ async function actualizarPendientes() {
 
 
 // ==================================================
-// MOSTRAR REGISTROS DEL TRABAJADOR
+// MOSTRAR REGISTROS LOCALES DEL TRABAJADOR
 // ==================================================
 
-async function mostrarRegistrosTrabajador(codigo) {
+async function mostrarRegistrosTrabajador(
+  codigo
+) {
 
   const lista =
     document.getElementById(
@@ -1297,43 +2384,37 @@ async function mostrarRegistrosTrabajador(codigo) {
     );
 
 
-  if (!codigo) {
-
-    lista.textContent =
-      "Seleccione un trabajador";
-
-
-    totalPantalla.textContent =
-      "Total: 0 kg";
-
-    return;
-
-  }
-
-
   try {
 
     const registros =
-      await obtenerPendientes();
+      await obtenerDeAlmacen(
+        STORE_REGISTROS
+      );
 
 
     const registrosTrabajador =
       registros.filter(
-
         function(registro) {
 
-          return String(
-            registro.codigo
-          )
-          .trim()
-          .toLowerCase()
-          ===
-          String(codigo)
-          .trim()
-          .toLowerCase();
+          return (
+
+            String(
+              registro.codigo
+            )
+              .trim()
+              .toLowerCase()
+
+            ===
+
+            String(
+              codigo
+            )
+              .trim()
+              .toLowerCase()
+
+          );
 
         }
-
       );
 
 
@@ -1356,7 +2437,6 @@ async function mostrarRegistrosTrabajador(codigo) {
 
 
     registrosTrabajador.forEach(
-
       function(registro) {
 
         const fila =
@@ -1383,8 +2463,6 @@ async function mostrarRegistrosTrabajador(codigo) {
           "";
 
 
-        // PESO
-
         if (
 
           registro.peso !== "" &&
@@ -1402,7 +2480,9 @@ async function mostrarRegistrosTrabajador(codigo) {
 
 
           if (
-            !isNaN(numero)
+            !isNaN(
+              numero
+            )
           ) {
 
             total +=
@@ -1418,13 +2498,13 @@ async function mostrarRegistrosTrabajador(codigo) {
         }
 
 
-        // JORNADA
-
         if (
           registro.jornada
         ) {
 
-          if (texto) {
+          if (
+            texto
+          ) {
 
             texto +=
               " - ";
@@ -1473,8 +2553,12 @@ async function mostrarRegistrosTrabajador(codigo) {
 
               try {
 
-                await eliminarLocal(
+                await eliminarDeAlmacen(
+
+                  STORE_REGISTROS,
+
                   registro.id
+
                 );
 
 
@@ -1514,19 +2598,23 @@ async function mostrarRegistrosTrabajador(codigo) {
         );
 
       }
-
     );
 
 
     totalPantalla.textContent =
+
       "Total: " +
+
       total +
+
       " kg";
 
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
 
 
     lista.textContent =
@@ -1542,170 +2630,80 @@ async function mostrarRegistrosTrabajador(codigo) {
 
 
 // ==================================================
-// SINCRONIZAR UN REGISTRO
+// VOLVER PRINCIPAL
 // ==================================================
 
-async function sincronizarRegistro(registro) {
+function volverPrincipal() {
 
-  const url =
+  trabajadorSeleccionado =
+    null;
 
-    URL_APPS_SCRIPT +
 
-    "?action=guardar" +
+  ocultarPantallas();
 
-    "&id=" +
-    encodeURIComponent(
-      registro.id
-    ) +
 
-    "&fechaHora=" +
-    encodeURIComponent(
-      registro.fechaHora
-    ) +
-
-    "&codigo=" +
-    encodeURIComponent(
-      registro.codigo
-    ) +
-
-    "&peso=" +
-    encodeURIComponent(
-
-      registro.peso === undefined ||
-      registro.peso === null
-
-        ?
-        ""
-
-        :
-        registro.peso
-
-    ) +
-
-    "&jornada=" +
-    encodeURIComponent(
-
-      registro.jornada === undefined ||
-      registro.jornada === null
-
-        ?
-        ""
-
-        :
-        registro.jornada
-
+  document
+    .getElementById(
+      "pantallaPrincipal"
+    )
+    .classList.remove(
+      "oculto"
     );
-
-
-  const resultado =
-    await jsonp(
-      url
-    );
-
-
-  if (
-
-    !resultado ||
-
-    resultado.ok !== true
-
-  ) {
-
-    throw new Error(
-
-      resultado &&
-      resultado.error
-
-        ?
-
-        resultado.error
-
-        :
-
-        "No se pudo sincronizar"
-
-    );
-
-  }
-
-
-  return true;
 
 }
 
 
 // ==================================================
-// SINCRONIZAR TODOS LOS REGISTROS
+// CANCELAR TRABAJADOR
 // ==================================================
 
-async function sincronizar() {
+function cancelarTrabajador() {
 
-  if (
-    !navigator.onLine
-  ) {
+  volverPrincipal();
 
-    return;
-
-  }
+}
 
 
-  const pendientes =
-    await obtenerPendientes();
+// ==================================================
+// OCULTAR PANTALLAS
+// ==================================================
 
+function ocultarPantallas() {
 
-  for (
-
-    const registro
-
-    of pendientes
-
-  ) {
-
-    try {
-
-      await sincronizarRegistro(
-        registro
-      );
-
-
-      await eliminarLocal(
-        registro.id
-      );
-
-
-    } catch (error) {
-
-      console.log(
-        "No se pudo sincronizar:",
-        error
-      );
-
-      break;
-
-    }
-
-  }
-
-
-  await actualizarPendientes();
-
-
-  const codigo =
-    document
-      .getElementById(
-        "codigo"
-      )
-      .value
-      .trim();
-
-
-  if (codigo) {
-
-    await mostrarRegistrosTrabajador(
-      codigo
+  document
+    .getElementById(
+      "pantallaPrincipal"
+    )
+    .classList.add(
+      "oculto"
     );
 
-  }
+
+  document
+    .getElementById(
+      "pantallaTrabajadores"
+    )
+    .classList.add(
+      "oculto"
+    );
+
+
+  document
+    .getElementById(
+      "pantallaAgregar"
+    )
+    .classList.add(
+      "oculto"
+    );
+
+
+  document
+    .getElementById(
+      "pantallaFormulario"
+    )
+    .classList.add(
+      "oculto"
+    );
 
 }
 
@@ -1720,32 +2718,30 @@ window.addEventListener(
 
   async function() {
 
-    document
-      .getElementById(
+    const estado =
+      document.getElementById(
         "estado"
-      )
-      .textContent =
+      );
+
+
+    estado.textContent =
       "Internet disponible. Sincronizando...";
 
 
     try {
 
-      await cargarTrabajadores();
-
       await sincronizar();
 
 
-      document
-        .getElementById(
-          "estado"
-        )
-        .textContent =
+      estado.textContent =
         "✓ Sincronización completada";
 
 
     } catch (error) {
 
-      console.error(error);
+      console.error(
+        error
+      );
 
     }
 
@@ -1788,7 +2784,9 @@ async function iniciarAplicacion() {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
 
   }
 
@@ -1799,7 +2797,9 @@ async function iniciarAplicacion() {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
 
   }
 
@@ -1812,9 +2812,20 @@ async function iniciarAplicacion() {
 
       await sincronizar();
 
+
+      document
+        .getElementById(
+          "estado"
+        )
+        .textContent =
+        "✓ Aplicación sincronizada";
+
+
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        error
+      );
 
     }
 
@@ -1823,10 +2834,15 @@ async function iniciarAplicacion() {
 }
 
 
+// ==================================================
+// INICIAR
+// ==================================================
+
 iniciarAplicacion();
 
 
 </script>
+
 
 </body>
 
