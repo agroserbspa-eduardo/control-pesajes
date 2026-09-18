@@ -485,6 +485,17 @@ label {
 </h2>
 
 
+<!-- AGREGAR TRABAJADOR: SIEMPRE APARECE COMO PRIMERA OPCIÓN -->
+
+<button
+  type="button"
+  onclick="abrirNuevoTrabajador()">
+
+  ➕ AGREGAR TRABAJADOR
+
+</button>
+
+
 <button
   type="button"
   onclick="cargarTrabajadores()"
@@ -505,15 +516,6 @@ label {
 
 
 <hr class="separador">
-
-
-<button
-  type="button"
-  onclick="abrirNuevoTrabajador()">
-
-  ➕ AGREGAR TRABAJADOR
-
-</button>
 
 
 <button
@@ -2465,8 +2467,17 @@ async function guardarNuevoTrabajador() {
     }
 
 
-    cerrarNuevoTrabajador();
+    // --------------------------------------------
+    // CERRAR LAS VENTANAS DE TRABAJADORES
+    // --------------------------------------------
 
+    cerrarNuevoTrabajador();
+    cerrarTrabajadores();
+
+
+    // --------------------------------------------
+    // ACTUALIZAR LA LISTA Y DEJAR SELECCIONADO
+    // --------------------------------------------
 
     mostrarListaTrabajadores();
 
