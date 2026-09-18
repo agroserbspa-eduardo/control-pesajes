@@ -250,6 +250,18 @@ label {
   font-size:
     18px;
 
+  color:
+    #d00000;
+
+  font-weight:
+    bold;
+
+  border:
+    1px solid #d00000;
+
+  background:
+    white;
+
 }
 
 
@@ -485,8 +497,7 @@ label {
 </h2>
 
 
-<!-- AGREGAR TRABAJADOR: SIEMPRE APARECE COMO PRIMERA OPCIÓN -->
-
+<!-- AGREGAR TRABAJADOR: PRIMERA OPCIÓN -->
 <button
   type="button"
   onclick="abrirNuevoTrabajador()">
@@ -513,19 +524,6 @@ label {
   Cargando trabajadores...
 
 </div>
-
-
-<hr class="separador">
-
-
-<button
-  type="button"
-  onclick="cerrarTrabajadores()"
-  class="botonSecundario">
-
-  ✖ CERRAR
-
-</button>
 
 
 </div>
@@ -2041,7 +2039,7 @@ function seleccionarTrabajador(
     ")";
 
 
-  // Mantener el campo de kilos vacío al seleccionar trabajador
+  // Dejar Kilos vacío al seleccionar trabajador
   document.getElementById(
     "kilos"
   ).value =
@@ -2160,9 +2158,24 @@ document
 
 async function abrirTrabajadores() {
 
-  document.getElementById(
-    "tarjetaTrabajadores"
-  ).classList.remove(
+  const tarjeta =
+    document.getElementById(
+      "tarjetaTrabajadores"
+    );
+
+  // El mismo botón abre y cierra la lista
+  if (!tarjeta.classList.contains("oculto")) {
+
+    tarjeta.classList.add(
+      "oculto"
+    );
+
+    return;
+
+  }
+
+
+  tarjeta.classList.remove(
     "oculto"
   );
 
@@ -2475,17 +2488,9 @@ async function guardarNuevoTrabajador() {
     }
 
 
-    // --------------------------------------------
-    // CERRAR LAS VENTANAS DE TRABAJADORES
-    // --------------------------------------------
-
     cerrarNuevoTrabajador();
     cerrarTrabajadores();
 
-
-    // --------------------------------------------
-    // ACTUALIZAR LA LISTA Y DEJAR SELECCIONADO
-    // --------------------------------------------
 
     mostrarListaTrabajadores();
 
