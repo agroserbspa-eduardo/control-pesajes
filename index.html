@@ -655,6 +655,7 @@ label {
   type="number"
   step="0.1"
   min="0"
+  value=""
   placeholder="Ej: 84.5">
 
 
@@ -1974,7 +1975,7 @@ function mostrarListaTrabajadores() {
 
 
       eliminar.textContent =
-        "🗑️";
+        "✖";
 
 
       eliminar.title =
@@ -2038,6 +2039,13 @@ function seleccionarTrabajador(
     " (" +
     trabajador.codigo +
     ")";
+
+
+  // Mantener el campo de kilos vacío al seleccionar trabajador
+  document.getElementById(
+    "kilos"
+  ).value =
+    "";
 
 
   document.getElementById(
@@ -2969,7 +2977,7 @@ async function mostrarRegistrosTrabajador(
 
 
         boton.textContent =
-          "🗑️";
+          "✖";
 
 
         boton.onclick =
