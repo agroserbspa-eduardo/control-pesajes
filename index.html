@@ -1,26 +1,26 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 
-\<html lang="es">
+<html lang="es">
 
-\<head>
+<head>
 
-\<meta charset="UTF-8">
+<meta charset="UTF-8">
 
-\<meta
+<meta
   name="viewport"
   content="width=device-width, initial-scale=1.0"
 \>
 
-\<meta
+<meta
   name="theme-color"
   content="#333333"
 \>
 
-\<title>Control de Pesajes\</title>
+<title>Control de Pesajes</title>
 
 
 
-\<style>
+<style>
 
 body {
 
@@ -237,153 +237,153 @@ label {
 
 }
 
-\</style>
+</style>
 
-\</head>
-
-
-
-\<body>
+</head>
 
 
 
-\<div class="contenedor">
+<body>
 
 
 
-\<h1>
+<div class="contenedor">
+
+
+
+<h1>
 
 CONTROL DE PESAJES
 
-\</h1>
+</h1>
 
 
 
-\<div class="tarjeta">
+<div class="tarjeta">
 
 
 
-\<!-- ============================================== -->
-\<!-- PANTALLA PRINCIPAL -->
-\<!-- ============================================== -->
+<!-- ============================================== -->
+<!-- PANTALLA PRINCIPAL -->
+<!-- ============================================== -->
 
-\<div id="pantallaPrincipal">
+<div id="pantallaPrincipal">
 
 
 
-\<button
+<button
   type="button"
   onclick="abrirSeleccionTrabajador()"
 \>
 
 👤 SELECCIONAR TRABAJADOR
 
-\</button>
+</button>
 
 
 
-\<button
+<button
   type="button"
   onclick="descargarRespaldo()"
 \>
 
 📥 DESCARGAR RESPALDO
 
-\</button>
+</button>
 
 
 
-\</div>
+</div>
 
 
 
-\<!-- ============================================== -->
-\<!-- LISTA TRABAJADORES -->
-\<!-- ============================================== -->
+<!-- ============================================== -->
+<!-- LISTA TRABAJADORES -->
+<!-- ============================================== -->
 
-\<div
+<div
   id="pantallaTrabajadores"
   class="oculto"
 \>
 
 
 
-\<h2>
+<h2>
 
 SELECCIONAR TRABAJADOR
 
-\</h2>
+</h2>
 
 
 
-\<div id="listaTrabajadores">
+<div id="listaTrabajadores">
 
 Cargando trabajadores...
 
-\</div>
+</div>
 
 
 
-\<div class="separador">
+<div class="separador">
 
-\</div>
+</div>
 
 
 
-\<button
+<button
   type="button"
   onclick="abrirAgregarTrabajador()"
 \>
 
 ➕ AGREGAR NUEVO TRABAJADOR
 
-\</button>
+</button>
 
 
 
-\<button
+<button
   type="button"
   onclick="volverPrincipal()"
 \>
 
 ⬅ VOLVER
 
-\</button>
+</button>
 
 
 
-\</div>
+</div>
 
 
 
-\<!-- ============================================== -->
-\<!-- AGREGAR TRABAJADOR -->
-\<!-- ============================================== -->
+<!-- ============================================== -->
+<!-- AGREGAR TRABAJADOR -->
+<!-- ============================================== -->
 
-\<div
+<div
   id="pantallaAgregar"
   class="oculto"
 \>
 
 
 
-\<h2>
+<h2>
 
 NUEVO TRABAJADOR
 
-\</h2>
+</h2>
 
 
 
-\<label>
+<label>
 
 Código del trabajador
 
-\</label>
+</label>
 
 
 
-\<input
+<input
   id="nuevoCodigo"
   type="text"
   autocomplete="off"
@@ -392,15 +392,15 @@ Código del trabajador
 
 
 
-\<label>
+<label>
 
 Nombre del trabajador
 
-\</label>
+</label>
 
 
 
-\<input
+<input
   id="nuevoNombre"
   type="text"
   autocomplete="off"
@@ -409,72 +409,72 @@ Nombre del trabajador
 
 
 
-\<button
+<button
   type="button"
   onclick="guardarNuevoTrabajador()"
 \>
 
 💾 GUARDAR TRABAJADOR
 
-\</button>
+</button>
 
 
 
-\<button
+<button
   type="button"
   onclick="abrirSeleccionTrabajador()"
 \>
 
 ⬅ VOLVER
 
-\</button>
+</button>
 
 
 
-\</div>
+</div>
 
 
 
-\<!-- ============================================== -->
-\<!-- FORMULARIO -->
-\<!-- ============================================== -->
+<!-- ============================================== -->
+<!-- FORMULARIO -->
+<!-- ============================================== -->
 
-\<div
+<div
   id="pantallaFormulario"
   class="oculto"
 \>
 
 
 
-\<button
+<button
   type="button"
   onclick="abrirSeleccionTrabajador()"
 \>
 
 👤 SELECCIONAR TRABAJADOR
 
-\</button>
+</button>
 
 
 
-\<div
+<div
   id="trabajadorSeleccionado"
   class="trabajadorSeleccionado"
 \>
 
-\</div>
+</div>
 
 
 
-\<label>
+<label>
 
 Peso (kg)
 
-\</label>
+</label>
 
 
 
-\<input
+<input
   id="peso"
   type="number"
   step="0.1"
@@ -484,39 +484,39 @@ Peso (kg)
 
 
 
-\<label>
+<label>
 
 Jornada
 
-\</label>
+</label>
 
 
 
-\<select id="jornada">
+<select id="jornada">
 
 
 
-\<option value="">
+<option value="">
 
 Seleccione una jornada
 
-\</option>
+</option>
 
 
 
-\<option value="Día completo">
+<option value="Día completo">
 
 Día completo
 
-\</option>
+</option>
 
 
 
-\<option value="Medio día">
+<option value="Medio día">
 
 Medio día
 
-\</option>
+</option>
 
 <option value="Día completo 2">
 
@@ -526,82 +526,82 @@ Día completo 2
 
 
 
-\</select>
+</select>
 
 
 
-\<button
+<button
   type="button"
   onclick="guardarRegistroFormulario()"
 \>
 
 💾 GUARDAR REGISTRO
 
-\</button>
+</button>
 
 
 
-\<div id="registrosTrabajador">
+<div id="registrosTrabajador">
 
 
 
-\<h2>
+<h2>
 
 REGISTROS DEL DÍA
 
-\</h2>
+</h2>
 
 
 
-\<div id="listaRegistros">
+<div id="listaRegistros">
 
-\</div>
+</div>
 
 
 
-\<div id="totalTrabajador">
+<div id="totalTrabajador">
 
 Total: 0 kg
 
-\</div>
+</div>
 
 
 
-\</div>
+</div>
 
 
 
-\</div>
+</div>
 
 
 
-\<!-- ============================================== -->
-\<!-- ESTADO -->
-\<!-- ============================================== -->
+<!-- ============================================== -->
+<!-- ESTADO -->
+<!-- ============================================== -->
 
-\<div id="estado">
+<div id="estado">
 
-\</div>
+</div>
 
 
 
-\<div id="pendientes">
+<div id="pendientes">
 
 Pendientes de sincronización: 0
 
-\</div>
+</div>
 
 
 
-\</div>
+</div>
 
 
 
-\</div>
+</div>
 
 
 
-\<script>
+<script>
 
 
 
@@ -3432,10 +3432,10 @@ iniciarAplicacion();
 
 
 
-\</script>
+</script>
 
 
 
-\</body>
+</body>
 
-\</html>
+</html>
