@@ -200,26 +200,6 @@ label {
 
 }
 
-.botonEliminar {
-
-  width: auto;
-
-  padding: 8px 12px;
-
-  margin: 0;
-
-  color: #d00000;
-
-  background: transparent;
-
-  border: none;
-
-  font-size: 22px;
-
-  font-weight: bold;
-
-}
-
 #totalTrabajador {
 
   margin-top: 15px;
@@ -324,6 +304,11 @@ SELECCIONAR TRABAJADOR
 </button>
 
 
+<div class="separador">
+
+</div>
+
+
 <div id="listaTrabajadores">
 
 Cargando trabajadores...
@@ -372,7 +357,7 @@ Código asignado automáticamente
   id="nuevoCodigo"
   type="text"
   autocomplete="off"
-  placeholder="Se asigna automáticamente"
+  placeholder="Cargando..."
   readonly
 >
 
@@ -1145,8 +1130,7 @@ async function cargarTrabajadores() {
         await jsonp(
 
           URL_APPS_SCRIPT +
-          "?action=trabajadores&_=" +
-          Date.now()
+          "?action=trabajadores"
 
         );
 
@@ -1378,6 +1362,8 @@ function mostrarListaTrabajadores() {
 
 
       boton.textContent =
+        trabajador.codigo +
+        " - " +
         trabajador.nombre;
 
 
@@ -1476,28 +1462,39 @@ async function seleccionarTrabajador(
 
 function obtenerSiguienteCodigoLocal() {
 
-  let mayor = 0;
+  let mayor =
+    0;
+
 
   trabajadores.forEach(
     function(t) {
 
       const numero =
         parseInt(
-          String(t.codigo || "").trim(),
+          String(
+            t.codigo || ""
+          ).trim(),
           10
         );
+
 
       if (
         !isNaN(numero) &&
         numero > mayor
       ) {
-        mayor = numero;
+
+        mayor =
+          numero;
+
       }
 
     }
   );
 
-  return String(mayor + 1);
+
+  return String(
+    mayor + 1
+  );
 
 }
 
@@ -1508,9 +1505,14 @@ function obtenerSiguienteCodigoLocal() {
 
 async function obtenerSiguienteCodigoRemoto() {
 
-  if (!navigator.onLine) {
+  if (
+    !navigator.onLine
+  ) {
+
     return obtenerSiguienteCodigoLocal();
+
   }
+
 
   const resultado =
     await jsonp(
@@ -1518,6 +1520,7 @@ async function obtenerSiguienteCodigoRemoto() {
       "?action=siguienteCodigo&_=" +
       Date.now()
     );
+
 
   if (
     !resultado ||
@@ -1533,6 +1536,7 @@ async function obtenerSiguienteCodigoRemoto() {
     );
 
   }
+
 
   return String(
     resultado.codigo
@@ -1564,6 +1568,7 @@ async function abrirAgregarTrabajador() {
       "nuevoCodigo"
     );
 
+
   const campoNombre =
     document.getElementById(
       "nuevoNombre"
@@ -1572,6 +1577,7 @@ async function abrirAgregarTrabajador() {
 
   campoCodigo.value =
     "Cargando...";
+
 
   campoNombre.value =
     "";
@@ -1585,9 +1591,10 @@ async function abrirAgregarTrabajador() {
   } catch (error) {
 
     console.error(
-      "No se pudo obtener el código remoto:",
+      "No se pudo obtener el código desde Google Sheets:",
       error
     );
+
 
     campoCodigo.value =
       obtenerSiguienteCodigoLocal();
@@ -1640,14 +1647,23 @@ async function guardarNuevoTrabajador() {
   }
 
 
-  // Con Internet, siempre volvemos a consultar Google Sheets
-  // para no usar un código viejo guardado en la tablet.
-  if (navigator.onLine) {
+  // Con Internet, Google Sheets es la fuente de verdad.
+  if (
+    navigator.onLine
+  ) {
 
     try {
 
       codigo =
         await obtenerSiguienteCodigoRemoto();
+
+
+      document
+        .getElementById(
+          "nuevoCodigo"
+        )
+        .value =
+        codigo;
 
     } catch (error) {
 
@@ -1656,33 +1672,20 @@ async function guardarNuevoTrabajador() {
         error
       );
 
-      // Se conserva el código mostrado al abrir la pantalla.
-      if (!codigo || codigo === "Cargando...") {
-        codigo =
-          obtenerSiguienteCodigoLocal();
-      }
-
     }
 
   }
 
 
-  if (!codigo || codigo === "Cargando...") {
+  if (
+    !codigo ||
+    codigo === "Cargando..."
+  ) {
 
-    estado.textContent =
-      "No se pudo generar el código del trabajador";
-
-    return;
+    codigo =
+      obtenerSiguienteCodigoLocal();
 
   }
-
-
-  document
-    .getElementById(
-      "nuevoCodigo"
-    )
-    .value =
-    codigo;
 
 
   const existe =
@@ -1691,37 +1694,26 @@ async function guardarNuevoTrabajador() {
 
         return (
           String(
-            t.codigo
+            t.codigo || ""
           )
             .trim()
             .toLowerCase()
           ===
-          codigo
-            .toLowerCase()
+          codigo.toLowerCase()
         );
 
       }
     );
 
 
-  if (existe) {
+  if (
+    existe
+  ) {
 
-    // Si el código quedó ocupado localmente, pedimos nuevamente
-    // el siguiente código a Google Sheets.
-    if (navigator.onLine) {
+    estado.textContent =
+      "Ese código ya existe. Actualice la lista e intente nuevamente.";
 
-      try {
-
-        codigo =
-          await obtenerSiguienteCodigoRemoto();
-
-      } catch (error) {
-
-        console.error(error);
-
-      }
-
-    }
+    return;
 
   }
 
@@ -1735,17 +1727,16 @@ async function guardarNuevoTrabajador() {
       Math
         .random()
         .toString(36)
-        .substring(2, 8),
-
+        .substring(
+          2,
+          8
+        ),
 
     codigo:
       codigo,
 
     nombre:
-      nombre,
-
-    sincronizado:
-      false
+      nombre
 
   };
 
@@ -1767,52 +1758,17 @@ async function guardarNuevoTrabajador() {
       "✓ Trabajador guardado en la tablet";
 
 
-    if (navigator.onLine) {
+    if (
+      navigator.onLine
+    ) {
 
       try {
 
-        const idLocal =
-          trabajador.id;
+        await sincronizarTrabajadores();
 
 
-        const resultado =
-          await sincronizarTrabajador(
-            trabajador
-          );
-
-        if (
-          resultado &&
-          resultado.trabajador &&
-          resultado.trabajador.codigo
-        ) {
-
-          trabajador.codigo =
-            String(
-              resultado.trabajador.codigo
-            );
-
-          trabajador.nombre =
-            String(
-              resultado.trabajador.nombre ||
-              trabajador.nombre
-            );
-
-          trabajador.id =
-            resultado.trabajador.id ||
-            trabajador.id;
-        }
-
-
-        await eliminarDeAlmacen(
-          STORE_TRABAJADORES,
-          idLocal
-        ).catch(
-          function() {}
-        );
-
-
-        // Volvemos a cargar para que la lista refleje Google Sheets.
         await cargarTrabajadores();
+
 
         estado.textContent =
           "✓ Trabajador sincronizado";
@@ -1824,6 +1780,7 @@ async function guardarNuevoTrabajador() {
           error
         );
 
+
         estado.textContent =
           "✓ Guardado en la tablet. Pendiente de sincronización";
 
@@ -1832,70 +1789,15 @@ async function guardarNuevoTrabajador() {
     }
 
 
-    // Al guardar, se cierra la pantalla de agregar.
-    // No dejamos una segunda pantalla abierta.
-    ocultarPantallas();
+    abrirSeleccionTrabajador();
 
-    document
-      .getElementById(
-        "pantallaFormulario"
-      )
-      .classList.remove(
-        "oculto"
-      );
-
-
-    trabajadorSeleccionado =
-      trabajador;
-
-
-    document
-      .getElementById(
-        "trabajadorSeleccionado"
-      )
-      .textContent =
-      nombre +
-      " (" +
-      codigo +
-      ")";
-
-
-    document
-      .getElementById(
-        "peso"
-      )
-      .value =
-      "";
-
-    document
-      .getElementById(
-        "jornada"
-      ).value =
-      "";
-
-
-    await mostrarRegistrosTrabajador(
-      codigo
-    );
-
-
-    setTimeout(
-      function() {
-        document
-          .getElementById(
-            "peso"
-          )
-          .focus();
-      },
-      100
-    );
-
-
-    await actualizarPendientes();
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
+
 
     estado.textContent =
       "No se pudo guardar el trabajador";
@@ -2221,10 +2123,7 @@ async function sincronizarTrabajador(
 
     encodeURIComponent(
       trabajador.nombre
-    ) +
-
-    "&_=" +
-    Date.now();
+    );
 
 
   const resultado =
@@ -2270,8 +2169,12 @@ async function sincronizarTrabajador(
 
 async function sincronizarTrabajadores() {
 
-  if (!navigator.onLine) {
-    return [];
+  if (
+    !navigator.onLine
+  ) {
+
+    return;
+
   }
 
 
@@ -2279,9 +2182,6 @@ async function sincronizarTrabajadores() {
     await obtenerDeAlmacen(
       STORE_TRABAJADORES
     );
-
-
-  let primerError = null;
 
 
   for (
@@ -2297,9 +2197,13 @@ async function sincronizarTrabajadores() {
 
 
       await eliminarDeAlmacen(
+
         STORE_TRABAJADORES,
+
         trabajador.id
+
       );
+
 
     } catch (error) {
 
@@ -2308,17 +2212,10 @@ async function sincronizarTrabajadores() {
         error
       );
 
-      if (!primerError) {
-        primerError = error;
-      }
+      break;
 
     }
 
-  }
-
-
-  if (primerError) {
-    throw primerError;
   }
 
 
@@ -2404,10 +2301,7 @@ async function sincronizarRegistro(
 
         registro.jornada
 
-    ) +
-
-    "&_=" +
-    Date.now();
+    );
 
 
   const resultado =
@@ -2472,8 +2366,12 @@ async function sincronizarRegistro(
 
 async function sincronizarRegistros() {
 
-  if (!navigator.onLine) {
+  if (
+    !navigator.onLine
+  ) {
+
     return;
+
   }
 
 
@@ -2481,9 +2379,6 @@ async function sincronizarRegistros() {
     await obtenerDeAlmacen(
       STORE_REGISTROS
     );
-
-
-  let primerError = null;
 
 
   for (
@@ -2494,7 +2389,9 @@ async function sincronizarRegistros() {
     if (
       registro.sincronizado === true
     ) {
+
       continue;
+
     }
 
 
@@ -2511,9 +2408,7 @@ async function sincronizarRegistros() {
         error
       );
 
-      if (!primerError) {
-        primerError = error;
-      }
+      break;
 
     }
 
@@ -2521,11 +2416,6 @@ async function sincronizarRegistros() {
 
 
   await actualizarPendientes();
-
-
-  if (primerError) {
-    throw primerError;
-  }
 
 }
 
@@ -2541,28 +2431,6 @@ async function sincronizar() {
   ) {
 
     return;
-
-  }
-
-
-  const conexion =
-    await jsonp(
-      URL_APPS_SCRIPT +
-      "?action=ping&_=" +
-      Date.now()
-    );
-
-
-  if (
-    !conexion ||
-    conexion.ok !== true
-  ) {
-
-    throw new Error(
-      conexion && conexion.error
-        ? conexion.error
-        : "Google Apps Script no respondió correctamente"
-    );
 
   }
 
@@ -2850,74 +2718,9 @@ async function mostrarRegistrosTrabajador(
           texto;
 
 
-        const boton =
-          document.createElement(
-            "button"
-          );
-
-
-        boton.className =
-          "botonEliminar";
-
-
-        boton.textContent =
-          "❌";
-
-
-        boton.type =
-          "button";
-
-
-        boton.onclick =
-          async function() {
-
-            if (
-
-              confirm(
-                "¿Eliminar este registro?"
-              )
-
-            ) {
-
-              try {
-
-                await eliminarDeAlmacen(
-
-                  STORE_REGISTROS,
-
-                  registro.id
-
-                );
-
-
-                await actualizarPendientes();
-
-
-                await mostrarRegistrosTrabajador(
-                  codigo
-                );
-
-
-              } catch (error) {
-
-                alert(
-                  "No se pudo eliminar el registro"
-                );
-
-              }
-
-            }
-
-          };
-
 
         fila.appendChild(
           informacion
-        );
-
-
-        fila.appendChild(
-          boton
         );
 
 
@@ -3267,16 +3070,6 @@ window.addEventListener(
         error
       );
 
-      document
-        .getElementById(
-          "estado"
-        )
-        .textContent =
-        "No se pudo sincronizar: " +
-        (error && error.message
-          ? error.message
-          : error);
-
     }
 
   }
@@ -3375,10 +3168,7 @@ async function iniciarAplicacion() {
           "estado"
         )
         .textContent =
-        "No se pudo sincronizar: " +
-        (error && error.message
-          ? error.message
-          : error);
+        "No se pudo sincronizar. Los datos siguen guardados.";
 
     }
 
