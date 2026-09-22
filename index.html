@@ -9,12 +9,12 @@
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1.0"
-\>
+>
 
 <meta
   name="theme-color"
   content="#333333"
-\>
+>
 
 <title>Control de Pesajes</title>
 
@@ -117,7 +117,7 @@ label {
 
 }
 
-\#estado {
+#estado {
 
   text-align: center;
 
@@ -127,7 +127,7 @@ label {
 
 }
 
-\#pendientes {
+#pendientes {
 
   text-align: center;
 
@@ -171,7 +171,7 @@ label {
 
 }
 
-\#listaRegistros {
+#listaRegistros {
 
   margin-top: 15px;
 
@@ -211,7 +211,7 @@ label {
 
 }
 
-\#totalTrabajador {
+#totalTrabajador {
 
   margin-top: 15px;
 
@@ -274,7 +274,7 @@ CONTROL DE PESAJES
 <button
   type="button"
   onclick="abrirSeleccionTrabajador()"
-\>
+>
 
 👤 SELECCIONAR TRABAJADOR
 
@@ -285,7 +285,7 @@ CONTROL DE PESAJES
 <button
   type="button"
   onclick="descargarRespaldo()"
-\>
+>
 
 📥 DESCARGAR RESPALDO
 
@@ -304,7 +304,7 @@ CONTROL DE PESAJES
 <div
   id="pantallaTrabajadores"
   class="oculto"
-\>
+>
 
 
 
@@ -333,7 +333,7 @@ Cargando trabajadores...
 <button
   type="button"
   onclick="abrirAgregarTrabajador()"
-\>
+>
 
 ➕ AGREGAR NUEVO TRABAJADOR
 
@@ -344,7 +344,7 @@ Cargando trabajadores...
 <button
   type="button"
   onclick="volverPrincipal()"
-\>
+>
 
 ⬅ VOLVER
 
@@ -363,7 +363,7 @@ Cargando trabajadores...
 <div
   id="pantallaAgregar"
   class="oculto"
-\>
+>
 
 
 
@@ -388,7 +388,7 @@ Código del trabajador
   type="text"
   autocomplete="off"
   placeholder="Ej: 1"
-\>
+>
 
 
 
@@ -405,14 +405,14 @@ Nombre del trabajador
   type="text"
   autocomplete="off"
   placeholder="Nombre completo"
-\>
+>
 
 
 
 <button
   type="button"
   onclick="guardarNuevoTrabajador()"
-\>
+>
 
 💾 GUARDAR TRABAJADOR
 
@@ -423,7 +423,7 @@ Nombre del trabajador
 <button
   type="button"
   onclick="abrirSeleccionTrabajador()"
-\>
+>
 
 ⬅ VOLVER
 
@@ -442,14 +442,14 @@ Nombre del trabajador
 <div
   id="pantallaFormulario"
   class="oculto"
-\>
+>
 
 
 
 <button
   type="button"
   onclick="abrirSeleccionTrabajador()"
-\>
+>
 
 👤 SELECCIONAR TRABAJADOR
 
@@ -460,7 +460,7 @@ Nombre del trabajador
 <div
   id="trabajadorSeleccionado"
   class="trabajadorSeleccionado"
-\>
+>
 
 </div>
 
@@ -480,7 +480,7 @@ Peso (kg)
   step="0.1"
   inputmode="decimal"
   placeholder="Ej: 345"
-\>
+>
 
 
 
@@ -533,7 +533,7 @@ Día completo 2
 <button
   type="button"
   onclick="guardarRegistroFormulario()"
-\>
+>
 
 💾 GUARDAR REGISTRO
 
@@ -609,8 +609,8 @@ Pendientes de sincronización: 0
 // URL GOOGLE APPS SCRIPT
 // ==================================================
 
-const URL\_APPS\_SCRIPT =
-  "[https://script.google.com/macros/s/AKfycbxCDWwilSh4v7eukRicKgGR0eEFbGlbYmxqlRVwTtOYsTvO26rHYp-T1iQTjUdh0kLg\_w/exec](https://script.google.com/macros/s/AKfycbxCDWwilSh4v7eukRicKgGR0eEFbGlbYmxqlRVwTtOYsTvO26rHYp-T1iQTjUdh0kLg_w/exec)";
+const URL_APPS_SCRIPT =
+  "https://script.google.com/macros/s/AKfycbxCDWwilSh4v7eukRicKgGR0eEFbGlbYmxqlRVwTtOYsTvO26rHYp-T1iQTjUdh0kLg_w/exec";
 
 
 
@@ -628,16 +628,16 @@ let trabajadorSeleccionado = null;
 // BASE DE DATOS
 // ==================================================
 
-const DB\_NAME =
+const DB_NAME =
   "ControlPesajesDB";
 
-const DB\_VERSION =
+const DB_VERSION =
   6;
 
-const STORE\_REGISTROS =
+const STORE_REGISTROS =
   "pesajes";
 
-const STORE\_TRABAJADORES =
+const STORE_TRABAJADORES =
   "trabajadores";
 
 
@@ -707,8 +707,8 @@ function abrirBaseDatos() {
 
         solicitud =
           indexedDB.open(
-            DB\_NAME,
-            DB\_VERSION
+            DB_NAME,
+            DB_VERSION
           );
 
       } catch (error) {
@@ -732,14 +732,14 @@ function abrirBaseDatos() {
           if (
 
             !db.objectStoreNames.contains(
-              STORE\_REGISTROS
+              STORE_REGISTROS
             )
 
           ) {
 
             db.createObjectStore(
 
-              STORE\_REGISTROS,
+              STORE_REGISTROS,
 
               {
                 keyPath: "id"
@@ -754,14 +754,14 @@ function abrirBaseDatos() {
           if (
 
             !db.objectStoreNames.contains(
-              STORE\_TRABAJADORES
+              STORE_TRABAJADORES
             )
 
           ) {
 
             db.createObjectStore(
 
-              STORE\_TRABAJADORES,
+              STORE_TRABAJADORES,
 
               {
                 keyPath: "id"
@@ -1032,9 +1032,9 @@ function jsonp(url) {
     function(resolve, reject) {
 
       const callbackName =
-        "callback\_" +
+        "callback_" +
         Date.now() +
-        "\_" +
+        "_" +
         Math
           .random()
           .toString(36)
@@ -1250,7 +1250,7 @@ async function cargarTrabajadores() {
       const lista =
         await jsonp(
 
-          URL\_APPS\_SCRIPT +
+          URL_APPS_SCRIPT +
           "?action=trabajadores"
 
         );
@@ -1337,7 +1337,7 @@ async function cargarTrabajadores() {
 
   const nuevosLocales =
     await obtenerDeAlmacen(
-      STORE\_TRABAJADORES
+      STORE_TRABAJADORES
     );
 
 
@@ -1722,7 +1722,7 @@ async function guardarNuevoTrabajador() {
             .trim()
             .toLowerCase()
 
-          \===
+          ===
 
           codigo
             .toLowerCase()
@@ -1777,7 +1777,7 @@ async function guardarNuevoTrabajador() {
 
     await guardarEnAlmacen(
 
-      STORE\_TRABAJADORES,
+      STORE_TRABAJADORES,
 
       trabajador
 
@@ -2110,7 +2110,7 @@ async function guardarRegistroLocal(
 
   await guardarEnAlmacen(
 
-    STORE\_REGISTROS,
+    STORE_REGISTROS,
 
     registro
 
@@ -2175,7 +2175,7 @@ async function sincronizarTrabajador(
 
   const url =
 
-    URL\_APPS\_SCRIPT +
+    URL_APPS_SCRIPT +
 
     "?action=agregarTrabajador" +
 
@@ -2257,7 +2257,7 @@ async function sincronizarTrabajadores() {
 
   const pendientes =
     await obtenerDeAlmacen(
-      STORE\_TRABAJADORES
+      STORE_TRABAJADORES
     );
 
 
@@ -2277,7 +2277,7 @@ async function sincronizarTrabajadores() {
 
       await eliminarDeAlmacen(
 
-        STORE\_TRABAJADORES,
+        STORE_TRABAJADORES,
 
         trabajador.id
 
@@ -2301,7 +2301,7 @@ async function sincronizarTrabajadores() {
 
 
   return await obtenerDeAlmacen(
-    STORE\_TRABAJADORES
+    STORE_TRABAJADORES
   );
 
 }
@@ -2328,7 +2328,7 @@ async function sincronizarRegistro(
 
   const url =
 
-    URL\_APPS\_SCRIPT +
+    URL_APPS_SCRIPT +
 
     "?action=guardar" +
 
@@ -2435,7 +2435,7 @@ async function sincronizarRegistro(
 
   await guardarEnAlmacen(
 
-    STORE\_REGISTROS,
+    STORE_REGISTROS,
 
     registro
 
@@ -2467,7 +2467,7 @@ async function sincronizarRegistros() {
 
   const registros =
     await obtenerDeAlmacen(
-      STORE\_REGISTROS
+      STORE_REGISTROS
     );
 
 
@@ -2554,14 +2554,14 @@ async function actualizarPendientes() {
 
     const registros =
       await obtenerDeAlmacen(
-        STORE\_REGISTROS
+        STORE_REGISTROS
       );
 
 
 
     const trabajadoresPendientes =
       await obtenerDeAlmacen(
-        STORE\_TRABAJADORES
+        STORE_TRABAJADORES
       );
 
 
@@ -2634,7 +2634,7 @@ async function mostrarRegistrosTrabajador(
 
     const registros =
       await obtenerDeAlmacen(
-        STORE\_REGISTROS
+        STORE_REGISTROS
       );
 
 
@@ -2656,7 +2656,7 @@ async function mostrarRegistrosTrabajador(
               .trim()
               .toLowerCase()
 
-            \===
+            ===
 
             String(
               codigo
@@ -2882,7 +2882,7 @@ async function mostrarRegistrosTrabajador(
 
                 await eliminarDeAlmacen(
 
-                  STORE\_REGISTROS,
+                  STORE_REGISTROS,
 
                   registro.id
 
@@ -2977,7 +2977,7 @@ async function descargarRespaldo() {
 
     const registros =
       await obtenerDeAlmacen(
-        STORE\_REGISTROS
+        STORE_REGISTROS
       );
 
 
@@ -3125,7 +3125,7 @@ async function descargarRespaldo() {
 
     enlace.download =
 
-      "Respaldo\_Control\_Pesajes\_" +
+      "Respaldo_Control_Pesajes_" +
 
       obtenerFechaLocal() +
 
@@ -3261,7 +3261,7 @@ function ocultarPantallas() {
 // CUANDO VUELVE INTERNET
 // ==================================================
 
-window\.addEventListener(
+window.addEventListener(
 
   "online",
 
@@ -3320,7 +3320,7 @@ window\.addEventListener(
 // SIN INTERNET
 // ==================================================
 
-window\.addEventListener(
+window.addEventListener(
 
   "offline",
 
