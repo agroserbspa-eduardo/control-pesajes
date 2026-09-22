@@ -19,7 +19,6 @@
 <title>Control de Pesajes</title>
 
 
-
 <style>
 
 body {
@@ -242,13 +241,10 @@ label {
 </head>
 
 
-
 <body>
 
 
-
 <div class="contenedor">
-
 
 
 <h1>
@@ -258,9 +254,7 @@ CONTROL DE PESAJES
 </h1>
 
 
-
 <div class="tarjeta">
-
 
 
 <!-- ============================================== -->
@@ -268,7 +262,6 @@ CONTROL DE PESAJES
 <!-- ============================================== -->
 
 <div id="pantallaPrincipal">
-
 
 
 <button
@@ -279,7 +272,6 @@ CONTROL DE PESAJES
 👤 SELECCIONAR TRABAJADOR
 
 </button>
-
 
 
 <button
@@ -292,9 +284,7 @@ CONTROL DE PESAJES
 </button>
 
 
-
 </div>
-
 
 
 <!-- ============================================== -->
@@ -307,13 +297,11 @@ CONTROL DE PESAJES
 >
 
 
-
 <h2>
 
 SELECCIONAR TRABAJADOR
 
 </h2>
-
 
 
 <div id="listaTrabajadores">
@@ -323,11 +311,9 @@ Cargando trabajadores...
 </div>
 
 
-
 <div class="separador">
 
 </div>
-
 
 
 <button
@@ -340,7 +326,6 @@ Cargando trabajadores...
 </button>
 
 
-
 <button
   type="button"
   onclick="volverPrincipal()"
@@ -351,9 +336,7 @@ Cargando trabajadores...
 </button>
 
 
-
 </div>
-
 
 
 <!-- ============================================== -->
@@ -366,7 +349,6 @@ Cargando trabajadores...
 >
 
 
-
 <h2>
 
 NUEVO TRABAJADOR
@@ -374,13 +356,11 @@ NUEVO TRABAJADOR
 </h2>
 
 
-
 <label>
 
 Código del trabajador
 
 </label>
-
 
 
 <input
@@ -391,13 +371,11 @@ Código del trabajador
 >
 
 
-
 <label>
 
 Nombre del trabajador
 
 </label>
-
 
 
 <input
@@ -406,7 +384,6 @@ Nombre del trabajador
   autocomplete="off"
   placeholder="Nombre completo"
 >
-
 
 
 <button
@@ -419,7 +396,6 @@ Nombre del trabajador
 </button>
 
 
-
 <button
   type="button"
   onclick="abrirSeleccionTrabajador()"
@@ -430,9 +406,7 @@ Nombre del trabajador
 </button>
 
 
-
 </div>
-
 
 
 <!-- ============================================== -->
@@ -445,7 +419,6 @@ Nombre del trabajador
 >
 
 
-
 <button
   type="button"
   onclick="abrirSeleccionTrabajador()"
@@ -456,7 +429,6 @@ Nombre del trabajador
 </button>
 
 
-
 <div
   id="trabajadorSeleccionado"
   class="trabajadorSeleccionado"
@@ -465,13 +437,11 @@ Nombre del trabajador
 </div>
 
 
-
 <label>
 
 Peso (kg)
 
 </label>
-
 
 
 <input
@@ -483,7 +453,6 @@ Peso (kg)
 >
 
 
-
 <label>
 
 Jornada
@@ -491,9 +460,7 @@ Jornada
 </label>
 
 
-
 <select id="jornada">
-
 
 
 <option value="">
@@ -503,13 +470,11 @@ Seleccione una jornada
 </option>
 
 
-
 <option value="Día completo">
 
 Día completo
 
 </option>
-
 
 
 <option value="Medio día">
@@ -518,16 +483,8 @@ Medio día
 
 </option>
 
-<option value="Día completo 2">
-
-Día completo 2
-
-</option>
-
-
 
 </select>
-
 
 
 <button
@@ -540,9 +497,7 @@ Día completo 2
 </button>
 
 
-
 <div id="registrosTrabajador">
-
 
 
 <h2>
@@ -552,11 +507,9 @@ REGISTROS DEL DÍA
 </h2>
 
 
-
 <div id="listaRegistros">
 
 </div>
-
 
 
 <div id="totalTrabajador">
@@ -566,13 +519,10 @@ Total: 0 kg
 </div>
 
 
-
 </div>
 
 
-
 </div>
-
 
 
 <!-- ============================================== -->
@@ -584,7 +534,6 @@ Total: 0 kg
 </div>
 
 
-
 <div id="pendientes">
 
 Pendientes de sincronización: 0
@@ -592,17 +541,13 @@ Pendientes de sincronización: 0
 </div>
 
 
-
 </div>
 
 
-
 </div>
-
 
 
 <script>
-
 
 
 // ==================================================
@@ -613,7 +558,6 @@ const URL_APPS_SCRIPT =
   "https://script.google.com/macros/s/AKfycbxCDWwilSh4v7eukRicKgGR0eEFbGlbYmxqlRVwTtOYsTvO26rHYp-T1iQTjUdh0kLg_w/exec";
 
 
-
 // ==================================================
 // TRABAJADORES
 // ==================================================
@@ -621,7 +565,6 @@ const URL_APPS_SCRIPT =
 let trabajadores = [];
 
 let trabajadorSeleccionado = null;
-
 
 
 // ==================================================
@@ -641,7 +584,6 @@ const STORE_TRABAJADORES =
   "trabajadores";
 
 
-
 // ==================================================
 // FECHA LOCAL
 // ==================================================
@@ -654,10 +596,8 @@ function obtenerFechaLocal(fecha) {
       : new Date();
 
 
-
   const año =
     f.getFullYear();
-
 
 
   const mes =
@@ -669,7 +609,6 @@ function obtenerFechaLocal(fecha) {
     );
 
 
-
   const dia =
     String(
       f.getDate()
@@ -677,7 +616,6 @@ function obtenerFechaLocal(fecha) {
       2,
       "0"
     );
-
 
 
   return (
@@ -689,7 +627,6 @@ function obtenerFechaLocal(fecha) {
   );
 
 }
-
 
 
 // ==================================================
@@ -720,13 +657,11 @@ function abrirBaseDatos() {
       }
 
 
-
       solicitud.onupgradeneeded =
         function(event) {
 
           const db =
             event.target.result;
-
 
 
           if (
@@ -748,7 +683,6 @@ function abrirBaseDatos() {
             );
 
           }
-
 
 
           if (
@@ -774,7 +708,6 @@ function abrirBaseDatos() {
         };
 
 
-
       solicitud.onsuccess =
         function(event) {
 
@@ -785,7 +718,6 @@ function abrirBaseDatos() {
         };
 
 
-
       solicitud.onerror =
         function() {
 
@@ -794,7 +726,6 @@ function abrirBaseDatos() {
           );
 
         };
-
 
 
       solicitud.onblocked =
@@ -814,7 +745,6 @@ function abrirBaseDatos() {
 }
 
 
-
 // ==================================================
 // GUARDAR EN ALMACÉN
 // ==================================================
@@ -828,7 +758,6 @@ async function guardarEnAlmacen(
     await abrirBaseDatos();
 
 
-
   return new Promise(
     function(resolve, reject) {
 
@@ -839,18 +768,15 @@ async function guardarEnAlmacen(
         );
 
 
-
       const almacen =
         transaccion.objectStore(
           almacenNombre
         );
 
 
-
       almacen.put(
         datos
       );
-
 
 
       transaccion.oncomplete =
@@ -861,7 +787,6 @@ async function guardarEnAlmacen(
           resolve();
 
         };
-
 
 
       transaccion.onerror =
@@ -881,7 +806,6 @@ async function guardarEnAlmacen(
 }
 
 
-
 // ==================================================
 // OBTENER DE ALMACÉN
 // ==================================================
@@ -894,7 +818,6 @@ async function obtenerDeAlmacen(
     await abrirBaseDatos();
 
 
-
   return new Promise(
     function(resolve, reject) {
 
@@ -905,17 +828,14 @@ async function obtenerDeAlmacen(
         );
 
 
-
       const almacen =
         transaccion.objectStore(
           almacenNombre
         );
 
 
-
       const solicitud =
         almacen.getAll();
-
 
 
       solicitud.onsuccess =
@@ -926,7 +846,6 @@ async function obtenerDeAlmacen(
             [];
 
 
-
           db.close();
 
           resolve(
@@ -934,7 +853,6 @@ async function obtenerDeAlmacen(
           );
 
         };
-
 
 
       solicitud.onerror =
@@ -954,7 +872,6 @@ async function obtenerDeAlmacen(
 }
 
 
-
 // ==================================================
 // ELIMINAR DE ALMACÉN
 // ==================================================
@@ -968,7 +885,6 @@ async function eliminarDeAlmacen(
     await abrirBaseDatos();
 
 
-
   return new Promise(
     function(resolve, reject) {
 
@@ -979,18 +895,15 @@ async function eliminarDeAlmacen(
         );
 
 
-
       const almacen =
         transaccion.objectStore(
           almacenNombre
         );
 
 
-
       almacen.delete(
         id
       );
-
 
 
       transaccion.oncomplete =
@@ -1001,7 +914,6 @@ async function eliminarDeAlmacen(
           resolve();
 
         };
-
 
 
       transaccion.onerror =
@@ -1019,7 +931,6 @@ async function eliminarDeAlmacen(
   );
 
 }
-
 
 
 // ==================================================
@@ -1041,17 +952,14 @@ function jsonp(url) {
           .substring(2);
 
 
-
       const script =
         document.createElement(
           "script"
         );
 
 
-
       let terminado =
         false;
-
 
 
       const tiempo =
@@ -1068,14 +976,11 @@ function jsonp(url) {
             }
 
 
-
             terminado =
               true;
 
 
-
             limpiar();
-
 
 
             reject(
@@ -1091,13 +996,11 @@ function jsonp(url) {
         );
 
 
-
       function limpiar() {
 
         clearTimeout(
           tiempo
         );
-
 
 
         if (
@@ -1109,7 +1012,6 @@ function jsonp(url) {
           );
 
         }
-
 
 
         try {
@@ -1130,7 +1032,6 @@ function jsonp(url) {
       }
 
 
-
       window[
         callbackName
       ] =
@@ -1145,14 +1046,11 @@ function jsonp(url) {
           }
 
 
-
           terminado =
             true;
 
 
-
           limpiar();
-
 
 
           resolve(
@@ -1160,7 +1058,6 @@ function jsonp(url) {
           );
 
         };
-
 
 
       script.onerror =
@@ -1175,14 +1072,11 @@ function jsonp(url) {
           }
 
 
-
           terminado =
             true;
 
 
-
           limpiar();
-
 
 
           reject(
@@ -1194,12 +1088,10 @@ function jsonp(url) {
         };
 
 
-
       const separador =
         url.includes("?")
           ? "&"
           : "?";
-
 
 
       script.src =
@@ -1211,7 +1103,6 @@ function jsonp(url) {
         );
 
 
-
       document.body.appendChild(
         script
       );
@@ -1220,7 +1111,6 @@ function jsonp(url) {
   );
 
 }
-
 
 
 // ==================================================
@@ -1235,10 +1125,8 @@ async function cargarTrabajadores() {
     );
 
 
-
   let trabajadoresInternet =
     [];
-
 
 
   if (
@@ -1256,7 +1144,6 @@ async function cargarTrabajadores() {
         );
 
 
-
       if (
         !Array.isArray(
           lista
@@ -1270,10 +1157,8 @@ async function cargarTrabajadores() {
       }
 
 
-
       trabajadoresInternet =
         lista;
-
 
 
       localStorage.setItem(
@@ -1298,7 +1183,6 @@ async function cargarTrabajadores() {
   }
 
 
-
   if (
     trabajadoresInternet.length === 0
   ) {
@@ -1307,7 +1191,6 @@ async function cargarTrabajadores() {
       localStorage.getItem(
         "trabajadores"
       );
-
 
 
     if (
@@ -1334,12 +1217,10 @@ async function cargarTrabajadores() {
   }
 
 
-
   const nuevosLocales =
     await obtenerDeAlmacen(
       STORE_TRABAJADORES
     );
-
 
 
   trabajadores =
@@ -1349,10 +1230,8 @@ async function cargarTrabajadores() {
     ];
 
 
-
   const codigos =
     new Set();
-
 
 
   trabajadores =
@@ -1367,7 +1246,6 @@ async function cargarTrabajadores() {
             .toLowerCase();
 
 
-
         if (
           codigos.has(
             codigo
@@ -1379,18 +1257,15 @@ async function cargarTrabajadores() {
         }
 
 
-
         codigos.add(
           codigo
         );
-
 
 
         return true;
 
       }
     );
-
 
 
   trabajadores.sort(
@@ -1412,7 +1287,6 @@ async function cargarTrabajadores() {
   );
 
 
-
   if (
     !navigator.onLine
   ) {
@@ -1425,7 +1299,6 @@ async function cargarTrabajadores() {
 }
 
 
-
 // ==================================================
 // ABRIR LISTA TRABAJADORES
 // ==================================================
@@ -1433,7 +1306,6 @@ async function cargarTrabajadores() {
 async function abrirSeleccionTrabajador() {
 
   ocultarPantallas();
-
 
 
   document
@@ -1445,15 +1317,12 @@ async function abrirSeleccionTrabajador() {
     );
 
 
-
   await cargarTrabajadores();
-
 
 
   mostrarListaTrabajadores();
 
 }
-
 
 
 // ==================================================
@@ -1468,10 +1337,8 @@ function mostrarListaTrabajadores() {
     );
 
 
-
   lista.innerHTML =
     "";
-
 
 
   if (
@@ -1486,7 +1353,6 @@ function mostrarListaTrabajadores() {
   }
 
 
-
   trabajadores.forEach(
     function(trabajador) {
 
@@ -1496,20 +1362,16 @@ function mostrarListaTrabajadores() {
         );
 
 
-
       boton.className =
         "trabajadorItem";
-
 
 
       boton.type =
         "button";
 
 
-
       boton.textContent =
         trabajador.nombre;
-
 
 
       boton.onclick =
@@ -1522,7 +1384,6 @@ function mostrarListaTrabajadores() {
         };
 
 
-
       lista.appendChild(
         boton
       );
@@ -1531,7 +1392,6 @@ function mostrarListaTrabajadores() {
   );
 
 }
-
 
 
 // ==================================================
@@ -1546,9 +1406,7 @@ async function seleccionarTrabajador(
     trabajador;
 
 
-
   ocultarPantallas();
-
 
 
   document
@@ -1560,14 +1418,12 @@ async function seleccionarTrabajador(
     );
 
 
-
   document
     .getElementById(
       "trabajadorSeleccionado"
     )
     .textContent =
       trabajador.nombre;
-
 
 
   document
@@ -1578,7 +1434,6 @@ async function seleccionarTrabajador(
       "";
 
 
-
   document
     .getElementById(
       "jornada"
@@ -1587,11 +1442,9 @@ async function seleccionarTrabajador(
       "";
 
 
-
   await mostrarRegistrosTrabajador(
     trabajador.codigo
   );
-
 
 
   setTimeout(
@@ -1610,7 +1463,6 @@ async function seleccionarTrabajador(
 }
 
 
-
 // ==================================================
 // ABRIR AGREGAR TRABAJADOR
 // ==================================================
@@ -1618,7 +1470,6 @@ async function seleccionarTrabajador(
 function abrirAgregarTrabajador() {
 
   ocultarPantallas();
-
 
 
   document
@@ -1630,14 +1481,12 @@ function abrirAgregarTrabajador() {
     );
 
 
-
   document
     .getElementById(
       "nuevoCodigo"
     )
     .value =
     "";
-
 
 
   document
@@ -1648,7 +1497,6 @@ function abrirAgregarTrabajador() {
     "";
 
 }
-
 
 
 // ==================================================
@@ -1663,7 +1511,6 @@ async function guardarNuevoTrabajador() {
     );
 
 
-
   const codigo =
     document
       .getElementById(
@@ -1673,7 +1520,6 @@ async function guardarNuevoTrabajador() {
       .trim();
 
 
-
   const nombre =
     document
       .getElementById(
@@ -1681,7 +1527,6 @@ async function guardarNuevoTrabajador() {
       )
       .value
       .trim();
-
 
 
   if (
@@ -1696,7 +1541,6 @@ async function guardarNuevoTrabajador() {
   }
 
 
-
   if (
     !nombre
   ) {
@@ -1707,7 +1551,6 @@ async function guardarNuevoTrabajador() {
     return;
 
   }
-
 
 
   const existe =
@@ -1733,7 +1576,6 @@ async function guardarNuevoTrabajador() {
     );
 
 
-
   if (
     existe
   ) {
@@ -1744,7 +1586,6 @@ async function guardarNuevoTrabajador() {
     return;
 
   }
-
 
 
   const trabajador = {
@@ -1760,17 +1601,14 @@ async function guardarNuevoTrabajador() {
         .substring(2, 8),
 
 
-
     codigo:
       codigo,
-
 
 
     nombre:
       nombre
 
   };
-
 
 
   try {
@@ -1784,16 +1622,13 @@ async function guardarNuevoTrabajador() {
     );
 
 
-
     trabajadores.push(
       trabajador
     );
 
 
-
     estado.textContent =
       "✓ Trabajador guardado en la tablet";
-
 
 
     if (
@@ -1805,9 +1640,7 @@ async function guardarNuevoTrabajador() {
         await sincronizarTrabajadores();
 
 
-
         await cargarTrabajadores();
-
 
 
         estado.textContent =
@@ -1823,9 +1656,7 @@ async function guardarNuevoTrabajador() {
     }
 
 
-
     abrirSeleccionTrabajador();
-
 
 
   } catch (error) {
@@ -1835,14 +1666,12 @@ async function guardarNuevoTrabajador() {
     );
 
 
-
     estado.textContent =
       "No se pudo guardar el trabajador";
 
   }
 
 }
-
 
 
 // ==================================================
@@ -1865,10 +1694,8 @@ function crearRegistro(
   }
 
 
-
   const ahora =
     new Date();
-
 
 
   return {
@@ -1883,10 +1710,8 @@ function crearRegistro(
         .substring(2, 8),
 
 
-
     fechaHora:
       ahora.toISOString(),
-
 
 
     fechaLocal:
@@ -1895,20 +1720,16 @@ function crearRegistro(
       ),
 
 
-
     codigo:
       trabajadorSeleccionado.codigo,
-
 
 
     peso:
       peso,
 
 
-
     jornada:
       jornada,
-
 
 
     sincronizado:
@@ -1917,7 +1738,6 @@ function crearRegistro(
   };
 
 }
-
 
 
 // ==================================================
@@ -1932,7 +1752,6 @@ async function guardarRegistroFormulario() {
     );
 
 
-
   if (
     !trabajadorSeleccionado
   ) {
@@ -1945,7 +1764,6 @@ async function guardarRegistroFormulario() {
   }
 
 
-
   const valorPeso =
     document
       .getElementById(
@@ -1954,14 +1772,12 @@ async function guardarRegistroFormulario() {
       .value;
 
 
-
   const jornada =
     document
       .getElementById(
         "jornada"
       )
       .value;
-
 
 
   if (
@@ -1980,10 +1796,8 @@ async function guardarRegistroFormulario() {
   }
 
 
-
   let peso =
     "";
-
 
 
   if (
@@ -2002,7 +1816,6 @@ async function guardarRegistroFormulario() {
           )
 
       );
-
 
 
     if (
@@ -2027,7 +1840,6 @@ async function guardarRegistroFormulario() {
   }
 
 
-
   try {
 
     const registro =
@@ -2037,11 +1849,9 @@ async function guardarRegistroFormulario() {
       );
 
 
-
     await guardarRegistroLocal(
       registro
     );
-
 
 
     document
@@ -2050,7 +1860,6 @@ async function guardarRegistroFormulario() {
       )
       .value =
       "";
-
 
 
     document
@@ -2061,11 +1870,9 @@ async function guardarRegistroFormulario() {
       "";
 
 
-
     await mostrarRegistrosTrabajador(
       trabajadorSeleccionado.codigo
     );
-
 
 
     document
@@ -2075,13 +1882,11 @@ async function guardarRegistroFormulario() {
       .focus();
 
 
-
   } catch (error) {
 
     console.error(
       error
     );
-
 
 
     estado.textContent =
@@ -2090,7 +1895,6 @@ async function guardarRegistroFormulario() {
   }
 
 }
-
 
 
 // ==================================================
@@ -2107,7 +1911,6 @@ async function guardarRegistroLocal(
     );
 
 
-
   await guardarEnAlmacen(
 
     STORE_REGISTROS,
@@ -2117,14 +1920,11 @@ async function guardarRegistroLocal(
   );
 
 
-
   await actualizarPendientes();
-
 
 
   estado.textContent =
     "✓ Registro guardado en la tablet";
-
 
 
   if (
@@ -2136,14 +1936,11 @@ async function guardarRegistroLocal(
       await sincronizarTrabajadores();
 
 
-
       await sincronizarRegistros();
-
 
 
       estado.textContent =
         "✓ Registro guardado y sincronizado";
-
 
 
     } catch (error) {
@@ -2151,7 +1948,6 @@ async function guardarRegistroLocal(
       console.log(
         error
       );
-
 
 
       estado.textContent =
@@ -2162,7 +1958,6 @@ async function guardarRegistroLocal(
   }
 
 }
-
 
 
 // ==================================================
@@ -2198,12 +1993,10 @@ async function sincronizarTrabajador(
     );
 
 
-
   const resultado =
     await jsonp(
       url
     );
-
 
 
   if (
@@ -2232,11 +2025,9 @@ async function sincronizarTrabajador(
   }
 
 
-
   return resultado;
 
 }
-
 
 
 // ==================================================
@@ -2254,12 +2045,10 @@ async function sincronizarTrabajadores() {
   }
 
 
-
   const pendientes =
     await obtenerDeAlmacen(
       STORE_TRABAJADORES
     );
-
 
 
   for (
@@ -2274,7 +2063,6 @@ async function sincronizarTrabajadores() {
       );
 
 
-
       await eliminarDeAlmacen(
 
         STORE_TRABAJADORES,
@@ -2282,7 +2070,6 @@ async function sincronizarTrabajadores() {
         trabajador.id
 
       );
-
 
 
     } catch (error) {
@@ -2299,13 +2086,11 @@ async function sincronizarTrabajadores() {
   }
 
 
-
   return await obtenerDeAlmacen(
     STORE_TRABAJADORES
   );
 
 }
-
 
 
 // ==================================================
@@ -2323,7 +2108,6 @@ async function sincronizarRegistro(
     return true;
 
   }
-
 
 
   const url =
@@ -2387,12 +2171,10 @@ async function sincronizarRegistro(
     );
 
 
-
   const resultado =
     await jsonp(
       url
     );
-
 
 
   if (
@@ -2421,7 +2203,6 @@ async function sincronizarRegistro(
   }
 
 
-
   // ================================================
   // IMPORTANTE:
   // NO ELIMINAMOS EL REGISTRO
@@ -2430,7 +2211,6 @@ async function sincronizarRegistro(
 
   registro.sincronizado =
     true;
-
 
 
   await guardarEnAlmacen(
@@ -2442,11 +2222,9 @@ async function sincronizarRegistro(
   );
 
 
-
   return true;
 
 }
-
 
 
 // ==================================================
@@ -2464,12 +2242,10 @@ async function sincronizarRegistros() {
   }
 
 
-
   const registros =
     await obtenerDeAlmacen(
       STORE_REGISTROS
     );
-
 
 
   for (
@@ -2484,7 +2260,6 @@ async function sincronizarRegistros() {
       continue;
 
     }
-
 
 
     try {
@@ -2507,11 +2282,9 @@ async function sincronizarRegistros() {
   }
 
 
-
   await actualizarPendientes();
 
 }
-
 
 
 // ==================================================
@@ -2529,19 +2302,15 @@ async function sincronizar() {
   }
 
 
-
   await sincronizarTrabajadores();
-
 
 
   await sincronizarRegistros();
 
 
-
   await cargarTrabajadores();
 
 }
-
 
 
 // ==================================================
@@ -2558,12 +2327,10 @@ async function actualizarPendientes() {
       );
 
 
-
     const trabajadoresPendientes =
       await obtenerDeAlmacen(
         STORE_TRABAJADORES
       );
-
 
 
     const registrosPendientes =
@@ -2576,7 +2343,6 @@ async function actualizarPendientes() {
 
         }
       );
-
 
 
     document
@@ -2594,7 +2360,6 @@ async function actualizarPendientes() {
       );
 
 
-
   } catch (error) {
 
     console.error(
@@ -2604,7 +2369,6 @@ async function actualizarPendientes() {
   }
 
 }
-
 
 
 // ==================================================
@@ -2622,12 +2386,10 @@ async function mostrarRegistrosTrabajador(
     );
 
 
-
   const totalPantalla =
     document.getElementById(
       "totalTrabajador"
     );
-
 
 
   try {
@@ -2638,10 +2400,8 @@ async function mostrarRegistrosTrabajador(
       );
 
 
-
     const hoy =
       obtenerFechaLocal();
-
 
 
     const registrosTrabajador =
@@ -2665,10 +2425,8 @@ async function mostrarRegistrosTrabajador(
               .toLowerCase();
 
 
-
           let fechaRegistro =
             registro.fechaLocal;
-
 
 
           if (
@@ -2683,7 +2441,6 @@ async function mostrarRegistrosTrabajador(
           }
 
 
-
           return (
 
             mismoCodigo &&
@@ -2694,7 +2451,6 @@ async function mostrarRegistrosTrabajador(
 
         }
       );
-
 
 
     registrosTrabajador.sort(
@@ -2710,15 +2466,12 @@ async function mostrarRegistrosTrabajador(
     );
 
 
-
     lista.innerHTML =
       "";
 
 
-
     let total =
       0;
-
 
 
     if (
@@ -2731,7 +2484,6 @@ async function mostrarRegistrosTrabajador(
     }
 
 
-
     registrosTrabajador.forEach(
       function(registro) {
 
@@ -2741,10 +2493,8 @@ async function mostrarRegistrosTrabajador(
           );
 
 
-
         fila.className =
           "registro";
-
 
 
         const informacion =
@@ -2753,15 +2503,12 @@ async function mostrarRegistrosTrabajador(
           );
 
 
-
         informacion.className =
           "infoRegistro";
 
 
-
         let texto =
           "";
-
 
 
         if (
@@ -2780,7 +2527,6 @@ async function mostrarRegistrosTrabajador(
             );
 
 
-
           if (
             !isNaN(
               numero
@@ -2793,13 +2539,11 @@ async function mostrarRegistrosTrabajador(
           }
 
 
-
           texto +=
             registro.peso +
             " kg";
 
         }
-
 
 
         if (
@@ -2816,12 +2560,10 @@ async function mostrarRegistrosTrabajador(
           }
 
 
-
           texto +=
             registro.jornada;
 
         }
-
 
 
         if (
@@ -2839,10 +2581,8 @@ async function mostrarRegistrosTrabajador(
         }
 
 
-
         informacion.textContent =
           texto;
-
 
 
         const boton =
@@ -2851,20 +2591,16 @@ async function mostrarRegistrosTrabajador(
           );
 
 
-
         boton.className =
           "botonEliminar";
-
 
 
         boton.textContent =
           "❌";
 
 
-
         boton.type =
           "button";
-
 
 
         boton.onclick =
@@ -2889,15 +2625,12 @@ async function mostrarRegistrosTrabajador(
                 );
 
 
-
                 await actualizarPendientes();
-
 
 
                 await mostrarRegistrosTrabajador(
                   codigo
                 );
-
 
 
               } catch (error) {
@@ -2913,17 +2646,14 @@ async function mostrarRegistrosTrabajador(
           };
 
 
-
         fila.appendChild(
           informacion
         );
 
 
-
         fila.appendChild(
           boton
         );
-
 
 
         lista.appendChild(
@@ -2932,7 +2662,6 @@ async function mostrarRegistrosTrabajador(
 
       }
     );
-
 
 
     totalPantalla.textContent =
@@ -2944,7 +2673,6 @@ async function mostrarRegistrosTrabajador(
       " kg";
 
 
-
   } catch (error) {
 
     console.error(
@@ -2952,10 +2680,8 @@ async function mostrarRegistrosTrabajador(
     );
 
 
-
     lista.textContent =
       "No se pudieron cargar los registros";
-
 
 
     totalPantalla.textContent =
@@ -2964,7 +2690,6 @@ async function mostrarRegistrosTrabajador(
   }
 
 }
-
 
 
 // ==================================================
@@ -2981,7 +2706,6 @@ async function descargarRespaldo() {
       );
 
 
-
     if (
       registros.length === 0
     ) {
@@ -2995,7 +2719,6 @@ async function descargarRespaldo() {
     }
 
 
-
     const encabezados =
 
       [
@@ -3007,7 +2730,6 @@ async function descargarRespaldo() {
         "Jornada",
         "Sincronizado"
       ];
-
 
 
     const filas =
@@ -3038,13 +2760,11 @@ async function descargarRespaldo() {
       );
 
 
-
     const datos =
       [
         encabezados,
         ...filas
       ];
-
 
 
     const csv =
@@ -3066,7 +2786,6 @@ async function descargarRespaldo() {
                       );
 
 
-
                   return (
                     '"' +
                     texto +
@@ -3086,7 +2805,6 @@ async function descargarRespaldo() {
         );
 
 
-
     const blob =
       new Blob(
 
@@ -3103,12 +2821,10 @@ async function descargarRespaldo() {
       );
 
 
-
     const url =
       URL.createObjectURL(
         blob
       );
-
 
 
     const enlace =
@@ -3117,10 +2833,8 @@ async function descargarRespaldo() {
       );
 
 
-
     enlace.href =
       url;
-
 
 
     enlace.download =
@@ -3132,15 +2846,12 @@ async function descargarRespaldo() {
       ".csv";
 
 
-
     document.body.appendChild(
       enlace
     );
 
 
-
     enlace.click();
-
 
 
     document.body.removeChild(
@@ -3148,11 +2859,9 @@ async function descargarRespaldo() {
     );
 
 
-
     URL.revokeObjectURL(
       url
     );
-
 
 
     document
@@ -3163,13 +2872,11 @@ async function descargarRespaldo() {
       "✓ Respaldo descargado";
 
 
-
   } catch (error) {
 
     console.error(
       error
     );
-
 
 
     alert(
@@ -3179,7 +2886,6 @@ async function descargarRespaldo() {
   }
 
 }
-
 
 
 // ==================================================
@@ -3192,9 +2898,7 @@ function volverPrincipal() {
     null;
 
 
-
   ocultarPantallas();
-
 
 
   document
@@ -3206,7 +2910,6 @@ function volverPrincipal() {
     );
 
 }
-
 
 
 // ==================================================
@@ -3224,7 +2927,6 @@ function ocultarPantallas() {
     );
 
 
-
   document
     .getElementById(
       "pantallaTrabajadores"
@@ -3232,7 +2934,6 @@ function ocultarPantallas() {
     .classList.add(
       "oculto"
     );
-
 
 
   document
@@ -3244,7 +2945,6 @@ function ocultarPantallas() {
     );
 
 
-
   document
     .getElementById(
       "pantallaFormulario"
@@ -3254,7 +2954,6 @@ function ocultarPantallas() {
     );
 
 }
-
 
 
 // ==================================================
@@ -3273,10 +2972,8 @@ window.addEventListener(
       );
 
 
-
     estado.textContent =
       "Internet disponible. Sincronizando...";
-
 
 
     try {
@@ -3284,10 +2981,8 @@ window.addEventListener(
       await sincronizar();
 
 
-
       estado.textContent =
         "✓ Todo sincronizado";
-
 
 
       if (
@@ -3301,7 +2996,6 @@ window.addEventListener(
       }
 
 
-
     } catch (error) {
 
       console.error(
@@ -3313,7 +3007,6 @@ window.addEventListener(
   }
 
 );
-
 
 
 // ==================================================
@@ -3338,7 +3031,6 @@ window.addEventListener(
 );
 
 
-
 // ==================================================
 // INICIAR APLICACIÓN
 // ==================================================
@@ -3358,7 +3050,6 @@ async function iniciarAplicacion() {
   }
 
 
-
   try {
 
     await actualizarPendientes();
@@ -3370,7 +3061,6 @@ async function iniciarAplicacion() {
     );
 
   }
-
 
 
   if (
@@ -3387,9 +3077,7 @@ async function iniciarAplicacion() {
         "Sincronizando...";
 
 
-
       await sincronizar();
-
 
 
       document
@@ -3400,13 +3088,11 @@ async function iniciarAplicacion() {
         "✓ Todo sincronizado";
 
 
-
     } catch (error) {
 
       console.log(
         error
       );
-
 
 
       document
@@ -3423,7 +3109,6 @@ async function iniciarAplicacion() {
 }
 
 
-
 // ==================================================
 // INICIAR
 // ==================================================
@@ -3431,9 +3116,7 @@ async function iniciarAplicacion() {
 iniciarAplicacion();
 
 
-
 </script>
-
 
 
 </body>
