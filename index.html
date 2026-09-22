@@ -557,6 +557,10 @@ let trabajadores = [];
 
 let trabajadorSeleccionado = null;
 
+// Promesa de sincronización actualmente en curso.
+// Evita que dos procesos intenten sincronizar al mismo tiempo.
+let sincronizacionEnCurso = null;
+
 
 // ==================================================
 // BASE DE DATOS
@@ -928,7 +932,7 @@ async function eliminarDeAlmacen(
 // JSONP
 // ==================================================
 
-function jsonp(url) {
+function jsonp(url, tiempoEspera = 30000) {
 
   return new Promise(
     function(resolve, reject) {
@@ -982,7 +986,7 @@ function jsonp(url) {
 
           },
 
-          15000
+          tiempoEspera
 
         );
 
@@ -1091,7 +1095,9 @@ function jsonp(url) {
         "callback=" +
         encodeURIComponent(
           callbackName
-        );
+        ) +
+        "&_cache=" +
+        Date.now();
 
 
       document.body.appendChild(
@@ -1099,6 +1105,78 @@ function jsonp(url) {
       );
 
     }
+  );
+
+}
+
+
+// ==================================================
+// JSONP CON REINTENTO
+// ==================================================
+
+async function jsonpConReintento(
+  url,
+  intentos = 2
+) {
+
+  let ultimoError =
+    null;
+
+
+  for (
+    let intento = 1;
+    intento <= intentos;
+    intento++
+  ) {
+
+    try {
+
+      return await jsonp(
+        url
+      );
+
+    } catch (error) {
+
+      ultimoError =
+        error;
+
+      console.log(
+        "Intento " +
+        intento +
+        " de " +
+        intentos +
+        " falló:",
+        error
+      );
+
+
+      if (
+        intento < intentos
+      ) {
+
+        await new Promise(
+          function(resolve) {
+
+            setTimeout(
+              resolve,
+              1000
+            );
+
+          }
+        );
+
+      }
+
+    }
+
+  }
+
+
+  throw (
+    ultimoError ||
+    new Error(
+      "No se pudo completar la solicitud"
+    )
   );
 
 }
@@ -2066,19 +2144,16 @@ async function guardarRegistroLocal(
 
     try {
 
-      await sincronizarTrabajadores();
-
-
-      await sincronizarRegistros();
+      await sincronizar();
 
 
       estado.textContent =
         "✓ Registro guardado y sincronizado";
 
-
     } catch (error) {
 
-      console.log(
+      console.error(
+        "Sincronización después de guardar:",
         error
       );
 
@@ -2116,7 +2191,7 @@ async function sincronizarTrabajador(
     "&codigo=" +
 
     encodeURIComponent(
-      trabajador.codigo
+      trabajador.codigo || ""
     ) +
 
     "&nombre=" +
@@ -2127,32 +2202,21 @@ async function sincronizarTrabajador(
 
 
   const resultado =
-    await jsonp(
+    await jsonpConReintento(
       url
     );
 
 
   if (
-
     !resultado ||
-
     resultado.ok !== true
-
   ) {
 
     throw new Error(
-
       resultado &&
       resultado.error
-
-        ?
-
-        resultado.error
-
-        :
-
-        "No se pudo sincronizar el trabajador"
-
+        ? resultado.error
+        : "No se pudo sincronizar el trabajador"
     );
 
   }
@@ -2173,7 +2237,7 @@ async function sincronizarTrabajadores() {
     !navigator.onLine
   ) {
 
-    return;
+    return 0;
 
   }
 
@@ -2184,44 +2248,94 @@ async function sincronizarTrabajadores() {
     );
 
 
+  let sincronizados =
+    0;
+
+
   for (
     const trabajador
     of pendientes
   ) {
 
+    const nombre =
+      trabajador.nombre ||
+      trabajador.codigo ||
+      trabajador.id;
+
+
+    document
+      .getElementById(
+        "estado"
+      )
+      .textContent =
+      "Sincronizando trabajador: " +
+      nombre;
+
+
     try {
 
-      await sincronizarTrabajador(
-        trabajador
-      );
+      const resultado =
+        await sincronizarTrabajador(
+          trabajador
+        );
+
+
+      // Si el servidor asignó/confirmó un código diferente,
+      // actualizamos el trabajador local para mantenerlo consistente.
+      if (
+        resultado &&
+        resultado.trabajador
+      ) {
+
+        const trabajadorServidor =
+          resultado.trabajador;
+
+        const cambioCodigo =
+          trabajadorServidor.codigo &&
+          String(
+            trabajadorServidor.codigo
+          ) !== String(
+            trabajador.codigo || ""
+          );
+
+
+        if (
+          cambioCodigo
+        ) {
+
+          trabajador.codigo =
+            String(
+              trabajadorServidor.codigo
+            );
+
+        }
+
+      }
 
 
       await eliminarDeAlmacen(
-
         STORE_TRABAJADORES,
-
         trabajador.id
-
       );
 
+
+      sincronizados++;
 
     } catch (error) {
 
-      console.log(
-        "No se pudo sincronizar trabajador:",
-        error
+      throw new Error(
+        "Trabajador " +
+        nombre +
+        ": " +
+        error.message
       );
-
-      break;
 
     }
 
   }
 
 
-  return await obtenerDeAlmacen(
-    STORE_TRABAJADORES
-  );
+  return sincronizados;
 
 }
 
@@ -2258,100 +2372,63 @@ async function sincronizarRegistro(
     "&fechaHora=" +
 
     encodeURIComponent(
-      registro.fechaHora
+      registro.fechaHora || ""
     ) +
 
     "&codigo=" +
 
     encodeURIComponent(
-      registro.codigo
+      registro.codigo || ""
     ) +
 
     "&peso=" +
 
     encodeURIComponent(
-
       registro.peso === undefined ||
-
       registro.peso === null
-
-        ?
-
-        ""
-
-        :
-
-        registro.peso
-
+        ? ""
+        : registro.peso
     ) +
 
     "&jornada=" +
 
     encodeURIComponent(
-
       registro.jornada === undefined ||
-
       registro.jornada === null
-
-        ?
-
-        ""
-
-        :
-
-        registro.jornada
-
+        ? ""
+        : registro.jornada
     );
 
 
   const resultado =
-    await jsonp(
+    await jsonpConReintento(
       url
     );
 
 
   if (
-
     !resultado ||
-
     resultado.ok !== true
-
   ) {
 
     throw new Error(
-
       resultado &&
       resultado.error
-
-        ?
-
-        resultado.error
-
-        :
-
-        "No se pudo sincronizar"
-
+        ? resultado.error
+        : "No se pudo sincronizar"
     );
 
   }
 
 
-  // ================================================
-  // IMPORTANTE:
-  // NO ELIMINAMOS EL REGISTRO
-  // SOLO LO MARCAMOS COMO SINCRONIZADO
-  // ================================================
-
+  // Solo marcamos como sincronizado después de recibir OK del servidor.
   registro.sincronizado =
     true;
 
 
   await guardarEnAlmacen(
-
     STORE_REGISTROS,
-
     registro
-
   );
 
 
@@ -2370,7 +2447,7 @@ async function sincronizarRegistros() {
     !navigator.onLine
   ) {
 
-    return;
+    return 0;
 
   }
 
@@ -2379,6 +2456,10 @@ async function sincronizarRegistros() {
     await obtenerDeAlmacen(
       STORE_REGISTROS
     );
+
+
+  let sincronizados =
+    0;
 
 
   for (
@@ -2395,20 +2476,40 @@ async function sincronizarRegistros() {
     }
 
 
+    document
+      .getElementById(
+        "estado"
+      )
+      .textContent =
+      "Sincronizando pesaje: " +
+      String(
+        registro.codigo || ""
+      ) +
+      " - " +
+      String(
+        registro.peso || ""
+      ) +
+      " kg";
+
+
     try {
 
       await sincronizarRegistro(
         registro
       );
 
+      sincronizados++;
+
     } catch (error) {
 
-      console.log(
-        "No se pudo sincronizar:",
-        error
+      throw new Error(
+        "Pesaje " +
+        String(
+          registro.id
+        ) +
+        ": " +
+        error.message
       );
-
-      break;
 
     }
 
@@ -2416,6 +2517,9 @@ async function sincronizarRegistros() {
 
 
   await actualizarPendientes();
+
+
+  return sincronizados;
 
 }
 
@@ -2435,13 +2539,74 @@ async function sincronizar() {
   }
 
 
-  await sincronizarTrabajadores();
+  // Si ya existe una sincronización en curso, reutilizamos esa misma promesa.
+  if (
+    sincronizacionEnCurso
+  ) {
+
+    return await sincronizacionEnCurso;
+
+  }
 
 
-  await sincronizarRegistros();
+  sincronizacionEnCurso =
+    (async function() {
+
+      const estado =
+        document.getElementById(
+          "estado"
+        );
 
 
-  await cargarTrabajadores();
+      estado.textContent =
+        "Sincronizando...";
+
+
+      try {
+
+        await sincronizarTrabajadores();
+
+
+        await sincronizarRegistros();
+
+
+        await cargarTrabajadores();
+
+
+        await actualizarPendientes();
+
+
+        estado.textContent =
+          "✓ Todo sincronizado";
+
+      } catch (error) {
+
+        console.error(
+          "Error de sincronización:",
+          error
+        );
+
+
+        await actualizarPendientes();
+
+
+        throw error;
+
+      }
+
+    })();
+
+
+  try {
+
+    return await sincronizacionEnCurso;
+
+  } finally {
+
+    sincronizacionEnCurso =
+      null;
+
+  }
 
 }
 
@@ -3067,8 +3232,13 @@ window.addEventListener(
     } catch (error) {
 
       console.error(
+        "Sincronización al volver Internet:",
         error
       );
+
+      estado.textContent =
+        "Sincronización pendiente: " +
+        error.message;
 
     }
 
@@ -3159,6 +3329,7 @@ async function iniciarAplicacion() {
     } catch (error) {
 
       console.log(
+        "Error de sincronización inicial:",
         error
       );
 
@@ -3168,7 +3339,8 @@ async function iniciarAplicacion() {
           "estado"
         )
         .textContent =
-        "No se pudo sincronizar. Los datos siguen guardados.";
+        "Sincronización pendiente: " +
+        error.message;
 
     }
 
