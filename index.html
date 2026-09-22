@@ -200,6 +200,24 @@ label {
 
 }
 
+.botonEliminarRegistro {
+
+  width: auto;
+
+  margin-top: 0;
+
+  margin-left: 10px;
+
+  padding: 8px 12px;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  background: #f2f2f2;
+
+}
+
 #totalTrabajador {
 
   margin-top: 15px;
@@ -2348,12 +2366,198 @@ async function sincronizarTrabajadores() {
 
 
 // ==================================================
+// ELIMINAR REGISTRO EN GOOGLE SHEETS
+// ==================================================
+
+async function eliminarRegistroRemoto(
+  registro
+) {
+
+  const url =
+
+    URL_APPS_SCRIPT +
+
+    "?action=eliminarRegistro" +
+
+    "&id=" +
+
+    encodeURIComponent(
+      registro.id
+    );
+
+
+  const resultado =
+    await jsonpConReintento(
+      url
+    );
+
+
+  if (
+    !resultado ||
+    resultado.ok !== true
+  ) {
+
+    throw new Error(
+      resultado &&
+      resultado.error
+        ? resultado.error
+        : "No se pudo eliminar el pesaje en Google Sheets"
+    );
+
+  }
+
+
+  return resultado;
+
+}
+
+
+// ==================================================
+// ELIMINAR UN PESAJE
+// ==================================================
+
+async function eliminarPesaje(
+  registro
+) {
+
+  const estado =
+    document.getElementById(
+      "estado"
+    );
+
+
+  const detalle =
+    (registro.peso !== "" &&
+    registro.peso !== null &&
+    registro.peso !== undefined
+      ? String(registro.peso) + " kg"
+      : "Sin peso") +
+    (registro.jornada
+      ? " - " + String(registro.jornada)
+      : "");
+
+
+  if (!window.confirm(
+    "¿Está seguro de eliminar este pesaje?\n\n" +
+    detalle
+  )) {
+
+    return;
+
+  }
+
+
+  try {
+
+    // Si nunca se sincronizó, no existe en Google Sheets.
+    if (
+      registro.sincronizado !== true
+    ) {
+
+      await eliminarDeAlmacen(
+        STORE_REGISTROS,
+        registro.id
+      );
+
+      estado.textContent =
+        "✓ Pesaje eliminado";
+
+    } else if (navigator.onLine) {
+
+      estado.textContent =
+        "Eliminando pesaje...";
+
+      await eliminarRegistroRemoto(
+        registro
+      );
+
+      await eliminarDeAlmacen(
+        STORE_REGISTROS,
+        registro.id
+      );
+
+      estado.textContent =
+        "✓ Pesaje eliminado";
+
+    } else {
+
+      // Sin Internet se marca para borrar al volver la conexión.
+      registro.eliminado =
+        true;
+
+      await guardarEnAlmacen(
+        STORE_REGISTROS,
+        registro
+      );
+
+      estado.textContent =
+        "✓ Pesaje eliminado de la tablet. Pendiente de sincronización";
+
+    }
+
+
+    if (
+      trabajadorSeleccionado
+    ) {
+
+      await mostrarRegistrosTrabajador(
+        trabajadorSeleccionado.codigo
+      );
+
+    }
+
+
+    await actualizarPendientes();
+
+  } catch (error) {
+
+    console.error(
+      "Error al eliminar pesaje:",
+      error
+    );
+
+
+    estado.textContent =
+      "No se pudo eliminar el pesaje: " +
+      error.message;
+
+  }
+
+}
+
+
+// ==================================================
 // SINCRONIZAR UN REGISTRO
 // ==================================================
 
 async function sincronizarRegistro(
   registro
 ) {
+
+  if (
+    registro.eliminado === true
+  ) {
+
+    if (!navigator.onLine) {
+
+      return false;
+
+    }
+
+
+    await eliminarRegistroRemoto(
+      registro
+    );
+
+    await eliminarDeAlmacen(
+      STORE_REGISTROS,
+      registro.id
+    );
+
+    return true;
+
+  }
+
 
   if (
     registro.sincronizado === true
@@ -2428,7 +2632,6 @@ async function sincronizarRegistro(
   }
 
 
-  // Solo marcamos como sincronizado después de recibir OK del servidor.
   registro.sincronizado =
     true;
 
@@ -2713,6 +2916,14 @@ async function mostrarRegistrosTrabajador(
       registros.filter(
         function(registro) {
 
+          if (
+            registro.eliminado === true
+          ) {
+
+            return false;
+
+          }
+
           const mismoCodigo =
 
             String(
@@ -2896,6 +3107,43 @@ async function mostrarRegistrosTrabajador(
         );
 
 
+        const botonEliminar =
+          document.createElement(
+            "button"
+          );
+
+
+        botonEliminar.type =
+          "button";
+
+
+        botonEliminar.className =
+          "botonEliminarRegistro";
+
+
+        botonEliminar.textContent =
+          "🗑";
+
+
+        botonEliminar.title =
+          "Eliminar pesaje";
+
+
+        botonEliminar.onclick =
+          function() {
+
+            eliminarPesaje(
+              registro
+            );
+
+          };
+
+
+        fila.appendChild(
+          botonEliminar
+        );
+
+
         lista.appendChild(
           fila
         );
@@ -2940,9 +3188,19 @@ async function descargarRespaldo() {
 
   try {
 
-    const registros =
+    const registrosGuardados =
       await obtenerDeAlmacen(
         STORE_REGISTROS
+      );
+
+
+    const registros =
+      registrosGuardados.filter(
+        function(registro) {
+
+          return registro.eliminado !== true;
+
+        }
       );
 
 
