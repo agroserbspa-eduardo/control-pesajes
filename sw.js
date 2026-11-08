@@ -1,178 +1,75 @@
-const CACHE_NAME =
-  "control-pesajes-v4";
 
+const CACHE_NAME = "control-pesajes-v5";
+const ARCHIVO_PRINCIPAL = "./index.html";
 
-const ARCHIVOS = [
+self.addEventListener("install", function(event) {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(function(cache) {
+        return cache.add(ARCHIVO_PRINCIPAL);
+      })
+      .then(function() {
+        return self.skipWaiting();
+      })
+  );
+});
 
-  "./",
+self.addEventListener("activate", function(event) {
+  event.waitUntil(
+    caches.keys()
+      .then(function(nombres) {
+        return Promise.all(
+          nombres
+            .filter(function(nombre) {
+              return nombre.startsWith("control-pesajes-") &&
+                     nombre !== CACHE_NAME;
+            })
+            .map(function(nombre) {
+              return caches.delete(nombre);
+            })
+        );
+      })
+      .then(function() {
+        return self.clients.claim();
+      })
+  );
+});
 
-  "./index.html",
+self.addEventListener("fetch", function(event) {
+  if (event.request.method !== "GET") return;
 
-  "./manifest.json"
+  const url = new URL(event.request.url);
 
-];
+  if (url.origin !== self.location.origin) return;
 
-
-/* ==================================================
-   INSTALAR
-================================================== */
-
-self.addEventListener(
-  "install",
-  function(event) {
-
-    event.waitUntil(
-
-      caches
-        .open(
-          CACHE_NAME
-        )
-        .then(
-          function(cache) {
-
-            return cache.addAll(
-              ARCHIVOS
-            );
-
-          }
-        )
-
-    );
-
-
-    self.skipWaiting();
-
-  }
-);
-
-
-/* ==================================================
-   ACTIVAR
-================================================== */
-
-self.addEventListener(
-  "activate",
-  function(event) {
-
-    event.waitUntil(
-
-      caches.keys()
-        .then(
-          function(nombres) {
-
-            return Promise.all(
-
-              nombres
-                .filter(
-                  function(nombre) {
-
-                    return nombre
-                      !== CACHE_NAME;
-
-                  }
-                )
-
-                .map(
-                  function(nombre) {
-
-                    return caches.delete(
-                      nombre
-                    );
-
-                  }
-                )
-
-            );
-
-          }
-        )
-
-    );
-
-
-    self.clients.claim();
-
-  }
-);
-
-
-/* ==================================================
-   INTERNET / SIN INTERNET
-================================================== */
-
-self.addEventListener(
-  "fetch",
-  function(event) {
-
-    /*
-       Para la aplicación:
-
-       INTERNET:
-       intenta obtener la versión nueva.
-
-       SIN INTERNET:
-       utiliza la versión guardada.
-    */
-
-    if (
-      event.request.method !==
-      "GET"
-    ) {
-
-      return;
-
-    }
-
-
+  if (event.request.mode === "navigate") {
     event.respondWith(
-
-      fetch(
-        event.request
-      )
-
-      .then(
-        function(respuesta) {
-
-          /*
-             Guardar copia actualizada
-          */
-
-          const copia =
-            respuesta.clone();
-
-
-          caches
-            .open(
-              CACHE_NAME
-            )
-            .then(
-              function(cache) {
-
-                cache.put(
-                  event.request,
-                  copia
-                );
-
-              }
-            );
-
-
+      fetch(event.request)
+        .then(function(respuesta) {
+          if (respuesta && respuesta.ok) {
+            const copia = respuesta.clone();
+            caches.open(CACHE_NAME).then(function(cache) {
+              cache.put(ARCHIVO_PRINCIPAL, copia);
+            });
+          }
           return respuesta;
+        })
+        .catch(function() {
+          return caches.match(ARCHIVO_PRINCIPAL)
+            .then(function(respuestaGuardada) {
+              if (respuestaGuardada) return respuestaGuardada;
 
-        }
-      )
-
-      .catch(
-        function() {
-
-          return caches.match(
-            event.request
-          );
-
-        }
-      )
-
+              return new Response(
+                "Conéctate a internet y abre Control de Pesajes una vez.",
+                {
+                  status: 503,
+                  headers: {
+                    "Content-Type": "text/plain; charset=utf-8"
+                  }
+                }
+              );
+            });
+        })
     );
-
   }
-);
+});
